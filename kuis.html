@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ujian Sertifikasi Arsitek — Misi Arsitek Muda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ========== [BAGIAN: GAYA KHUSUS UJIAN & SERTIFIKAT CETAK] ========== */
+    .kartu-soal-ujian {
+      background: var(--putih-murni);
+      border: 2px solid #CBD5E1;
+      border-left: 6px solid var(--biru-blueprint);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .opsi-pilihan-ujian {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.65rem 0.9rem;
+      border: 2px solid #CBD5E1;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--putih-kertas);
+      transition: all 0.15s ease;
+    }
+
+    .opsi-pilihan-ujian:hover {
+      border-color: var(--biru-blueprint);
+      background: rgba(255, 193, 7, 0.12);
+    }
+
+    /* Desain Sertifikat Arsitek */
+    #area-sertifikat-cetak {
+      display: none;
+      background: #FFFFFF;
+      color: #0F172A;
+      border: 10px double #0B2A4A;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      margin: 1.5rem 0;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    #area-sertifikat-cetak.tampil {
+      display: block;
+      animation: munculHalus 0.45s ease;
+    }
+
+    .bingkai-dalam-sertifikat {
+      border: 2px solid #D97706;
+      padding: 2rem 1.5rem;
+      border-radius: 6px;
+      background-image:
+        radial-gradient(rgba(11, 42, 74, 0.04) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+
+    .judul-sertifikat {
+      font-family: var(--font-judul);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0B2A4A;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .subjudul-sertifikat {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #B45309;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .nama-penerima-sertifikat {
+      font-family: var(--font-judul);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #0B2A4A;
+      border-bottom: 3px solid #FFC107;
+      display: inline-block;
+      padding: 0 1.5rem 0.25rem;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .kaki-sertifikat {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 2.25rem;
+      padding-top: 1rem;
+    }
+
+    /* Aturan Cetak Khusus Halaman Ujian (@media print) */
+    @media print {
+      .sembunyikan-saat-cetak {
+        display: none !important;
+      }
+      #area-sertifikat-cetak {
+        display: block !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== [BAGIAN: BAR AKSESIBILITAS] ========== -->
+  <div class="bar-aksesibilitas sembunyikan-saat-cetak">
+    <div class="isi-bar-aksesibilitas">
+      <div class="info-arsitek-mini">
+        <span class="lencana-pangkat-mini" id="tampilan-pangkat-atas">👷 Pangkat: Magang</span>
+        <span id="tampilan-skor-atas">⭐ Skor: 0</span>
+        <span id="tampilan-combo-atas">🔥 Combo: 0x</span>
+      </div>
+      <div class="kelompok-tombol-akses">
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(-1)">A-</button>
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(1)">A+</button>
+        <button type="button" class="tombol-akses" onclick="toggleModeGelap()">🌓 Mode Kontras</button>
+        <button type="button" class="tombol-akses" onclick="resetProgresBelajar()">🔄 Reset Progres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== [BAGIAN: NAVBAR] ========== -->
+  <header class="navbar-utama sembunyikan-saat-cetak">
+    <div class="isi-navbar">
+      <a href="index.html" class="merek-aplikasi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#FFC107"/>
+          <polygon points="12,36 36,36 12,12" fill="none" stroke="#0B2A4A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="29" width="7" height="7" fill="none" stroke="#0B2A4A" stroke-width="2"/>
+        </svg>
+        <div>
+          <span class="teks-merek">ARCHIPYTHA</span>
+          <span class="subteks-merek">Proyek 5: Ujian Sertifikasi Arsitek Utama</span>
+        </div>
+      </a>
+      <nav aria-label="Navigasi Proyek">
+        <ul class="daftar-menu-navigasi" id="daftar-menu-navigasi"></ul>
+      </nav>
+    </div>
+  </header>
+  <div class="ornamen-penggaris sembunyikan-saat-cetak"></div>
+
+  <!-- ========== [BAGIAN: KONTEN UTAMA UJIAN SERTIFIKASI] ========== -->
+  <main class="wadah-utama" id="awal-materi">
+
+    <!-- Panel Sapaan Maskot -->
+    <section class="panel-maskot sembunyikan-saat-cetak">
+      <div class="ikon-maskot-wadah" id="maskot-ujian"></div>
+      <div class="isi-dialog-maskot">
+        <div class="nama-maskot">Ir. Bima — Ketua Dewan Penguji Arsitek</div>
+        <p class="pesan-maskot" id="pesan-maskot-ujian">
+          Selamat telah mencapai tahap puncak, Arsitek! Di <strong>Ujian Sertifikasi Arsitek</strong> ini, kamu akan diuji dengan 10 soal komprehensif (pilihan ganda & isian singkat). Raih skor minimal <strong>70%</strong> untuk menyandang gelar <strong>Arsitek Utama</strong> dan mencetak Sertifikat Resmimu!
+        </p>
+      </div>
+      <button type="button" class="tombol-akses" onclick="bacakanTeks(document.getElementById('pesan-maskot-ujian').innerText)">
+        🔊 Bacakan
+      </button>
+    </section>
+
+    <!-- 1. FORMULIR IDENTITAS PESERTA UJIAN SERTIFIKASI -->
+    <section class="kartu-materi sembunyikan-saat-cetak">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">REGISTRASI LISENSI ARSITEK</span>
+          <h1 class="judul-kartu">🪪 Data Peserta Ujian Sertifikasi</h1>
+        </div>
+      </div>
+
+      <p style="margin-bottom:1rem;">
+        Isi nama lengkap dan kelas/sekolahmu di bawah ini. Nama ini akan dicantumkan secara resmi pada <strong>Sertifikat Arsitek Muda</strong> setelah kamu lulus ujian!
+      </p>
+
+      <div class="grid-dua-kolom" style="align-items:end;">
+        <div>
+          <label for="input-nama-sertifikat" style="font-weight:700; display:block; margin-bottom:0.35rem;">
+            Nama Lengkap Siswa / Arsitek:
+          </label>
+          <input type="text" id="input-nama-sertifikat" class="input-teks" placeholder="Contoh: Budi Santoso" maxlength="50">
+        </div>
+        <div>
+          <label for="input-kelas-sertifikat" style="font-weight:700; display:block; margin-bottom:0.35rem;">
+            Kelas & Nama Sekolah:
+          </label>
+          <input type="text" id="input-kelas-sertifikat" class="input-teks" placeholder="Contoh: Kelas VIII-A — SMP Negeri 1" maxlength="60">
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. LEMBAR SOAL UJIAN SERTIFIKASI (10 SOAL: PILIHAN GANDA + ISIAN SINGKAT) -->
+    <section class="kartu-materi sembunyikan-saat-cetak" id="seksi-lembar-ujian">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">LEMBAR EVALUASI AKHIR — 10 SOAL</span>
+          <h2 class="judul-kartu">📋 Soal Ujian Sertifikasi Arsitek (Syarat Lulus: 70%)</h2>
+        </div>
+      </div>
+
+      <div id="wadah-daftar-soal-ujian"></div>
+
+      <div style="display:flex; gap:0.85rem; flex-wrap:wrap; align-items:center; margin-top:1.25rem;">
+        <button type="button" class="tombol-utama" id="tombol-kumpul-ujian">
+          🏆 Kumpulkan & Periksa Ujian Sertifikasi
+        </button>
+        <button type="button" class="tombol-sekunder" id="tombol-ulangi-ujian">
+          🔄 Acak / Ulangi Ujian
+        </button>
+      </div>
+
+      <!-- Ringkasan Hasil Ujian -->
+      <div id="ringkasan-hasil-ujian" class="kotak-feedback" style="margin-top:1.5rem;"></div>
+    </section>
+
+    <!-- 3. AREA SERTIFIKAT CETAK (@media print) -->
+    <section id="area-sertifikat-cetak" aria-label="Sertifikat Kelulusan Arsitek Muda">
+      <div class="bingkai-dalam-sertifikat">
+        <!-- Lencana Helm Emas SVG -->
+        <div style="margin-bottom:0.5rem;">
+          <svg viewBox="0 0 80 80" width="76" height="76" aria-hidden="true">
+            <circle cx="40" cy="40" r="36" fill="#0B2A4A" stroke="#FFC107" stroke-width="4"/>
+            <path d="M 18 44 C 18 24, 62 24, 62 44 Z" fill="#FFC107" stroke="#FFFFFF" stroke-width="2"/>
+            <rect x="35" y="22" width="10" height="15" rx="2" fill="#F59E0B"/>
+            <path d="M 14 44 L 66 44" stroke="#FFC107" stroke-width="4.5" stroke-linecap="round"/>
+            <polygon points="40,52 43,58 50,59 45,63 46,70 40,66 34,70 35,63 30,59 37,58" fill="#FFC107"/>
+          </svg>
+        </div>
+
+        <div class="judul-sertifikat">SERTIFIKAT KOMPETENSI ARSITEK MUDA</div>
+        <div class="subjudul-sertifikat">DIVISI KONSTRUKSI GEOMETRI & TEOREMA PYTHAGORAS — SMP KELAS VIII</div>
+
+        <p style="font-size:1rem; color:#334155;">Diberikan dengan bangga kepada:</p>
+        <div class="nama-penerima-sertifikat" id="cetak-nama-siswa">Arsitek Muda</div>
+        <div style="font-weight:700; color:#475569; margin-bottom:1rem;" id="cetak-kelas-siswa">Kelas VIII SMP</div>
+
+        <p style="max-width:680px; margin:0 auto 1.25rem; font-size:0.96rem; line-height:1.6; color:#1E293B;">
+          Telah berhasil menyelesaikan seluruh tahapan penemuan konsep (<em>Discovery Learning</em>) mulai dari
+          <strong>Proyek 1 (Fondasi Teorema Pythagoras)</strong>, <strong>Proyek 2 (Rangka Baja & Triple Pythagoras)</strong>,
+          <strong>Proyek 3 (Atap & Tangga Sudut Istimewa)</strong>, hingga <strong>Proyek 4 (Lapangan Proyek Kontekstual)</strong>,
+          serta dinyatakan <strong>LULUS</strong> pada Ujian Sertifikasi Akhir.
+        </p>
+
+        <!-- Kotak Skor & Pangkat pada Sertifikat -->
+        <div style="display:inline-flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; background:#F8FAFC; border:2px solid #0B2A4A; border-radius:8px; padding:0.75rem 1.5rem; margin-bottom:0.5rem;">
+          <div>
+            <span style="font-size:0.8rem; color:#475569; display:block;">SKOR UJIAN SERTIFIKASI</span>
+            <strong style="font-family:var(--font-judul); font-size:1.5rem; color:#2E7D32;" id="cetak-skor-ujian">100 / 100</strong>
+          </div>
+          <div style="border-left:2px dashed #CBD5E1; padding-left:1.5rem;">
+            <span style="font-size:0.8rem; color:#475569; display:block;">GELAR PANGKAT AKHIR</span>
+            <strong style="font-family:var(--font-judul); font-size:1.5rem; color:#0B2A4A;" id="cetak-pangkat-akhir">Arsitek Utama</strong>
+          </div>
+          <div style="border-left:2px dashed #CBD5E1; padding-left:1.5rem;">
+            <span style="font-size:0.8rem; color:#475569; display:block;">TOTAL POIN KONSTRUKSI</span>
+            <strong style="font-family:var(--font-judul); font-size:1.5rem; color:#B45309;" id="cetak-total-poin">500 Poin</strong>
+          </div>
+        </div>
+
+        <div class="kaki-sertifikat">
+          <div style="text-align:center;">
+            <div style="font-size:0.85rem; color:#475569;">Tanggal Terbit Sertifikat:</div>
+            <strong id="cetak-tanggal-terbit" style="font-size:0.95rem;">-</strong>
+            <div style="font-size:0.78rem; color:#64748B; margin-top:0.2rem;" id="cetak-kode-lisensi">No. Lisensi: MAM-VIII-001</div>
+          </div>
+
+          <div style="text-align:center;">
+            <div style="font-size:0.85rem; color:#475569; margin-bottom:1.8rem;">Kepala Arsitek Pembimbing,</div>
+            <strong style="border-top:2px solid #0B2A4A; padding-top:0.25rem; display:inline-block; min-width:180px;">
+              Ir. Bima Konstruksi, S.T.
+            </strong>
+          </div>
+        </div>
+
+        <!-- Tombol Cetak (Disembunyikan otomatis saat kertas dicetak) -->
+        <div class="sembunyikan-saat-cetak" style="margin-top:2rem; padding-top:1.25rem; border-top:1px dashed #CBD5E1;">
+          <button type="button" class="tombol-utama" onclick="window.print()">
+            🖨️ Cetak Sertifikat / Simpan sebagai PDF
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. JURNAL REFLEKSI AKHIR -->
+    <section class="kartu-materi sembunyikan-saat-cetak" id="wadah-jurnal-ujian"></section>
+
+  </main>
+
+  <footer class="kaki-halaman sembunyikan-saat-cetak">
+    <p><strong>ARCHIPYTHA</strong> — Proyek 5: Ujian Sertifikasi Arsitek Utama</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ==========================================================================
+       LOGIKA UJIAN SERTIFIKASI ARSITEK & SERTIFIKAT CETAK (kuis.html)
+       ========================================================================== */
+
+    // UBAH DI SINI: Daftar 10 Soal Ujian Sertifikasi Akhir (Pilihan Ganda & Isian Singkat)
+    const daftarSoalUjian = [
+      {
+        id: "ujian-1",
+        proyek: "ujian",
+        jenis: "pilihan-ganda",
+        level: 1,
+        pertanyaan: "Sebuah segitiga siku-siku memiliki panjang sisi tegak p, sisi alas q, dan sisi miring (hipotenusa) r. Rumus Teorema Pythagoras yang benar untuk mencari salah satu sisi siku-siku p adalah...",
+        pilihan: [
+          "p² = q² + r²",
+          "p² = r² - q²",
+          "p² = q² - r²",
+          "p = r - q"
+        ],
+        dataGambar: { jenis: "siku", a: 6, b: 8, labelA: "p (Sisi Tegak)", labelB: "q (Sisi Alas)", labelC: "r (Sisi Miring)" },
+        kunci: 1,
+        petunjuk1: "Sisi miring r adalah sisi terpanjang, sehingga r² = p² + q².",
+        petunjuk2: "Untuk mencari sisi siku-siku p², kurangkan kuadrat sisi miring (r²) dengan kuadrat sisi siku-siku lainnya (q²).",
+        kesalahanUmum: {
+          "0": "Jika ditambah (q² + r²), hasilnya akan lebih besar dari sisi miring r². Ingat bahwa r adalah sisi miring!",
+          "2": "Karena r adalah sisi miring (terpanjang), maka r² yang dikurangi q², bukan sebaliknya."
+        },
+        penjelasan: "Karena r adalah hipotenusa, berlaku p² + q² = r², sehingga untuk mencari sisi siku-siku p berlaku p² = r² - q²."
+      },
+      {
+        id: "ujian-2",
+        proyek: "ujian",
+        jenis: "isian-angka",
+        level: 1,
+        pertanyaan: "Tiang bendera upacara di halaman sekolah memiliki tinggi 12 meter. Tali pengerek bendera ditarik kencang dari puncak tiang ke patok tanah yang berjarak 5 meter dari pangkal tiang. Berapa meter panjang tali pengerek bendera tersebut?",
+        dataGambar: { jenis: "siku", a: 12, b: 5, labelA: "Tiang = 12 m", labelB: "Jarak = 5 m", labelC: "Tali = ? m" },
+        kunci: 13,
+        petunjuk1: "Tinggi tiang (12 m) dan jarak patok (5 m) membentuk sudut siku-siku. Panjang tali adalah sisi miring.",
+        petunjuk2: "Hitung c = √(12² + 5²) = √(144 + 25) = √169.",
+        kesalahanUmum: {
+          "17": "Kamu menjumlahkan langsung 12 + 5 = 17. Kuadratkan dulu masing-masing sisi ya!",
+          "169": "169 adalah nilai c². Jangan lupa menarik akar kuadratnya: √169 = 13."
+        },
+        penjelasan: "Panjang tali bendera merupakan sisi miring: c = √(12² + 5²) = √(144 + 25) = √169 = 13 meter."
+      },
+      {
+        id: "ujian-3",
+        proyek: "ujian",
+        jenis: "pilihan-ganda",
+        level: 1,
+        pertanyaan: "Manakah di antara kelompok tiga ukuran batang baja berikut yang merupakan Triple Pythagoras?",
+        pilihan: [
+          "7 cm, 12 cm, 15 cm",
+          "8 cm, 15 cm, 17 cm",
+          "9 cm, 12 cm, 16 cm",
+          "10 cm, 20 cm, 25 cm"
+        ],
+        kunci: 1,
+        petunjuk1: "Triple Pythagoras harus memenuhi a² + b² = c² dengan c sebagai bilangan terbesar.",
+        petunjuk2: "Uji pilihan kedua: 8² + 15² = 64 + 225 = 289, dan 17² = 289.",
+        kesalahanUmum: {
+          "2": "9² + 12² = 81 + 144 = 225. Agar siku-siku, sisi miringnya harus √225 = 15 cm, bukan 16 cm."
+        },
+        penjelasan: "Pasangan (8, 15, 17) memenuhi 8² + 15² = 64 + 225 = 289 = 17², sehingga merupakan Triple Pythagoras."
+      },
+      {
+        id: "ujian-4",
+        proyek: "ujian",
+        jenis: "pilihan-ganda",
+        level: 2,
+        pertanyaan: "Seorang arsitek menyusun kerangka taman berbentuk segitiga dengan panjang ketiga sisinya 8 meter, 10 meter, dan 14 meter. Jenis segitiga apakah yang terbentuk?",
+        pilihan: [
+          "Segitiga Siku-Siku",
+          "Segitiga Lancip",
+          "Segitiga Tumpul",
+          "Segitiga Sama Kaki"
+        ],
+        kunci: 2,
+        petunjuk1: "Sisi terpanjang adalah c = 14 m. Bandingkan nilai 8² + 10² terhadap 14².",
+        petunjuk2: "8² + 10² = 64 + 100 = 164, sedangkan 14² = 196. Karena a² + b² < c² (164 < 196), jenis segitiga apakah itu?",
+        kesalahanUmum: {
+          "1": "Ingat: jika a² + b² LEBIH KECIL dari c² (164 < 196), maka sisi c terlalu lebar sehingga sudut di depannya melebar menjadi Segitiga Tumpul, bukan lancip!"
+        },
+        penjelasan: "Karena 8² + 10² = 164 dan 14² = 196, diperoleh a² + b² < c² (164 < 196). Maka segitiga tersebut adalah Segitiga Tumpul."
+      },
+      {
+        id: "ujian-5",
+        proyek: "ujian",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Sebuah tangga kayu sepanjang 15 meter disandarkan pada dinding rumah. Jika jarak ujung bawah tangga ke dinding adalah 9 meter, berapa meter tinggi dinding yang dicapai ujung atas tangga?",
+        dataGambar: { jenis: "siku", a: 12, b: 9, labelA: "Tinggi = ? m", labelB: "Jarak = 9 m", labelC: "Tangga = 15 m" },
+        kunci: 12,
+        petunjuk1: "Tangga 15 m adalah sisi miring (c) dan jarak 9 m adalah sisi alas (b).",
+        petunjuk2: "Gunakan pengurangan kuadrat: a = √(15² - 9²) = √(225 - 81) = √144.",
+        kesalahanUmum: {
+          "144": "144 adalah nilai a². Jangan lupa tarik akar kuadratnya: √144 = 12!",
+          "6": "Kamu mengurangkan langsung 15 - 9 = 6 tanpa menguadratkan terlebih dahulu."
+        },
+        penjelasan: "Tinggi dinding: a = √(15² - 9²) = √(225 - 81) = √144 = 12 meter."
+      },
+      {
+        id: "ujian-6",
+        proyek: "ujian",
+        jenis: "pilihan-ganda",
+        level: 2,
+        pertanyaan: "Penyangga kanopi sekolah berbentuk segitiga siku-siku sama kaki (sudut 45° - 45° - 90°). Jika kedua sisi siku-sikunya masing-masing berukuran 8 meter, berapakah panjang besi miring penyangga kanopi tersebut?",
+        pilihan: [
+          "8 meter",
+          "8√2 meter",
+          "8√3 meter",
+          "16 meter"
+        ],
+        dataGambar: { jenis: "istimewa-45", k: 8 },
+        kunci: 1,
+        petunjuk1: "Perbandingan sisi segitiga bersudut 45° - 45° - 90° adalah 1 : 1 : √2.",
+        petunjuk2: "Jika sisi siku-sikunya k = 8 m, maka sisi miringnya adalah k√2.",
+        kesalahanUmum: {
+          "2": "8√3 adalah perbandingan untuk sudut 60°, bukan untuk segitiga siku-siku sama kaki 45°.",
+          "3": "16 meter diperoleh jika dikalikan 2, padahal pengali sisi miring pada sudut 45° adalah √2."
+        },
+        penjelasan: "Berdasarkan perbandingan 1 : 1 : √2 pada segitiga 45°-45°-90°, panjang sisi miringnya adalah 8√2 meter."
+      },
+      {
+        id: "ujian-7",
+        proyek: "ujian",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Sebuah jalur kursi roda (ramp) dirancang membentuk segitiga siku-siku dengan sudut kemiringan 30° terhadap lantai mendatar. Jika tinggi undakan lantai (sisi di depan sudut 30°) adalah 1,5 meter, berapa meter panjang bidang miring jalur kursi roda tersebut?",
+        dataGambar: { jenis: "istimewa-3060", k: 1.5 },
+        kunci: 3,
+        petunjuk1: "Pada segitiga 30° - 60° - 90°, perbandingan sisi depan 30° : depan 60° : sisi miring (depan 90°) adalah 1 : √3 : 2.",
+        petunjuk2: "Panjang bidang miring (depan 90°) adalah 2 kali tinggi sisi di depan sudut 30° (2 × 1,5).",
+        kesalahanUmum: {
+          "0.75": "Kamu membagi 1,5 dengan 2. Karena bidang miring adalah hipotenusa (terpanjang), kalikan 1,5 × 2!",
+          "1.5": "1,5 m adalah sisi di depan sudut 30°. Sisi miringnya bernilai 2 kali lipat."
+        },
+        penjelasan: "Dengan perbandingan depan 30° : miring = 1 : 2, maka panjang jalur miring adalah 2 × 1,5 = 3 meter."
+      },
+      {
+        id: "ujian-8",
+        proyek: "ujian",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Rangka kuda-kuda atap rumah berbentuk segitiga sama kaki dengan lebar bentang alas total 10 meter dan tinggi tiang tengah (nok) 12 meter. Berapa meter panjang salah satu kemiringan kasau atap tersebut?",
+        dataGambar: { jenis: "siku", a: 12, b: 5, labelA: "Tinggi Nok = 12 m", labelB: "Setengah Alas = 5 m", labelC: "Kasau = ? m" },
+        kunci: 13,
+        petunjuk1: "Bagi dua terlebih dahulu lebar bentang alas atap: 10 ÷ 2 = 5 meter.",
+        petunjuk2: "Gunakan Pythagoras dengan tinggi a = 12 m dan setengah alas b = 5 m: c = √(12² + 5²).",
+        kesalahanUmum: {
+          "15.62": "Kamu menggunakan seluruh lebar 10 m sebagai alas segitiga siku-siku. Bagi dua dulu menjadi 5 m!",
+          "169": "169 adalah nilai c². Tarik akar kuadratnya menjadi √169 = 13."
+        },
+        penjelasan: "Setengah bentang alas = 10 ÷ 2 = 5 m. Panjang kemiringan atap: c = √(12² + 5²) = √(144 + 25) = √169 = 13 meter."
+      },
+      {
+        id: "ujian-9",
+        proyek: "ujian",
+        jenis: "isian-angka",
+        level: 3,
+        pertanyaan: "[HOTS] Seorang siswa menerbangkan layang-layang dengan panjang benang lurus 20 meter. Jarak mendatar siswa ke titik tepat di bawah layang-layang adalah 12 meter. Jika tinggi tangan siswa saat memegang benang adalah 1,2 meter dari permukaan tanah, berapa meter tinggi layang-layang diukur dari permukaan tanah?",
+        dataGambar: { jenis: "siku", a: 16, b: 12, labelA: "Tinggi Segitiga = ? (+1,2m)", labelB: "Mendatar = 12 m", labelC: "Benang = 20 m" },
+        kunci: 17.2,
+        petunjuk1: "Langkah 1: Cari tinggi vertikal layang-layang dari posisi tangan siswa: a = √(20² - 12²) = √(400 - 144) = √256.",
+        petunjuk2: "Hasil √256 adalah 16 meter. Langkah 2: Tambahkan tinggi tangan siswa dari tanah (16 + 1,2)!",
+        kesalahanUmum: {
+          "16": "16 meter baru tinggi dari posisi tangan siswa. Jangan lupa tambahkan tinggi tangan siswa dari tanah (1,2 meter)!",
+          "14.8": "Tinggi tangan siswa harus ditambahkan (16 + 1,2 = 17,2 m), bukan dikurangkan."
+        },
+        penjelasan: "Tinggi dari tangan siswa: a = √(20² - 12²) = √256 = 16 m. Tinggi layang-layang dari permukaan tanah = 16 + 1,2 = 17,2 meter."
+      },
+      {
+        id: "ujian-10",
+        proyek: "ujian",
+        jenis: "isian-angka",
+        level: 3,
+        pertanyaan: "[HOTS] Lapangan futsal sekolah berbentuk persegi panjang dengan ukuran panjang 24 meter dan lebar 7 meter. Pelatih meminta pemain berlari dari pojok A ke pojok seberang C menyusuri garis tepi lapangan (24 m + 7 m), lalu kembali dari C ke A memotong lurus melewati garis diagonal. Berapa meter TOTAL jarak yang ditempuh pemain tersebut dalam satu putaran itu?",
+        dataGambar: { jenis: "siku", a: 7, b: 24,batasMaks: 30, labelA: "Lebar = 7 m", labelB: "Panjang = 24 m", labelC: "Diagonal = ? m" },
+        kunci: 56,
+        petunjuk1: "Jarak berangkat lewat tepi lapangan = 24 + 7 = 31 meter. Sekarang cari jarak pulang lewat garis diagonal: c = √(24² + 7²).",
+        petunjuk2: "Diagonal c = √(576 + 49) = √625 = 25 meter. Jumlahkan jarak berangkat (31 m) dengan jarak pulang diagonal (25 m)!",
+        kesalahanUmum: {
+          "25": "25 meter baru panjang garis diagonalnya saja. Jumlahkan dengan jarak berangkat lewat tepi lapangan (24 + 7 + 25)!",
+          "31": "31 meter baru jarak lewat tepi lapangan (24 + 7). Tambahkan dengan panjang garis diagonal (25 m)!"
+        },
+        penjelasan: "Jarak lewat tepi = 24 + 7 = 31 m. Jarak diagonal = √(24² + 7²) = √625 = 25 m. Total jarak tempuh = 31 + 25 = 56 meter."
+      }
+    ];
+
+    // Masukkan soal ujian ke daftarSoal global agar fitur petunjuk & pemeriksa terintegrasi
+    daftarSoalUjian.forEach(soalBaru => {
+      if (!daftarSoal.some(s => s.id === soalBaru.id)) {
+        daftarSoal.push(soalBaru);
+      }
+    });
+
+    /**
+     * Fungsi renderLembarUjian: Merender seluruh soal ujian beserta ilustrasi SVG-nya.
+     */
+    function renderLembarUjian() {
+      const wadah = document.getElementById("wadah-daftar-soal-ujian");
+      if (!wadah) return;
+
+      wadah.innerHTML = daftarSoalUjian.map((soal, idx) => `
+        <div class="kartu-soal-ujian" id="kartu-ujian-${soal.id}">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.65rem;">
+            <span class="label-kode-teknik">SOAL ${idx + 1} DARI ${daftarSoalUjian.length} • LEVEL ${soal.level} ${soal.level === 3 ? '(HOTS)' : ''}</span>
+            <button type="button" class="tombol-akses" style="background:#0B2A4A; color:#FFF;"
+                    onclick="bacakanTeks('${soal.pertanyaan.replace(/'/g, "\\'")}')">
+              🔊 Bacakan Soal
+            </button>
+          </div>
+
+          <div class="${soal.dataGambar ? 'grid-dua-kolom' : ''}">
+            <div>
+              <p style="font-size:1.02rem; font-weight:600; margin-bottom:1rem;">${soal.pertanyaan}</p>
+
+              ${soal.jenis === "pilihan-ganda" ? `
+                <div style="display:grid; gap:0.55rem; margin-bottom:0.85rem;">
+                  ${soal.pilihan.map((teksOpsi, idxOpsi) => `
+                    <label class="opsi-pilihan-ujian">
+                      <input type="radio" name="jawaban-${soal.id}" value="${idxOpsi}">
+                      <span>${teksOpsi}</span>
+                    </label>
+                  `).join("")}
+                </div>
+              ` : `
+                <div style="margin-bottom:0.85rem; max-width:280px;">
+                  <input type="number" step="any" class="input-angka" id="jawaban-${soal.id}" placeholder="Ketik jawaban angka...">
+                </div>
+              `}
+
+              <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <button type="button" class="tombol-garis" onclick="tampilkanPetunjukSoal('${soal.id}', 1)">💡 Petunjuk 1</button>
+                <button type="button" class="tombol-garis" onclick="tampilkanPetunjukSoal('${soal.id}', 2)">💡 Petunjuk 2</button>
+              </div>
+
+              <div id="petunjuk-${soal.id}" class="kotak-petunjuk"></div>
+              <div id="feedback-${soal.id}" class="kotak-feedback"></div>
+            </div>
+
+            ${soal.dataGambar ? `
+              <div>
+                <div class="wadah-kanvas-svg" id="kanvas-ujian-${soal.id}" style="min-height:220px;"></div>
+              </div>
+            ` : ``}
+          </div>
+        </div>
+      `).join("");
+
+      // Gambar setiap ilustrasi SVG menggunakan fungsi pusat gambarSegitigaSiku / gambarSegitigaIstimewa
+      daftarSoalUjian.forEach(soal => {
+        if (!soal.dataGambar) return;
+        const idKanvas = `kanvas-ujian-${soal.id}`;
+        if (soal.dataGambar.jenis === "siku") {
+          gambarSegitigaSiku(idKanvas, soal.dataGambar.a, soal.dataGambar.b, {
+            batasMaks: soal.dataGambar.batasMaks || 25,
+            labelA: soal.dataGambar.labelA,
+            labelB: soal.dataGambar.labelB,
+            labelC: soal.dataGambar.labelC
+          });
+        } else if (soal.dataGambar.jenis === "istimewa-45") {
+          gambarSegitigaIstimewa(idKanvas, "45-45-90", soal.dataGambar.k);
+        } else if (soal.dataGambar.jenis === "istimewa-3060") {
+          gambarSegitigaIstimewa(idKanvas, "30-60-90", soal.dataGambar.k);
+        }
+      });
+    }
+
+    /**
+     * Fungsi tampilkanSertifikatResmi: Mengisi data sertifikat dan menampilkannya di layar.
+     */
+    function tampilkanSertifikatResmi(skorUjian) {
+      const progres = ambilProgresBelajar();
+      const inputNama = document.getElementById("input-nama-sertifikat").value.trim() || progres.namaArsitek || "Arsitek Muda Berprestasi";
+      const inputKelas = document.getElementById("input-kelas-sertifikat").value.trim() || progres.kelasArsitek || "Kelas VIII SMP";
+
+      // Simpan nama & kelas ke localStorage
+      progres.namaArsitek = inputNama;
+      progres.kelasArsitek = inputKelas;
+      simpanProgresBelajar(progres);
+
+      const pangkatAkhir = tentukanPangkatArsitek(progres.skorSiswa, progres.proyekTerbukaMaksimal);
+      const tanggalHariIni = new Date().toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+      const nomorUnik = `MAM-VIII-${new Date().getFullYear()}-${String(progres.skorSiswa).padStart(4, "0")}`;
+
+      document.getElementById("cetak-nama-siswa").textContent = inputNama;
+      document.getElementById("cetak-kelas-siswa").textContent = inputKelas;
+      document.getElementById("cetak-skor-ujian").textContent = `${skorUjian} / 100`;
+      document.getElementById("cetak-pangkat-akhir").textContent = pangkatAkhir;
+      document.getElementById("cetak-total-poin").textContent = `${progres.skorSiswa} Poin`;
+      document.getElementById("cetak-tanggal-terbit").textContent = tanggalHariIni;
+      document.getElementById("cetak-kode-lisensi").textContent = `No. Lisensi: ${nomorUnik}`;
+
+      const areaSertifikat = document.getElementById("area-sertifikat-cetak");
+      areaSertifikat.classList.add("tampil");
+    }
+
+    /**
+     * Fungsi evaluasiUjianSertifikasi: Memeriksa seluruh 10 soal ujian, menampilkan feedback
+     * per soal, mencatat kelulusan, dan menerbitkan sertifikat jika skor >= 70%.
+     */
+    function evaluasiUjianSertifikasi() {
+      let totalBenar = 0;
+
+      daftarSoalUjian.forEach(soal => {
+        let jawabanSiswa = "";
+        if (soal.jenis === "pilihan-ganda") {
+          const terpilih = document.querySelector(`input[name="jawaban-${soal.id}"]:checked`);
+          if (terpilih) jawabanSiswa = terpilih.value;
+        } else {
+          const inputEl = document.getElementById(`jawaban-${soal.id}`);
+          if (inputEl) jawabanSiswa = inputEl.value;
+        }
+
+        const hasil = periksaJawabanSoal(soal, jawabanSiswa);
+        const kotakFb = document.getElementById(`feedback-${soal.id}`);
+        const kartuSoal = document.getElementById(`kartu-ujian-${soal.id}`);
+
+        kotakFb.className = `kotak-feedback tampil ${hasil.benar ? "benar" : "salah"}`;
+        kotakFb.innerHTML = hasil.pesanFeedback;
+        kartuSoal.style.borderLeftColor = hasil.benar ? "var(--hijau-benar)" : "var(--merah-salah)";
+
+        catatHasilSoal(soal.id, hasil.benar, 20);
+        if (hasil.benar) totalBenar += 1;
+      });
+
+      const skorPersen = Math.round((totalBenar / daftarSoalUjian.length) * 100);
+      bukaProyekBerikutnya(5, skorPersen);
+
+      const kotakRingkasan = document.getElementById("ringkasan-hasil-ujian");
+      if (skorPersen >= BATAS_LULUS) {
+        kotakRingkasan.className = "kotak-feedback tampil benar animasi-benar";
+        kotakRingkasan.innerHTML = `
+          <h3 style="font-size:1.35rem; margin-bottom:0.4rem;">
+            🏆 SELAMAT! KAMU LULUS UJIAN SERTIFIKASI ARSITEK! (Skor: ${skorPersen}% — ${totalBenar}/${daftarSoalUjian.length} Benar)
+          </h3>
+          <p style="margin-bottom:0.85rem;">
+            Luar biasa! Kamu telah menguasai konsep Teorema Pythagoras, Triple Pythagoras, Sudut Istimewa, dan penerapannya di lapangan. Sertifikat resmimu telah diterbitkan di bawah ini!
+          </p>
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+            <a href="#area-sertifikat-cetak" class="tombol-utama">🎓 Lihat & Cetak Sertifikat</a>
+            <a href="index.html" class="tombol-sekunder">🏢 Kembali ke Kantor Proyek</a>
+          </div>
+        `;
+        tampilkanSertifikatResmi(skorPersen);
+        tampilkanNotifikasiMaskot(`Selamat Arsitek! Kamu lulus Ujian Sertifikasi dengan skor ${skorPersen}%!`, "senang");
+      } else {
+        document.getElementById("area-sertifikat-cetak").classList.remove("tampil");
+        kotakRingkasan.className = "kotak-feedback tampil salah";
+        kotakRingkasan.innerHTML = `
+          <h3 style="font-size:1.25rem; margin-bottom:0.4rem;">
+            👷 Skor Ujianmu: ${skorPersen}% (${totalBenar}/${daftarSoalUjian.length} Benar) — Belum Mencapai Batas Lulus ${BATAS_LULUS}%
+          </h3>
+          <p style="margin-bottom:0.75rem;">
+            Jangan berkecil hati, Arsitek! Setiap bangunan kokoh membutuhkan ketelitian. Baca pembahasan pada soal yang masih merah di atas, lalu klik tombol <strong>Acak / Ulangi Ujian</strong> untuk mencoba lagi!
+          </p>
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <a href="materi1.html" class="tombol-garis">📖 Ulas Proyek 1</a>
+            <a href="materi2.html" class="tombol-garis">📖 Ulas Proyek 2</a>
+            <a href="materi3.html" class="tombol-garis">📖 Ulas Proyek 3</a>
+            <a href="latihan.html" class="tombol-garis">📖 Ulas Lapangan</a>
+          </div>
+        `;
+        tampilkanNotifikasiMaskot(`Skormu ${skorPersen}%. Pelajari pembahasannya dan coba lagi agar mencapai ${BATAS_LULUS}%!`, "semangat");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("maskot-ujian").innerHTML = buatSvgMaskot("senang");
+
+      const progres = ambilProgresBelajar();
+      const inputNama = document.getElementById("input-nama-sertifikat");
+      const inputKelas = document.getElementById("input-kelas-sertifikat");
+
+      if (progres.namaArsitek && progres.namaArsitek !== "Arsitek Muda") {
+        inputNama.value = progres.namaArsitek;
+      }
+      if (progres.kelasArsitek) {
+        inputKelas.value = progres.kelasArsitek;
+      }
+
+      // Perbarui nama langsung pada sertifikat saat diketik
+      inputNama.addEventListener("input", () => {
+        const prog = ambilProgresBelajar();
+        prog.namaArsitek = inputNama.value.trim() || "Arsitek Muda";
+        simpanProgresBelajar(prog);
+        document.getElementById("cetak-nama-siswa").textContent = prog.namaArsitek;
+      });
+
+      inputKelas.addEventListener("input", () => {
+        const prog = ambilProgresBelajar();
+        prog.kelasArsitek = inputKelas.value.trim() || "Kelas VIII SMP";
+        simpanProgresBelajar(prog);
+        document.getElementById("cetak-kelas-siswa").textContent = prog.kelasArsitek;
+      });
+
+      // Render 10 Soal Ujian
+      renderLembarUjian();
+
+      // Jika sebelumnya sudah pernah lulus ujian, tampilkan sertifikatnya langsung
+      if (progres.proyekSelesai.ujian && (progres.skorGerbang.ujian || 0) >= BATAS_LULUS) {
+        tampilkanSertifikatResmi(progres.skorGerbang.ujian);
+      }
+
+      document.getElementById("tombol-kumpul-ujian").addEventListener("click", evaluasiUjianSertifikasi);
+      document.getElementById("tombol-ulangi-ujian").addEventListener("click", () => {
+        renderLembarUjian();
+        document.getElementById("ringkasan-hasil-ujian").className = "kotak-feedback";
+        window.scrollTo({ top: document.getElementById("seksi-lembar-ujian").offsetTop - 80, behavior: "smooth" });
+      });
+
+      // Render Jurnal Refleksi Akhir
+      renderJurnalRefleksi("wadah-jurnal-ujian", "ujian", "Seluruh Proyek (Fondasi, Rangka Baja, Sudut Istimewa, dan Lapangan)");
+    });
+  </script>
+</body>
+</html>

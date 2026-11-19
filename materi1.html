@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyek 1: Fondasi (Teorema Pythagoras) — ARCHIPYTHA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== [BAGIAN: BAR AKSESIBILITAS] ========== -->
+  <div class="bar-aksesibilitas">
+    <div class="isi-bar-aksesibilitas">
+      <div class="info-arsitek-mini">
+        <span class="lencana-pangkat-mini" id="tampilan-pangkat-atas">👷 Pangkat: Magang</span>
+        <span id="tampilan-skor-atas">⭐ Skor: 0</span>
+        <span id="tampilan-combo-atas">🔥 Combo: 0x</span>
+      </div>
+      <div class="kelompok-tombol-akses">
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(-1)">A-</button>
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(1)">A+</button>
+        <button type="button" class="tombol-akses" onclick="toggleModeGelap()">🌓 Mode Kontras</button>
+        <button type="button" class="tombol-akses" onclick="resetProgresBelajar()">🔄 Reset Progres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== [BAGIAN: NAVBAR] ========== -->
+  <header class="navbar-utama">
+    <div class="isi-navbar">
+      <a href="index.html" class="merek-aplikasi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#FFC107"/>
+          <polygon points="12,36 36,36 12,12" fill="none" stroke="#0B2A4A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="29" width="7" height="7" fill="none" stroke="#0B2A4A" stroke-width="2"/>
+        </svg>
+        <div>
+          <span class="teks-merek">ARCHIPYTHA</span>
+          <span class="subteks-merek">Proyek 1: Fondasi Bangunan (Teorema Pythagoras)</span>
+        </div>
+      </a>
+      <nav aria-label="Navigasi Proyek">
+        <ul class="daftar-menu-navigasi" id="daftar-menu-navigasi"></ul>
+      </nav>
+    </div>
+  </header>
+  <div class="ornamen-penggaris"></div>
+
+  <!-- ========== [BAGIAN: KONTEN UTAMA PROYEK 1] ========== -->
+  <main class="wadah-utama" id="awal-materi">
+
+    <!-- Sapaan Maskot & Pertanyaan Pemantik -->
+    <section class="panel-maskot">
+      <div class="ikon-maskot-wadah" id="maskot-proyek1"></div>
+      <div class="isi-dialog-maskot">
+        <div class="nama-maskot">Ir. Bima — Mandor Fondasi</div>
+        <p class="pesan-maskot" id="teks-pemantik-proyek1">
+          <strong>Pertanyaan Pemantik:</strong> Saat membangun sudut fondasi rumah atau memasang tali tiang bendera upacara, bagaimana para arsitek memastikan sudut bangunannya benar-benar siku-siku ($90^\circ$) dan mengetahui panjang tali miring tanpa harus memanjat ke puncak? Yuk, kita selidiki sendiri!
+        </p>
+      </div>
+      <button type="button" class="tombol-akses" onclick="bacakanTeks(document.getElementById('teks-pemantik-proyek1').innerText)">
+        🔊 Bacakan
+      </button>
+    </section>
+
+    <!-- 1. SEJARAH SINGKAT: TALI SIMPUL 3-4-5 MESIR KUNO -->
+    <article class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">ARSIP SEJARAH KONSTRUKSI</span>
+          <h1 class="judul-kartu">Rahasia Tali Simpul 3-4-5 Tukang Bangunan Mesir Kuno</h1>
+        </div>
+      </div>
+      <p>
+        Lebih dari 4.000 tahun yang lalu, para arsitek dan tukang bangunan Mesir Kuno (disebut <em>Harpedonaptai</em> atau "Perentang Tali") harus membuat sudut fondasi piramida dan lumbung gandum yang tepat siku-siku ($90^\circ$) di atas tanah lapang.
+      </p>
+      <p style="margin-top:0.6rem;">
+        Mereka mengambil seutas tali yang diberi <strong>12 simpul dengan jarak sama panjang</strong>, lalu merentangkannya membentuk segitiga dengan sisi-sisi <strong>3 bagian, 4 bagian, dan 5 bagian</strong>. Ternyata, sudut di antara sisi 3 dan 4 selalu menghasilkan sudut siku-siku yang presisi! Mengapa angka 3, 4, dan 5 begitu istimewa? Mari temukan rahasianya lewat simulasi di bawah ini.
+      </p>
+    </article>
+
+    <!-- 2. SIMULASI PENEMUAN KONSEP: PERSEGI DI TIAP SISI (a² + b² = c²) -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">EKSPERIMEN PENEMUAN KONSEP (DISCOVERY)</span>
+          <h2 class="judul-kartu">Lab Fondasi: Selidiki Luas Persegi pada Ketiga Sisi</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:1rem;">
+            Geser slider <strong>Sisi Tegak ($a$)</strong> dan <strong>Sisi Alas ($b$)</strong> di bawah ini (atau gunakan tombol panah keyboard). Perhatikan luas persegi biru ($a^2$), persegi hijau ($b^2$), dan persegi kuning pada sisi miring ($c^2$)!
+          </p>
+
+          <!-- Slider Sisi a -->
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-sisi-a">Sisi Tegak (a):</label>
+              <span id="nilai-label-a">3 meter</span>
+            </div>
+            <input type="range" id="slider-sisi-a" class="slider-input" min="1" max="15" step="1" value="3">
+          </div>
+
+          <!-- Slider Sisi b -->
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-sisi-b">Sisi Alas (b):</label>
+              <span id="nilai-label-b">4 meter</span>
+            </div>
+            <input type="range" id="slider-sisi-b" class="slider-input" min="1" max="15" step="1" value="4">
+          </div>
+
+          <!-- Tombol Preset Cepat -->
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+            <button type="button" class="tombol-garis" onclick="aturPresetFondasi(3, 4)">Preset (3, 4)</button>
+            <button type="button" class="tombol-garis" onclick="aturPresetFondasi(6, 8)">Preset (6, 8)</button>
+            <button type="button" class="tombol-garis" onclick="aturPresetFondasi(5, 12)">Preset (5, 12)</button>
+            <button type="button" class="tombol-garis" onclick="aturPresetFondasi(8, 15)">Preset (8, 15)</button>
+          </div>
+
+          <!-- Tabel Pengamatan Real-Time -->
+          <table class="tabel-teknik" aria-label="Tabel Pengamatan Luas Persegi">
+            <thead>
+              <tr>
+                <th>Luas Persegi $a^2$</th>
+                <th>Luas Persegi $b^2$</th>
+                <th>Jumlah $a^2 + b^2$</th>
+                <th>Luas Persegi Miring $c^2$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="sel-a-kuadrat">9</td>
+                <td id="sel-b-kuadrat">16</td>
+                <td id="sel-jumlah-ab" style="font-weight:700; color:#2E7D32;">25</td>
+                <td id="sel-c-kuadrat" style="font-weight:700; color:#B45309;">25</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Pertanyaan Penemuan Konsep sebelum rumus terbuka -->
+          <div class="kelompok-slider" style="background:rgba(255,193,7,0.12); border-left-color:var(--kuning-helm);">
+            <strong>🔍 Simpulkan Sendiri:</strong>
+            <p style="font-size:0.92rem; margin:0.35rem 0;">
+              Dari tabel pengamatan di atas, bagaimana hubungan antara nilai <strong>$a^2 + b^2$</strong> dengan <strong>$c^2$</strong>?
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.5rem;">
+              <button type="button" class="tombol-sekunder" onclick="jawabPenemuanKonsep(false)">a² + b² lebih kecil dari c²</button>
+              <button type="button" class="tombol-utama" onclick="jawabPenemuanKonsep(true)">a² + b² selalu SAMA DENGAN c²</button>
+            </div>
+            <div id="feedback-penemuan-rumus" class="kotak-feedback"></div>
+          </div>
+
+          <!-- Kotak Rumus (Tampil tegas setelah siswa menemukan konsep) -->
+          <div class="kotak-rumus-blueprint" id="kotak-rumus-pythagoras">
+            <div style="font-size:0.85rem; color:#CBD5E1;">RUMUS TEOREMA PYTHAGORAS:</div>
+            <div class="teks-rumus-besar">a² + b² = c²</div>
+            <div style="font-size:0.9rem; margin-top:0.35rem;">
+              $c = \sqrt{a^2 + b^2}$ &nbsp;|&nbsp; $a = \sqrt{c^2 - b^2}$ &nbsp;|&nbsp; $b = \sqrt{c^2 - a^2}$
+            </div>
+          </div>
+        </div>
+
+        <!-- Kanvas SVG Segitiga Siku-Siku + Persegi -->
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-simulasi-fondasi"></div>
+          <p style="font-size:0.85rem; color:var(--teks-sekunder); text-align:center; margin-top:0.5rem;">
+            Gambar skala otomatis dengan sudut siku-siku di titik biru kiri bawah.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ANIMASI PUZZLE PEMBUKTIAN VISUAL -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">BUKTI GEOMETRI VISUAL</span>
+          <h2 class="judul-kartu">Animasi Puzzle Pembuktian: Mengapa $a^2 + b^2 = c^2$?</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:0.85rem;">
+            Perhatikan persegi besar berukuran sisi <strong>$(a + b)$</strong> di samping. Di dalamnya terdapat <strong>4 segitiga siku-siku berwarna biru yang ukurannya sama persis</strong>.
+          </p>
+          <ul style="padding-left:1.25rem; font-size:0.94rem; margin-bottom:1rem;">
+            <li><strong>Susunan 1 (Geser 0%):</strong> Keempat segitiga disusun di pojok sehingga menyisakan dua ruang persegi kosong, yaitu <strong>$a^2$</strong> dan <strong>$b^2$</strong>.</li>
+            <li><strong>Susunan 2 (Geser 100%):</strong> Keempat segitiga digeser sehingga ruang kosong di tengah bergabung membentuk satu persegi miring utuh seluas <strong>$c^2$</strong>!</li>
+          </ul>
+
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-puzzle-bukti">Geser Transisi Susunan Puzzle:</label>
+              <span id="label-persen-puzzle">0% (Terpisah a² dan b²)</span>
+            </div>
+            <input type="range" id="slider-puzzle-bukti" class="slider-input" min="0" max="100" value="0">
+          </div>
+
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button type="button" class="tombol-utama" onclick="animasikanPuzzleOtomatis()">▶️ Putar Animasi Puzzle</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-puzzle-bukti"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LATIHAN INTERAKTIF: KENALI SISI MIRING (ROTASI SEGITIGA) -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">LATIHAN KETELITIAN MATA ARSITEK</span>
+          <h2 class="judul-kartu">🎯 Kenali Sisi Miring (Hipotenusa)</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:0.85rem;">
+            Banyak arsitek pemula tertipu ketika posisi segitiga diputar! Ingat: <strong>sisi miring (hipotenusa) selalu berada tepat di depan tanda sudut siku-siku</strong> dan merupakan sisi terpanjang.
+          </p>
+          <p style="margin-bottom:1rem; font-weight:700;">
+            Tugasmu: Putar segitiga di samping, lalu <u>ketuk/klik langsung garis sisi miringnya</u> pada gambar atau pilih tombol di bawah!
+          </p>
+
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-rotasi-siku">Sudut Putar Segitiga:</label>
+              <span id="label-derajat-rotasi">135°</span>
+            </div>
+            <input type="range" id="slider-rotasi-siku" class="slider-input" min="0" max="359" value="135">
+          </div>
+
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+            <button type="button" class="tombol-sekunder" id="tombol-putar-acak">🎲 Putar Posisi Acak</button>
+            <button type="button" class="tombol-garis" onclick="periksapilihanSisiMiring('a')">Pilih Sisi P</button>
+            <button type="button" class="tombol-garis" onclick="periksapilihanSisiMiring('b')">Pilih Sisi Q</button>
+            <button type="button" class="tombol-garis" onclick="periksapilihanSisiMiring('c')">Pilih Sisi R</button>
+          </div>
+
+          <div id="feedback-kenali-miring" class="kotak-feedback"></div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-kenali-miring"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. KALKULATOR MINI PENCARI SISI YANG HILANG -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">ALAT BANTU HITUNG TEKNIK</span>
+          <h2 class="judul-kartu">🧮 Kalkulator Mini Fondasi & Langkah Penyelesaian</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <div style="margin-bottom:0.85rem;">
+            <label for="pilih-target-kalkulator" style="font-weight:700; display:block; margin-bottom:0.3rem;">
+              Pilih Sisi yang Ingin Dicari:
+            </label>
+            <select id="pilih-target-kalkulator" class="pilihan-dropdown">
+              <option value="c">Cari Sisi Miring (c) — diketahui a dan b</option>
+              <option value="a">Cari Sisi Tegak (a) — diketahui c dan b</option>
+              <option value="b">Cari Sisi Alas (b) — diketahui c dan a</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.85rem;">
+            <div>
+              <label id="label-input-kalk-1" for="input-kalk-1" style="font-weight:700; font-size:0.9rem;">Sisi Tegak (a) [1-20]:</label>
+              <input type="number" id="input-kalk-1" class="input-angka" min="1" max="20" step="any" value="6">
+            </div>
+            <div>
+              <label id="label-input-kalk-2" for="input-kalk-2" style="font-weight:700; font-size:0.9rem;">Sisi Alas (b) [1-20]:</label>
+              <input type="number" id="input-kalk-2" class="input-angka" min="1" max="20" step="any" value="8">
+            </div>
+          </div>
+
+          <button type="button" class="tombol-utama" id="tombol-hitung-kalkulator">📐 Hitung & Gambarkan</button>
+
+          <div id="langkah-kalkulator-fondasi" class="kotak-feedback tampil benar" style="margin-top:1rem;"></div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-kalkulator-fondasi"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. GERBANG PROYEK 1 (KUIS MINI SYARAT LULUS 70%) -->
+    <section class="kartu-materi" id="wadah-gerbang-proyek1"></section>
+
+    <!-- 7. JURNAL REFLEKSI PROYEK 1 -->
+    <section class="kartu-materi" id="wadah-jurnal-proyek1"></section>
+
+  </main>
+
+  <footer class="kaki-halaman">
+    <p><strong>ARCHIPYTHA</strong> — Proyek 1: Fondasi (Teorema Pythagoras)</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Logika Interaktif Khusus Halaman Proyek 1 (materi1.html)
+    let sisiFondasiA = 3;
+    let sisiFondasiB = 4;
+    let sudutRotasiLatihan = 135;
+
+    /**
+     * Memperbarui simulasi segitiga siku-siku + persegi di tiap sisi serta tabel pengamatan.
+     */
+    function perbaruiSimulasiFondasi() {
+      sisiFondasiA = Number(document.getElementById("slider-sisi-a").value);
+      sisiFondasiB = Number(document.getElementById("slider-sisi-b").value);
+      const c = hitungSisiMiring(sisiFondasiA, sisiFondasiB);
+
+      document.getElementById("nilai-label-a").textContent = `${sisiFondasiA} meter`;
+      document.getElementById("nilai-label-b").textContent = `${sisiFondasiB} meter`;
+
+      const a2 = sisiFondasiA * sisiFondasiA;
+      const b2 = sisiFondasiB * sisiFondasiB;
+      const c2 = a2 + b2;
+
+      document.getElementById("sel-a-kuadrat").textContent = formatAngka(a2);
+      document.getElementById("sel-b-kuadrat").textContent = formatAngka(b2);
+      document.getElementById("sel-jumlah-ab").textContent = formatAngka(a2 + b2);
+      document.getElementById("sel-c-kuadrat").textContent = `${formatAngka(c2)} (c = ${formatAngka(c)})`;
+
+      gambarSegitigaSiku("kanvas-simulasi-fondasi", sisiFondasiA, sisiFondasiB, {
+        tampilkanPersegi: true
+      });
+    }
+
+    function aturPresetFondasi(a, b) {
+      document.getElementById("slider-sisi-a").value = a;
+      document.getElementById("slider-sisi-b").value = b;
+      perbaruiSimulasiFondasi();
+    }
+
+    function jawabPenemuanKonsep(apakahBenar) {
+      const fb = document.getElementById("feedback-penemuan-rumus");
+      if (apakahBenar) {
+        fb.className = "kotak-feedback tampil benar";
+        fb.innerHTML = `✅ <strong>Penemuan Hebat!</strong> Berapa pun ukuran sisi siku-sikunya, jumlah luas persegi $a^2 + b^2$ selalu sama dengan luas persegi pada sisi miring $c^2$. Inilah yang disebut <strong>Teorema Pythagoras</strong>!`;
+        catatHasilSoal("discovery-proyek1", true, 15);
+      } else {
+        fb.className = "kotak-feedback tampil salah";
+        fb.innerHTML = `❌ Coba amati lagi dua kolom paling kanan pada tabel di atas. Angka pada kolom $a^2 + b^2$ dan kolom $c^2$ selalu bernilai sama!`;
+      }
+    }
+
+    /**
+     * Menggambar animasi puzzle pembuktian visual berdasarkan persentase transisi t (0..1).
+     */
+    function gambarPuzzleBukti(persen) {
+      const t = Math.max(0, Math.min(100, Number(persen))) / 100;
+      const wadah = document.getElementById("kanvas-puzzle-bukti");
+      if (!wadah) return;
+
+      document.getElementById("label-persen-puzzle").textContent =
+        t < 0.5 ? `${Math.round(t * 100)}% (Menuju Susunan c²)` : `${Math.round(t * 100)}% (Terbentuk Persegi c²)`;
+
+      // Ukuran sisi dalam piksel SVG: a = 70, b = 110 -> panjang persegi besar a+b = 180
+      // Ditempatkan di tengah viewBox 400x300 -> xAwal = 110, yAwal = 60
+      const ox = 110;
+      const oy = 60;
+      const a = 70;
+      const b = 110;
+
+      // Fungsi interpolasi linier
+      const lerp = (awal, akhir) => awal + (akhir - awal) * t;
+
+      // 4 Segitiga Siku-Siku berpindah secara mulus dari Susunan 1 (a² + b²) ke Susunan 2 (c²)
+      // Segitiga 1 (kiri atas tetap di pojok kiri atas): (0,0)-(b,0)-(0,a)
+      const T1 = [
+        { x: 0, y: 0 },
+        { x: b, y: 0 },
+        { x: 0, y: a }
+      ];
+
+      // Segitiga 2: dari pojok kiri-atas pasangan persegi panjang (b,0)-(b,a)-(0,a) bergeser ke kanan atas (b,0)-(a+b,0)-(a+b,b)
+      const T2 = [
+        { x: b, y: 0 },
+        { x: lerp(b, a + b), y: lerp(a, 0) },
+        { x: lerp(0, a + b), y: lerp(a, b) }
+      ];
+
+      // Segitiga 3: dari kiri bawah (0,a)-(a,a+b)-(0,a+b)
+      const T3 = [
+        { x: 0, y: a },
+        { x: a, y: a + b },
+        { x: 0, y: a + b }
+      ];
+
+      // Segitiga 4: dari (0,a)-(a,a)-(a,a+b) bergeser ke kanan bawah (a+b,b)-(a+b,a+b)-(a,a+b)
+      const T4 = [
+        { x: lerp(0, a + b), y: lerp(a, b) },
+        { x: lerp(a, a + b), y: lerp(a, a + b) },
+        { x: a, y: a + b }
+      ];
+
+      const formatPoly = tri => tri.map(p => `${formatAngka(ox + p.x)},${formatAngka(oy + p.y)}`).join(" ");
+
+      wadah.innerHTML = `
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+          <!-- Latar Persegi Besar (Ruang Kosong bernilai a²+b² atau c²) -->
+          <rect x="${ox}" y="${oy}" width="${a + b}" height="${a + b}"
+                fill="rgba(255, 193, 7, 0.32)" stroke="#FFC107" stroke-width="2.5"/>
+
+          <!-- Label Luas Daerah Kosong -->
+          ${t < 0.25 ? `
+            <text x="${ox + b + a / 2}" y="${oy + a / 2}" fill="#FEF08A" font-size="14" font-weight="700" text-anchor="middle" dominant-baseline="middle">a²</text>
+            <text x="${ox + a + b / 2}" y="${oy + a + b / 2}" fill="#FEF08A" font-size="16" font-weight="700" text-anchor="middle" dominant-baseline="middle">b²</text>
+          ` : (t > 0.75 ? `
+            <text x="${ox + (a + b) / 2}" y="${oy + (a + b) / 2}" fill="#FEF08A" font-size="18" font-weight="700" text-anchor="middle" dominant-baseline="middle">Luas = c²</text>
+          ` : ``)}
+
+          <!-- 4 Segitiga Siku-Siku Kongruen -->
+          <polygon points="${formatPoly(T1)}" fill="#0284C7" stroke="#E0F2FE" stroke-width="1.8" opacity="0.9"/>
+          <polygon points="${formatPoly(T2)}" fill="#0369A1" stroke="#E0F2FE" stroke-width="1.8" opacity="0.9"/>
+          <polygon points="${formatPoly(T3)}" fill="#0284C7" stroke="#E0F2FE" stroke-width="1.8" opacity="0.9"/>
+          <polygon points="${formatPoly(T4)}" fill="#0369A1" stroke="#E0F2FE" stroke-width="1.8" opacity="0.9"/>
+        </svg>
+      `;
+    }
+
+    function animasikanPuzzleOtomatis() {
+      const slider = document.getElementById("slider-puzzle-bukti");
+      const targetAkhir = Number(slider.value) > 50 ? 0 : 100;
+      let nilaiSaatIni = Number(slider.value);
+      const langkah = targetAkhir === 100 ? 2 : -2;
+
+      clearInterval(window.timerPuzzle);
+      window.timerPuzzle = setInterval(() => {
+        nilaiSaatIni += langkah;
+        if ((langkah > 0 && nilaiSaatIni >= 100) || (langkah < 0 && nilaiSaatIni <= 0)) {
+          nilaiSaatIni = targetAkhir;
+          clearInterval(window.timerPuzzle);
+        }
+        slider.value = nilaiSaatIni;
+        gambarPuzzleBukti(nilaiSaatIni);
+      }, 20);
+    }
+
+    /**
+     * Merender latihan "Kenali Sisi Miring" dengan segitiga yang diputar secara trigonometri.
+     */
+    function renderLatihanKenaliMiring() {
+      document.getElementById("label-derajat-rotasi").textContent = `${sudutRotasiLatihan}°`;
+      gambarSegitigaSiku("kanvas-kenali-miring", 6, 8, {
+        rotasi: sudutRotasiLatihan,
+        labelA: "Sisi P",
+        labelB: "Sisi Q",
+        labelC: "Sisi R",
+        interaktifSisi: true,
+        klikSisiCallback: periksapilihanSisiMiring
+      });
+    }
+
+    function periksapilihanSisiMiring(kodeSisi) {
+      const fb = document.getElementById("feedback-kenali-miring");
+      if (kodeSisi === "c") {
+        fb.className = "kotak-feedback tampil benar";
+        fb.innerHTML = `✅ <strong>Tepat Sekali!</strong> <strong>Sisi R</strong> adalah sisi miring (hipotenusa) karena terletak tepat di seberang tanda kotak sudut siku-siku ($90^\circ$), meskipun posisi segitiganya diputar ke arah mana pun!`;
+        catatHasilSoal("kenali-sisi-miring", true, 10);
+      } else {
+        const namaSisi = kodeSisi === "a" ? "Sisi P" : "Sisi Q";
+        fb.className = "kotak-feedback tampil salah";
+        fb.innerHTML = `❌ <strong>Hati-hati terjebak rotasi!</strong> ${namaSisi} menempel langsung pada tanda kotak sudut siku-siku, sehingga ${namaSisi} adalah <strong>sisi siku-siku</strong>. Cari sisi yang berada <em>di depan/seberang</em> tanda sudut siku-siku!`;
+        catatHasilSoal("kenali-sisi-miring", false, 0);
+      }
+    }
+
+    /**
+     * Menghitung sisi yang hilang pada Kalkulator Mini Fondasi beserta langkahnya.
+     */
+    function jalankanKalkulatorFondasi() {
+      const target = document.getElementById("pilih-target-kalkulator").value;
+      const v1 = Number(document.getElementById("input-kalk-1").value);
+      const v2 = Number(document.getElementById("input-kalk-2").value);
+      const kotakLangkah = document.getElementById("langkah-kalkulator-fondasi");
+
+      if (!Number.isFinite(v1) || !Number.isFinite(v2) || v1 < 1 || v1 > 20 || v2 < 1 || v2 > 20) {
+        kotakLangkah.className = "kotak-feedback tampil salah";
+        kotakLangkah.innerHTML = "⚠️ Masukkan angka antara 1 sampai 20 pada kedua kolom input ya, Arsitek!";
+        gambarSegitigaSiku("kanvas-kalkulator-fondasi", "", "");
+        return;
+      }
+
+      if (target === "c") {
+        const c = hitungSisiMiring(v1, v2);
+        kotakLangkah.className = "kotak-feedback tampil benar";
+        kotakLangkah.innerHTML = `
+          <strong>Langkah Mencari Sisi Miring (c):</strong><br>
+          1. Tulis Rumus: $c^2 = a^2 + b^2$<br>
+          2. Substitusi: $c^2 = ${formatAngka(v1)}^2 + ${formatAngka(v2)}^2$<br>
+          3. Kuadratkan & Jumlahkan: $c^2 = ${formatAngka(v1 * v1)} + ${formatAngka(v2 * v2)} = ${formatAngka(v1 * v1 + v2 * v2)}$<br>
+          4. Tarik Akar: $c = \\sqrt{${formatAngka(v1 * v1 + v2 * v2)}} = $ <strong>${formatAngka(c)} satuan</strong>
+        `;
+        gambarSegitigaSiku("kanvas-kalkulator-fondasi", v1, v2);
+      } else {
+        // v1 adalah sisi miring c, v2 adalah sisi siku-siku yang diketahui
+        if (v1 <= v2) {
+          kotakLangkah.className = "kotak-feedback tampil salah";
+          kotakLangkah.innerHTML = `⚠️ <strong>Perhatikan Konsep:</strong> Sisi miring ($c = ${formatAngka(v1)}$) harus selalu <strong>lebih panjang</strong> daripada sisi siku-siku ($${formatAngka(v2)}$)! Besarkan nilai sisi miring $c$.`;
+          return;
+        }
+        const sisiDicari = Math.sqrt(v1 * v1 - v2 * v2);
+        const simbolDicari = target === "a" ? "a" : "b";
+        const simbolDiketahui = target === "a" ? "b" : "a";
+
+        kotakLangkah.className = "kotak-feedback tampil benar";
+        kotakLangkah.innerHTML = `
+          <strong>Langkah Mencari Sisi Siku-Siku (${simbolDicari}):</strong><br>
+          1. Tulis Rumus: $${simbolDicari}^2 = c^2 - ${simbolDiketahui}^2$<br>
+          2. Substitusi: $${simbolDicari}^2 = ${formatAngka(v1)}^2 - ${formatAngka(v2)}^2$<br>
+          3. Kuadratkan & Kurangkan: $${simbolDicari}^2 = ${formatAngka(v1 * v1)} - ${formatAngka(v2 * v2)} = ${formatAngka(v1 * v1 - v2 * v2)}$<br>
+          4. Tarik Akar: $${simbolDicari} = \\sqrt{${formatAngka(v1 * v1 - v2 * v2)}} = $ <strong>${formatAngka(sisiDicari)} satuan</strong>
+        `;
+        const gambarA = target === "a" ? Math.max(1, Math.min(20, sisiDicari)) : v2;
+        const gambarB = target === "b" ? Math.max(1, Math.min(20, sisiDicari)) : v2;
+        gambarSegitigaSiku("kanvas-kalkulator-fondasi", gambarA, gambarB, {
+          labelA: `a = ${formatAngka(target === "a" ? sisiDicari : v2)}`,
+          labelB: `b = ${formatAngka(target === "b" ? sisiDicari : v2)}`,
+          labelC: `c = ${formatAngka(v1)}`
+        });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("maskot-proyek1").innerHTML = buatSvgMaskot("standar");
+
+      // Inisialisasi Simulasi Fondasi
+      document.getElementById("slider-sisi-a").addEventListener("input", perbaruiSimulasiFondasi);
+      document.getElementById("slider-sisi-b").addEventListener("input", perbaruiSimulasiFondasi);
+      perbaruiSimulasiFondasi();
+
+      // Inisialisasi Puzzle Pembuktian Visual
+      const sliderPuzzle = document.getElementById("slider-puzzle-bukti");
+      sliderPuzzle.addEventListener("input", () => gambarPuzzleBukti(sliderPuzzle.value));
+      gambarPuzzleBukti(0);
+
+      // Inisialisasi Latihan Kenali Sisi Miring
+      const sliderRotasi = document.getElementById("slider-rotasi-siku");
+      sliderRotasi.addEventListener("input", () => {
+        sudutRotasiLatihan = Number(sliderRotasi.value);
+        renderLatihanKenaliMiring();
+      });
+      document.getElementById("tombol-putar-acak").addEventListener("click", () => {
+        sudutRotasiLatihan = Math.floor(Math.random() * 360);
+        sliderRotasi.value = sudutRotasiLatihan;
+        renderLatihanKenaliMiring();
+      });
+      renderLatihanKenaliMiring();
+
+      // Inisialisasi Kalkulator Mini Fondasi
+      const pilihTarget = document.getElementById("pilih-target-kalkulator");
+      pilihTarget.addEventListener("change", () => {
+        const t = pilihTarget.value;
+        const l1 = document.getElementById("label-input-kalk-1");
+        const l2 = document.getElementById("label-input-kalk-2");
+        const in1 = document.getElementById("input-kalk-1");
+        const in2 = document.getElementById("input-kalk-2");
+
+        if (t === "c") {
+          l1.textContent = "Sisi Tegak (a) [1-20]:";
+          l2.textContent = "Sisi Alas (b) [1-20]:";
+          in1.value = 6;
+          in2.value = 8;
+        } else if (t === "a") {
+          l1.textContent = "Sisi Miring (c) [1-20]:";
+          l2.textContent = "Sisi Alas (b) [1-20]:";
+          in1.value = 10;
+          in2.value = 8;
+        } else {
+          l1.textContent = "Sisi Miring (c) [1-20]:";
+          l2.textContent = "Sisi Tegak (a) [1-20]:";
+          in1.value = 10;
+          in2.value = 6;
+        }
+        jalankanKalkulatorFondasi();
+      });
+      document.getElementById("tombol-hitung-kalkulator").addEventListener("click", jalankanKalkulatorFondasi);
+      jalankanKalkulatorFondasi();
+
+      // Gambar ulang otomatis saat ukuran layar berubah
+      window.addEventListener("resize", () => {
+        perbaruiSimulasiFondasi();
+        renderLatihanKenaliMiring();
+      });
+
+      // Render Gerbang Proyek 1 & Jurnal Refleksi
+      renderGerbangProyek("wadah-gerbang-proyek1", "proyek1", 1, "materi2.html");
+      renderJurnalRefleksi("wadah-jurnal-proyek1", "proyek1", "Simulasi Luas Persegi & Kenali Sisi Miring");
+    });
+  </script>
+</body>
+</html>

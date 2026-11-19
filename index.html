@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kantor Proyek — ARCHIPYTHA</title>
+  <!-- Google Fonts dengan fallback sistem -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== [BAGIAN: BAR AKSESIBILITAS] ========== -->
+  <div class="bar-aksesibilitas">
+    <div class="isi-bar-aksesibilitas">
+      <div class="info-arsitek-mini">
+        <span class="lencana-pangkat-mini" id="tampilan-pangkat-atas">👷 Pangkat: Magang</span>
+        <span id="tampilan-skor-atas">⭐ Skor: 0</span>
+        <span id="tampilan-combo-atas">🔥 Combo: 0x</span>
+      </div>
+      <div class="kelompok-tombol-akses">
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(-1)" title="Perkecil Huruf">A-</button>
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(1)" title="Perbesar Huruf">A+</button>
+        <button type="button" class="tombol-akses" onclick="toggleModeGelap()">🌓 Mode Kontras</button>
+        <button type="button" class="tombol-akses" onclick="resetProgresBelajar()">🔄 Reset Progres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== [BAGIAN: NAVBAR] ========== -->
+  <header class="navbar-utama">
+    <div class="isi-navbar">
+      <a href="index.html" class="merek-aplikasi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#FFC107"/>
+          <polygon points="12,36 36,36 12,12" fill="none" stroke="#0B2A4A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="29" width="7" height="7" fill="none" stroke="#0B2A4A" stroke-width="2"/>
+        </svg>
+        <div>
+          <span class="teks-merek">ARCHIPYTHA</span>
+          <span class="subteks-merek">Petualangan Teorema Pythagoras SMP Kelas 8</span>
+        </div>
+      </a>
+      <nav aria-label="Navigasi Proyek">
+        <ul class="daftar-menu-navigasi" id="daftar-menu-navigasi"></ul>
+      </nav>
+    </div>
+  </header>
+  <div class="ornamen-penggaris"></div>
+
+  <!-- ========== [BAGIAN: KONTEN UTAMA KANTOR PROYEK] ========== -->
+  <main class="wadah-utama">
+
+    <!-- Panel Sapaan Maskot -->
+    <section class="panel-maskot" aria-label="Sapaan Maskot Proyek">
+      <div class="ikon-maskot-wadah" id="maskot-beranda"></div>
+      <div class="isi-dialog-maskot">
+        <div class="nama-maskot">Ir. Bima — Kepala Arsitek Pembimbing</div>
+        <p class="pesan-maskot" id="pesan-maskot-beranda">
+          Selamat datang di Kantor Proyek, Arsitek Muda! Di sini kamu tidak sekadar menghafal rumus, melainkan <strong>menemukan sendiri konsep Teorema Pythagoras</strong> lewat perancangan fondasi rumah, rangka baja, atap, tangga, hingga lapangan futsal sekolah.
+        </p>
+      </div>
+      <button type="button" class="tombol-akses" onclick="bacakanTeks(document.getElementById('pesan-maskot-beranda').innerText)">
+        🔊 Bacakan
+      </button>
+    </section>
+
+    <!-- Grid Utama: Pengantar Kantor Proyek & Menara Progres -->
+    <div class="grid-dua-kolom">
+
+      <!-- Kolom Kiri: Deskripsi, Tujuan, dan Tombol Mulai -->
+      <article class="kartu-materi">
+        <div class="kepala-kartu">
+          <div>
+            <span class="label-kode-teknik">DIVISI PERENCANAAN — KELAS VIII SMP</span>
+            <h1 class="judul-kartu">Kantor Pusat Proyek Konstruksi</h1>
+          </div>
+        </div>
+
+        <p style="margin-bottom:1rem;">
+          Sebagai arsitek magang, tugasmu adalah menyelesaikan <strong>4 Proyek Lapangan</strong> secara berurutan hingga lulus <strong>Ujian Sertifikasi Arsitek Utama</strong>. Setiap proyek yang kamu selesaikan akan menambah tinggi gedung konstruksimu dan memberimu lencana <strong>Helm Emas</strong>!
+        </p>
+
+        <div class="kelompok-slider" style="margin-bottom:1.25rem;">
+          <h2 style="font-family:var(--font-judul); font-size:1.2rem; margin-bottom:0.4rem;">
+            🎯 Tujuan Pembelajaran (Discovery Learning)
+          </h2>
+          <ul style="padding-left:1.25rem; font-size:0.94rem;">
+            <li>Menemukan dan membuktikan kebenaran <strong>Teorema Pythagoras</strong> ($a^2 + b^2 = c^2$) melalui penyelidikan luas persegi.</li>
+            <li>Menentukan panjang sisi segitiga siku-siku yang belum diketahui jika dua sisi lainnya diketahui.</li>
+            <li>Mengidentifikasi <strong>Triple Pythagoras</strong> dan menentukan jenis segitiga (lancip, siku-siku, atau tumpul).</li>
+            <li>Menemukan perbandingan sisi pada segitiga siku-siku bersudut istimewa ($45^\circ\text{-}45^\circ\text{-}90^\circ$ dan $30^\circ\text{-}60^\circ\text{-}90^\circ$).</li>
+            <li>Menyelesaikan masalah kontekstual sehari-hari menggunakan Teorema Pythagoras.</li>
+          </ul>
+        </div>
+
+        <div style="display:flex; gap:0.85rem; flex-wrap:wrap; align-items:center;">
+          <a href="materi1.html" class="tombol-utama" id="tombol-mulai-proyek">
+            🚀 Mulai / Lanjutkan Proyek
+          </a>
+          <a href="tentang.html" class="tombol-garis">
+            📘 Petunjuk Penggunaan
+          </a>
+        </div>
+      </article>
+
+      <!-- Kolom Kanan: Pangkat, Menara Bangunan Progres, dan Koleksi Helm Emas -->
+      <aside class="kartu-materi">
+        <div class="kepala-kartu">
+          <div>
+            <span class="label-kode-teknik">STATUS KARIER ARSITEK</span>
+            <h2 class="judul-kartu">Menara Progres & Lencana</h2>
+          </div>
+        </div>
+
+        <div class="wadah-gedung-progres">
+          <p class="keterangan-gedung">Gedung Konstruksi Bertumbuh Sesuai Proyek yang Lulus:
+        </p>
+          <!-- Lantai Gedung dari puncak (Ujian) ke dasar (Proyek 1) -->
+          <div class="lantai-gedung" id="lantai-ujian">🏆 Puncak Sertifikasi</div>
+          <div class="lantai-gedung" id="lantai-lapangan">🏗️ Lantai 4: Lapangan</div>
+          <div class="lantai-gedung" id="lantai-proyek3">📐 Lantai 3: Sudut Istimewa</div>
+          <div class="lantai-gedung" id="lantai-proyek2">🔩 Lantai 2: Rangka Baja</div>
+          <div class="lantai-gedung" id="lantai-proyek1">🧱 Lantai 1: Fondasi</div>
+          <div class="tanah-gedung"></div>
+        </div>
+
+        <div style="margin-top:1rem;">
+          <strong style="font-size:0.92rem;">Koleksi Lencana Helm Emas:</strong>
+          <div class="daftar-lencana" id="wadah-koleksi-lencana"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ========== [BAGIAN: TANTANGAN HARIAN] ========== -->
+    <section class="kartu-materi" id="seksi-tantangan-harian">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">BONUS INSPEKSI HARIAN</span>
+          <h2 class="judul-kartu">🌟 Tantangan Harian Arsitek</h2>
+        </div>
+        <span id="status-tantangan-harian" class="lencana-pangkat-mini">Bonus +25 Poin</span>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p id="teks-soal-harian" style="font-size:1.02rem; font-weight:600; margin-bottom:0.85rem;"></p>
+
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; margin-bottom:0.75rem;">
+            <input type="number" step="any" id="input-jawaban-harian" class="input-angka" style="max-width:200px;" placeholder="Jawaban (meter)...">
+            <button type="button" class="tombol-utama" id="tombol-periksa-harian">Periksa Jawaban</button>
+            <button type="button" class="tombol-garis" id="tombol-bacakan-harian">🔊 Bacakan</button>
+          </div>
+
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="tombol-garis" id="tombol-hint1-harian">💡 Petunjuk 1</button>
+            <button type="button" class="tombol-garis" id="tombol-hint2-harian">💡 Petunjuk 2</button>
+          </div>
+
+          <div id="kotak-petunjuk-harian" class="kotak-petunjuk"></div>
+          <div id="kotak-feedback-harian" class="kotak-feedback"></div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-svg-harian"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== [BAGIAN: PETA SELURUH PROYEK] ========== -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">ALUR BELAJAR TERKUNCI</span>
+          <h2 class="judul-kartu">Peta Tahapan Proyek Arsitek</h2>
+        </div>
+      </div>
+      <div class="grid-tiga-kolom" id="wadah-peta-proyek"></div>
+    </section>
+
+  </main>
+
+  <!-- ========== [BAGIAN: FOOTER] ========== -->
+  <footer class="kaki-halaman">
+    <p><strong>ARCHIPYTHA</strong> — Media Pembelajaran Interaktif Teorema Pythagoras SMP Kelas 8</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Inisialisasi khusus halaman Beranda (Kantor Proyek)
+    document.addEventListener("DOMContentLoaded", () => {
+      const progres = ambilProgresBelajar();
+
+      // 1. Tampilkan maskot di panel sapaan
+      document.getElementById("maskot-beranda").innerHTML = buatSvgMaskot("senang");
+
+      // 2. Arahkan tombol "Mulai / Lanjutkan Proyek" ke proyek tertinggi yang sudah terbuka
+      const proyekAktif = URUTAN_PROYEK.find(p => p.nomorUrut === progres.proyekTerbukaMaksimal) || URUTAN_PROYEK[1];
+      const tombolMulai = document.getElementById("tombol-mulai-proyek");
+      tombolMulai.href = proyekAktif.file;
+      tombolMulai.innerHTML = `🚀 Lanjutkan ke ${proyekAktif.nama}`;
+
+      // 3. Perbarui lantai menara gedung progres & lencana Helm Emas
+      const daftarKunciProyek = [
+        { id: "proyek1", label: "Helm Emas Proyek 1" },
+        { id: "proyek2", label: "Helm Emas Proyek 2" },
+        { id: "proyek3", label: "Helm Emas Proyek 3" },
+        { id: "lapangan", label: "Helm Emas Lapangan" },
+        { id: "ujian", label: "Sertifikat Arsitek Utama" }
+      ];
+
+      const wadahLencana = document.getElementById("wadah-koleksi-lencana");
+      wadahLencana.innerHTML = daftarKunciProyek.map(item => {
+        const selesai = Boolean(progres.proyekSelesai[item.id]);
+        const elLantai = document.getElementById(`lantai-${item.id}`);
+        if (elLantai && selesai) {
+          elLantai.classList.add("terbangun");
+        }
+        return `
+          <div class="item-lencana ${selesai ? 'terbuka' : ''}">
+            <span>${selesai ? '🪖✨' : '🔒'}</span>
+            <span>${item.label}</span>
+          </div>
+        `;
+      }).join("");
+
+      // 4. Render Peta Tahapan Proyek
+      const wadahPeta = document.getElementById("wadah-peta-proyek");
+      const daftarProyekUtama = URUTAN_PROYEK.filter(p => p.nomorUrut > 0);
+      wadahPeta.innerHTML = daftarProyekUtama.map(p => {
+        const terkunci = p.nomorUrut > progres.proyekTerbukaMaksimal;
+        const selesai = Boolean(progres.proyekSelesai[p.id]);
+        const skor = progres.skorGerbang[p.id] || 0;
+
+        return `
+          <div class="kelompok-slider" style="background:var(--putih-murni); border-left-color:${selesai ? '#2E7D32' : (terkunci ? '#64748B' : '#FFC107')};">
+            <div style="font-weight:700; font-size:0.8rem; color:var(--teks-sekunder);">
+              TAHAP ${p.nomorUrut} ${selesai ? '• ✅ SELESAI' : (terkunci ? '• 🔒 TERKUNCI' : '• 🔓 TERBUKA')}
+            </div>
+            <h3 style="font-family:var(--font-judul); font-size:1.2rem; margin:0.25rem 0;">${p.nama}</h3>
+            <p style="font-size:0.85rem; margin-bottom:0.75rem;">
+              Skor Terbaik Gerbang: <strong>${skor}%</strong>
+            </p>
+            ${terkunci ? `
+              <button type="button" class="tombol-garis" style="width:100%; opacity:0.7;"
+                      onclick="tampilkanNotifikasiMaskot('Selesaikan proyek sebelumnya minimal ${BATAS_LULUS}% dulu ya, Arsitek!', 'semangat')">
+                🔒 Masih Terkunci
+              </button>
+            ` : `
+              <a href="${p.file}" class="tombol-sekunder" style="width:100%;">Buka Proyek →</a>
+            `}
+          </div>
+        `;
+      }).join("");
+
+      // 5. Inisialisasi Tantangan Harian (1 soal acak berdasarkan tanggal hari ini)
+      const daftarSoalHarian = daftarSoal.filter(s => s.proyek === "harian");
+      const kodeHariIni = new Date().toDateString();
+      const indeksHarian = Math.abs(
+        kodeHariIni.split("").reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
+      ) % daftarSoalHarian.length;
+      const soalHariIni = daftarSoalHarian[indeksHarian];
+
+      document.getElementById("teks-soal-harian").textContent = soalHariIni.pertanyaan;
+      gambarSegitigaSiku("kanvas-svg-harian", soalHariIni.data.sisiA, soalHariIni.data.sisiB, {
+        labelA: `a = ${soalHariIni.data.sisiA} m`,
+        labelB: `b = ${soalHariIni.data.sisiB} m`,
+        labelC: `c = ?`
+      });
+
+      if (progres.tantanganHarianSelesai === kodeHariIni) {
+        document.getElementById("status-tantangan-harian").textContent = "✅ Selesai Hari Ini";
+      }
+
+      document.getElementById("tombol-bacakan-harian").addEventListener("click", () => {
+        bacakanTeks(soalHariIni.pertanyaan);
+      });
+
+      document.getElementById("tombol-hint1-harian").addEventListener("click", () => {
+        const kp = document.getElementById("kotak-petunjuk-harian");
+        kp.classList.add("tampil");
+        kp.innerHTML = `💡 <strong>Petunjuk 1:</strong> ${soalHariIni.petunjuk1}`;
+      });
+
+      document.getElementById("tombol-hint2-harian").addEventListener("click", () => {
+        const kp = document.getElementById("kotak-petunjuk-harian");
+        kp.classList.add("tampil");
+        kp.innerHTML = `💡 <strong>Petunjuk 1:</strong> ${soalHariIni.petunjuk1}<br>🧭 <strong>Petunjuk 2:</strong> ${soalHariIni.petunjuk2}`;
+      });
+
+      document.getElementById("tombol-periksa-harian").addEventListener("click", () => {
+        const nilaiInput = document.getElementById("input-jawaban-harian").value;
+        const hasil = periksaJawabanSoal(soalHariIni, nilaiInput);
+        const fb = document.getElementById("kotak-feedback-harian");
+
+        fb.className = `kotak-feedback tampil ${hasil.peringatan ? 'peringatan' : (hasil.benar ? 'benar' : 'salah')}`;
+        fb.innerHTML = hasil.pesanFeedback;
+
+        if (!hasil.peringatan) {
+          catatHasilSoal(soalHariIni.id, hasil.benar, 25);
+          if (hasil.benar) {
+            const progBaru = ambilProgresBelajar();
+            progBaru.tantanganHarianSelesai = kodeHariIni;
+            simpanProgresBelajar(progBaru);
+            document.getElementById("status-tantangan-harian").textContent = "✅ Selesai Hari Ini";
+            gambarSegitigaSiku("kanvas-svg-harian", soalHariIni.data.sisiA, soalHariIni.data.sisiB);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyek 3: Atap & Tangga (Sudut Istimewa) — Misi Arsitek Muda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== [BAGIAN: BAR AKSESIBILITAS] ========== -->
+  <div class="bar-aksesibilitas">
+    <div class="isi-bar-aksesibilitas">
+      <div class="info-arsitek-mini">
+        <span class="lencana-pangkat-mini" id="tampilan-pangkat-atas">👷 Pangkat: Magang</span>
+        <span id="tampilan-skor-atas">⭐ Skor: 0</span>
+        <span id="tampilan-combo-atas">🔥 Combo: 0x</span>
+      </div>
+      <div class="kelompok-tombol-akses">
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(-1)">A-</button>
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(1)">A+</button>
+        <button type="button" class="tombol-akses" onclick="toggleModeGelap()">🌓 Mode Kontras</button>
+        <button type="button" class="tombol-akses" onclick="resetProgresBelajar()">🔄 Reset Progres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== [BAGIAN: NAVBAR] ========== -->
+  <header class="navbar-utama">
+    <div class="isi-navbar">
+      <a href="index.html" class="merek-aplikasi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#FFC107"/>
+          <polygon points="12,36 36,36 12,12" fill="none" stroke="#0B2A4A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="29" width="7" height="7" fill="none" stroke="#0B2A4A" stroke-width="2"/>
+        </svg>
+        <div>
+          <span class="teks-merek">ARCHIPYTHA</span>
+          <span class="subteks-merek">Proyek 3: Atap & Tangga (Segitiga Sudut Istimewa)</span>
+        </div>
+      </a>
+      <nav aria-label="Navigasi Proyek">
+        <ul class="daftar-menu-navigasi" id="daftar-menu-navigasi"></ul>
+      </nav>
+    </div>
+  </header>
+  <div class="ornamen-penggaris"></div>
+
+  <!-- ========== [BAGIAN: KONTEN UTAMA PROYEK 3] ========== -->
+  <main class="wadah-utama" id="awal-materi">
+
+    <!-- Sapaan Maskot & Pertanyaan Pemantik -->
+    <section class="panel-maskot">
+      <div class="ikon-maskot-wadah" id="maskot-proyek3"></div>
+      <div class="isi-dialog-maskot">
+        <div class="nama-maskot">Ir. Bima — Spesialis Struktur Atap & Tangga</div>
+        <p class="pesan-maskot" id="teks-pemantik-proyek3">
+          <strong>Pertanyaan Pemantik:</strong> Ketika merancang kemiringan atap rumah bersudut $45^\circ$ atau tangga lantai dua dengan sudut kemiringan nyaman $30^\circ$, kita sering kali hanya mengetahui <strong>satu ukuran sisi saja</strong> (misalnya tinggi plafon). Bisakah kita menentukan panjang sisi lainnya hanya dari satu sisi dan sudutnya? Yuk, kita temukan perbandingan rahasianya!
+        </p>
+      </div>
+      <button type="button" class="tombol-akses" onclick="bacakanTeks(document.getElementById('teks-pemantik-proyek3').innerText)">
+        🔊 Bacakan
+      </button>
+    </section>
+
+    <!-- 1. PENEMUAN SEGITIGA SIKU-SIKU SAMA KAKI (45° - 45° - 90°) -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">PENEMUAN KONSEP 1 — ATAP SIMETRIS 45°</span>
+          <h1 class="judul-kartu">📐 Segitiga Siku-Siku Sudut Istimewa $45^\circ\text{-}45^\circ\text{-}90^\circ$</h1>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:0.85rem;">
+            Bayangkan sebuah ubin berbentuk <strong>persegi</strong> dengan panjang sisi $k$ satuan yang dipotong tepat menurut garis diagonalnya. Terbentuklah segitiga siku-siku sama kaki dengan sudut $45^\circ\text{-}45^\circ\text{-}90^\circ$!
+          </p>
+
+          <div class="kelompok-slider" style="background:rgba(255,193,7,0.12); border-left-color:var(--kuning-helm);">
+            <strong>🔍 Temukan Sendiri Perbandingannya dengan Teorema Pythagoras:</strong>
+            <p style="font-size:0.92rem; margin:0.4rem 0;">
+              Jika kedua sisi siku-sikunya sama panjang yaitu $a = 1$ dan $b = 1$, berapakah panjang sisi miring $c$?
+            </p>
+            <p style="font-size:0.92rem; margin-bottom:0.6rem;">
+              $$c = \sqrt{a^2 + b^2} = \sqrt{1^2 + 1^2} = \dots$$
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" class="tombol-garis" onclick="jawabDiscovery45(false)">c = 2</button>
+              <button type="button" class="tombol-utama" onclick="jawabDiscovery45(true)">c = √2 (≈ 1,41)</button>
+            </div>
+            <div id="feedback-discovery-45" class="kotak-feedback"></div>
+          </div>
+
+          <!-- Slider Pengali k untuk 45-45-90 -->
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-pengali-45">Ubah Panjang Sisi Siku-Siku ($k$):</label>
+              <span id="label-nilai-k45">k = 4 meter</span>
+            </div>
+            <input type="range" id="slider-pengali-45" class="slider-input" min="1" max="15" step="1" value="4">
+          </div>
+
+          <div class="kotak-rumus-blueprint">
+            <div style="font-size:0.85rem; color:#CBD5E1;">PERBANDINGAN SISI SEGITIGA 45° - 45° - 90°:</div>
+            <div class="teks-rumus-besar">a : b : c = 1 : 1 : √2</div>
+            <div style="font-size:0.9rem; margin-top:0.3rem;">
+              Sisi Siku-Siku $= k$ &nbsp;|&nbsp; Sisi Miring $= k\sqrt{2}$
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-istimewa-45"></div>
+          <table class="tabel-teknik" style="margin-top:0.75rem;">
+            <thead>
+              <tr>
+                <th>Depan $45^\circ$ ($a$)</th>
+                <th>Depan $45^\circ$ ($b$)</th>
+                <th>Depan $90^\circ$ (Miring $c$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="sel-45-a">4 m</td>
+                <td id="sel-45-b">4 m</td>
+                <td id="sel-45-c" style="font-weight:700; color:#B45309;">4√2 m (≈ 5,66 m)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PENEMUAN SEGITIGA SUDUT ISTIMEWA (30° - 60° - 90°) -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">PENEMUAN KONSEP 2 — TANGGA NYAMAN 30° & 60°</span>
+          <h2 class="judul-kartu">🪜 Segitiga Siku-Siku Sudut Istimewa $30^\circ\text{-}60^\circ\text{-}90^\circ$</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:0.85rem;">
+            Bagaimana cara menemukan perbandingan sisi segitiga $30^\circ\text{-}60^\circ\text{-}90^\circ$? Ambil sebuah <strong>segitiga sama sisi</strong> (ketiga sudutnya $60^\circ$) dengan panjang sisi $2$ satuan, lalu belah tepat di tengah dengan garis tinggi!
+          </p>
+          <ul style="padding-left:1.25rem; font-size:0.92rem; margin-bottom:0.85rem;">
+            <li>Sisi miring (di depan $90^\circ$) tetap berukuran <strong>$2$</strong> satuan.</li>
+            <li>Sisi alas terpendek (di depan sudut $30^\circ$) terbelah dua menjadi <strong>$1$</strong> satuan.</li>
+            <li>Berapakah tinggi sisi tegak (di depan sudut $60^\circ$) menurut Teorema Pythagoras?</li>
+          </ul>
+
+          <div class="kelompok-slider" style="background:rgba(255,193,7,0.12); border-left-color:var(--kuning-helm);">
+            <strong>🔍 Hitung Sisi di Depan Sudut $60^\circ$:</strong>
+            <p style="font-size:0.92rem; margin:0.4rem 0;">
+              $$b = \sqrt{c^2 - a^2} = \sqrt{2^2 - 1^2} = \sqrt{4 - 1} = \dots$$
+            </p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" class="tombol-utama" onclick="jawabDiscovery3060(true)">b = √3 (≈ 1,73)</button>
+              <button type="button" class="tombol-garis" onclick="jawabDiscovery3060(false)">b = 3</button>
+            </div>
+            <div id="feedback-discovery-3060" class="kotak-feedback"></div>
+          </div>
+
+          <!-- Slider Pengali k untuk 30-60-90 -->
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-pengali-3060">Ubah Panjang Sisi Terpendek Depan 30° ($k$):</label>
+              <span id="label-nilai-k3060">k = 3 meter</span>
+            </div>
+            <input type="range" id="slider-pengali-3060" class="slider-input" min="1" max="15" step="1" value="3">
+          </div>
+
+          <div class="kotak-rumus-blueprint">
+            <div style="font-size:0.85rem; color:#CBD5E1;">PERBANDINGAN SISI SEGITIGA 30° - 60° - 90°:</div>
+            <div class="teks-rumus-besar">Depan 30° : Depan 60° : Depan 90° = 1 : √3 : 2</div>
+            <div style="font-size:0.88rem; margin-top:0.35rem;">
+              💡 <strong>Tips Anti Tertukar:</strong> Sisi miring adalah $2$ (bukan $\sqrt{2}$), dan sisi di depan $60^\circ$ adalah $\sqrt{3}$ karena $\sqrt{3} \approx 1,73$ lebih kecil dari $2$!
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-istimewa-3060"></div>
+          <table class="tabel-teknik" style="margin-top:0.75rem;">
+            <thead>
+              <tr>
+                <th>Depan $30^\circ$ ($1 \cdot k$)</th>
+                <th>Depan $60^\circ$ ($\sqrt{3} \cdot k$)</th>
+                <th>Depan $90^\circ$ ($2 \cdot k$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="sel-30-a">3 m</td>
+                <td id="sel-60-b">3√3 m (≈ 5,20 m)</td>
+                <td id="sel-90-c" style="font-weight:700; color:#B45309;">6 m</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SIMULASI LATIHAN KONSTRUKSI ATAP & TANGGA -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">SIMULASI PENERAPAN ARSITEKTUR</span>
+          <h2 class="judul-kartu">🏠 Kalkulator & Tantangan Sudut Istimewa Atap dan Tangga</h2>
+        </div>
+      </div>
+
+      <p style="margin-bottom:1rem;">
+        Uji kemampuanmu menghitung ukuran rangka tangga rumah dengan sudut kemiringan $30^\circ$ terhadap lantai!
+      </p>
+
+      <div class="kelompok-slider" style="background:var(--putih-murni);">
+        <p style="font-weight:700; margin-bottom:0.65rem;">
+          Studi Kasus Tangga: Sebuah tangga rumah membentuk sudut $30^\circ$ terhadap lantai mendatar. Jika tinggi lantai dua dari lantai dasar (sisi di depan sudut $30^\circ$) adalah <strong>3,5 meter</strong>, berapakah panjang kemiringan tangga yang harus dibuat?
+        </p>
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+          <input type="number" step="any" id="input-studi-tangga" class="input-angka" style="max-width:200px;" placeholder="Panjang tangga (m)...">
+          <button type="button" class="tombol-utama" id="tombol-cek-studi-tangga">Periksa Hitungan Tangga</button>
+        </div>
+        <div id="feedback-studi-tangga" class="kotak-feedback"></div>
+      </div>
+    </section>
+
+    <!-- 4. GERBANG PROYEK 3 -->
+    <section class="kartu-materi" id="wadah-gerbang-proyek3"></section>
+
+    <!-- 5. JURNAL REFLEKSI PROYEK 3 -->
+    <section class="kartu-materi" id="wadah-jurnal-proyek3"></section>
+
+  </main>
+
+  <footer class="kaki-halaman">
+    <p><strong>ARCHIPYTHA</strong> — Proyek 3: Atap & Tangga (Sudut Istimewa)</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ========== [BAGIAN: PENAMBAHAN DATA SOAL GERBANG PROYEK 3] ========== */
+    const soalGerbangProyek3 = [
+      {
+        id: "gp3-1",
+        proyek: "proyek3",
+        jenis: "pilihan-ganda",
+        level: 1,
+        pertanyaan: "Berapakah perbandingan panjang sisi-sisi pada segitiga siku-siku sama kaki yang memiliki sudut 45° - 45° - 90°?",
+        pilihan: [
+          "1 : 1 : 2",
+          "1 : 1 : √2",
+          "1 : √3 : 2",
+          "1 : 2 : √3"
+        ],
+        kunci: 1,
+        petunjuk1: "Kedua sisi siku-sikunya sama panjang (1 : 1).",
+        petunjuk2: "Berdasarkan Teorema Pythagoras, sisi miringnya adalah √(1² + 1²) = √2.",
+        kesalahanUmum: {
+          "0": "Hati-hati! Sisi miringnya adalah √(1² + 1²) = √2, bukan 1 + 1 = 2.",
+          "2": "1 : √3 : 2 adalah perbandingan untuk segitiga bersudut 30° - 60° - 90°."
+        },
+        penjelasan: "Pada segitiga 45° - 45° - 90°, kedua sisi siku-sikunya sama panjang sehingga perbandingannya adalah 1 : 1 : √2."
+      },
+      {
+        id: "gp3-2",
+        proyek: "proyek3",
+        jenis: "isian-angka",
+        level: 1,
+        pertanyaan: "Sebuah tangga disandarkan pada tembok membentuk sudut 30° terhadap lantai. Jika tinggi tembok (sisi di depan sudut 30°) adalah 4 meter, berapa meter panjang tangga tersebut (sisi miring di depan 90°)?",
+        kunci: 8,
+        petunjuk1: "Perbandingan sisi di depan 30° : depan 60° : depan 90° adalah 1 : √3 : 2.",
+        petunjuk2: "Sisi di depan 90° (tangga) adalah 2 kali panjang sisi di depan 30°.",
+        kesalahanUmum: {
+          "2": "Kamu membagi 4 dengan 2. Karena tangga adalah sisi miring (perbandingan 2), kamu harus mengalikan 4 × 2!",
+          "4": "4 m adalah sisi di depan 30°. Sisi miring selalu 2 kali lipatnya pada segitiga 30°-60°-90°."
+        },
+        penjelasan: "Perbandingan depan 30° : miring (depan 90°) adalah 1 : 2. Karena sisi depan 30° = 4 m, maka panjang tangga = 2 × 4 = 8 meter."
+      },
+      {
+        id: "gp3-3",
+        proyek: "proyek3",
+        jenis: "pilihan-ganda",
+        level: 2,
+        pertanyaan: "Kuda-kuda atap rumah berbentuk segitiga siku-siku sama kaki (45° - 45° - 90°). Jika tinggi tegak atap adalah 6 meter, berapakah panjang kemiringan kasau atap tersebut?",
+        pilihan: [
+          "6 meter",
+          "6√2 meter",
+          "6√3 meter",
+          "12 meter"
+        ],
+        kunci: 1,
+        petunjuk1: "Gunakan perbandingan 1 : 1 : √2 untuk segitiga 45° - 45° - 90°.",
+        petunjuk2: "Jika sisi siku-sikunya k = 6 meter, maka sisi miringnya adalah k√2.",
+        kesalahanUmum: {
+          "2": "6√3 digunakan untuk sisi di depan 60°, sedangkan ini adalah segitiga 45°-45°-90°.",
+          "3": "12 meter diperoleh jika dikali 2, padahal pengali sisi miring pada sudut 45° adalah √2."
+        },
+        penjelasan: "Dengan perbandingan 1 : 1 : √2 dan sisi siku-siku = 6 m, maka panjang kemiringan atap adalah 6√2 meter."
+      },
+      {
+        id: "gp3-4",
+        proyek: "proyek3",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Tali penahan tiang antena memiliki panjang 10 meter (sisi miring) dan membentuk sudut 30° terhadap permukaan tanah. Berapa meter tinggi tiang antena tersebut (sisi di depan sudut 30°)?",
+        kunci: 5,
+        petunjuk1: "Sisi miring (depan 90°) bernilai 10 m, yang mewakili angka perbandingan 2.",
+        petunjuk2: "Sisi di depan sudut 30° mewakili perbandingan 1, yaitu setengah dari sisi miring.",
+        kesalahanUmum: {
+          "20": "Kamu mengalikan 10 × 2. Karena 10 m adalah sisi miring (terpanjang), sisi di depan 30° adalah setengahnya: 10 ÷ 2 = 5."
+        },
+        penjelasan: "Perbandingan depan 30° : miring = 1 : 2. Karena sisi miring = 10 m, maka tinggi tiang (depan 30°) = 10 ÷ 2 = 5 meter."
+      }
+    ];
+
+    soalGerbangProyek3.forEach(soalBaru => {
+      if (!daftarSoal.some(s => s.id === soalBaru.id)) {
+        daftarSoal.push(soalBaru);
+      }
+    });
+
+    /* ========== [BAGIAN: LOGIKA INTERAKTIF SUDUT ISTIMEWA] ========== */
+
+    function jawabDiscovery45(benar) {
+      const fb = document.getElementById("feedback-discovery-45");
+      if (benar) {
+        fb.className = "kotak-feedback tampil benar";
+        fb.innerHTML = "✅ <strong>Tepat!</strong> Karena $\\sqrt{1^2 + 1^2} = \\sqrt{2}$, maka perbandingan ketiga sisinya selalu <strong>$1 : 1 : \\sqrt{2}$</strong>!";
+        catatHasilSoal("discovery-45", true, 10);
+      } else {
+        fb.className = "kotak-feedback tampil salah";
+        fb.innerHTML = "❌ Ingat, hasil penjumlahan $1^2 + 1^2 = 2$ masih berada di dalam tanda akar kuadrat, sehingga hasilnya adalah $\\sqrt{2}$ (sekitar 1,41), bukan 2!";
+      }
+    }
+
+    function jawabDiscovery3060(benar) {
+      const fb = document.getElementById("feedback-discovery-3060");
+      if (benar) {
+        fb.className = "kotak-feedback tampil benar";
+        fb.innerHTML = "✅ <strong>Luar Biasa!</strong> Sisi di depan sudut $60^\\circ$ bernilai $\\sqrt{3}$, sehingga perbandingan lengkapnya adalah <strong>$1 : \\sqrt{3} : 2$</strong>!";
+        catatHasilSoal("discovery-3060", true, 10);
+      } else {
+        fb.className = "kotak-feedback tampil salah";
+        fb.innerHTML = "❌ $2^2 - 1^2 = 4 - 1 = 3$ adalah nilai $b^2$. Jangan lupa ditarik akarnya menjadi $\\sqrt{3}$!";
+      }
+    }
+
+    function perbaruiSimulasi45() {
+      const k = Number(document.getElementById("slider-pengali-45").value) || 4;
+      document.getElementById("label-nilai-k45").textContent = `k = ${k} meter`;
+      document.getElementById("sel-45-a").textContent = `${k} m`;
+      document.getElementById("sel-45-b").textContent = `${k} m`;
+      document.getElementById("sel-45-c").textContent = `${k}√2 m (≈ ${formatAngka(k * Math.SQRT2)} m)`;
+      gambarSegitigaIstimewa("kanvas-istimewa-45", "45-45-90", k);
+    }
+
+    function perbaruiSimulasi3060() {
+      const k = Number(document.getElementById("slider-pengali-3060").value) || 3;
+      document.getElementById("label-nilai-k3060").textContent = `k = ${k} meter`;
+      document.getElementById("sel-30-a").textContent = `${k} m`;
+      document.getElementById("sel-60-b").textContent = `${k}√3 m (≈ ${formatAngka(k * Math.sqrt(3))} m)`;
+      document.getElementById("sel-90-c").textContent = `${2 * k} m`;
+      gambarSegitigaIstimewa("kanvas-istimewa-3060", "30-60-90", k);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("maskot-proyek3").innerHTML = buatSvgMaskot("senang");
+
+      // Inisialisasi Slider 45-45-90 dan 30-60-90
+      document.getElementById("slider-pengali-45").addEventListener("input", perbaruiSimulasi45);
+      document.getElementById("slider-pengali-3060").addEventListener("input", perbaruiSimulasi3060);
+      perbaruiSimulasi45();
+      perbaruiSimulasi3060();
+
+      // Studi Kasus Tangga
+      document.getElementById("tombol-cek-studi-tangga").addEventListener("click", () => {
+        const nilai = Number(document.getElementById("input-studi-tangga").value);
+        const fb = document.getElementById("feedback-studi-tangga");
+        if (Math.abs(nilai - 7) < 0.05) {
+          fb.className = "kotak-feedback tampil benar";
+          fb.innerHTML = "✅ <strong>Benar Sekali!</strong> Karena sisi di depan $30^\\circ$ adalah $3,5\\text{ m}$, maka panjang tangga (sisi miring di depan $90^\\circ$) adalah $2 \\times 3,5 = $ <strong>7 meter</strong>!";
+          catatHasilSoal("studi-tangga-proyek3", true, 15);
+        } else {
+          fb.className = "kotak-feedback tampil salah";
+          fb.innerHTML = "❌ Perhatikan perbandingan $30^\\circ : 90^\\circ = 1 : 2$. Jika sisi di depan $30^\\circ$ adalah $3,5\\text{ m}$, kalikan dengan $2$ untuk mendapatkan panjang miring tangga!";
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        perbaruiSimulasi45();
+        perbaruiSimulasi3060();
+      });
+
+      // Render Gerbang Proyek 3 & Jurnal Refleksi
+      renderGerbangProyek("wadah-gerbang-proyek3", "proyek3", 3, "latihan.html");
+      renderJurnalRefleksi("wadah-jurnal-proyek3", "proyek3", "Perbandingan Segitiga 45°-45°-90° dan 30°-60°-90°");
+    });
+  </script>
+</body>
+</html>

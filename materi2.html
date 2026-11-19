@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyek 2: Rangka Baja (Triple Pythagoras) — Misi Arsitek Muda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== [BAGIAN: BAR AKSESIBILITAS] ========== -->
+  <div class="bar-aksesibilitas">
+    <div class="isi-bar-aksesibilitas">
+      <div class="info-arsitek-mini">
+        <span class="lencana-pangkat-mini" id="tampilan-pangkat-atas">👷 Pangkat: Magang</span>
+        <span id="tampilan-skor-atas">⭐ Skor: 0</span>
+        <span id="tampilan-combo-atas">🔥 Combo: 0x</span>
+      </div>
+      <div class="kelompok-tombol-akses">
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(-1)">A-</button>
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(1)">A+</button>
+        <button type="button" class="tombol-akses" onclick="toggleModeGelap()">🌓 Mode Kontras</button>
+        <button type="button" class="tombol-akses" onclick="resetProgresBelajar()">🔄 Reset Progres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== [BAGIAN: NAVBAR] ========== -->
+  <header class="navbar-utama">
+    <div class="isi-navbar">
+      <a href="index.html" class="merek-aplikasi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#FFC107"/>
+          <polygon points="12,36 36,36 12,12" fill="none" stroke="#0B2A4A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="29" width="7" height="7" fill="none" stroke="#0B2A4A" stroke-width="2"/>
+        </svg>
+        <div>
+          <span class="teks-merek">ARCHIPYTHA</span>
+          <span class="subteks-merek">Proyek 2: Rangka Baja (Triple Pythagoras)</span>
+        </div>
+      </a>
+      <nav aria-label="Navigasi Proyek">
+        <ul class="daftar-menu-navigasi" id="daftar-menu-navigasi"></ul>
+      </nav>
+    </div>
+  </header>
+  <div class="ornamen-penggaris"></div>
+
+  <!-- ========== [BAGIAN: KONTEN UTAMA PROYEK 2] ========== -->
+  <main class="wadah-utama" id="awal-materi">
+
+    <!-- Sapaan Maskot & Pertanyaan Pemantik -->
+    <section class="panel-maskot">
+      <div class="ikon-maskot-wadah" id="maskot-proyek2"></div>
+      <div class="isi-dialog-maskot">
+        <div class="nama-maskot">Ir. Bima — Kepala Divisi Struktur Baja</div>
+        <p class="pesan-maskot" id="teks-pemantik-proyek2">
+          <strong>Pertanyaan Pemantik:</strong> Saat memotong batang baja untuk rangka jembatan atau kanopi sekolah, tukang las kesulitan jika hasil hitungan sisi miringnya berupa angka desimal rumit seperti $\sqrt{20} \approx 4,4721\text{ m}$. Bagaimana cara memilih kombinasi ukuran sisi siku-siku agar panjang ketiga batang baja selalu berupa <strong>bilangan bulat utuh</strong>?
+        </p>
+      </div>
+      <button type="button" class="tombol-akses" onclick="bacakanTeks(document.getElementById('teks-pemantik-proyek2').innerText)">
+        🔊 Bacakan
+      </button>
+    </section>
+
+    <!-- 1. TABEL & GENERATOR TRIPLE PYTHAGORAS -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">PENEMUAN POLA BILANGAN</span>
+          <h1 class="judul-kartu">🔩 Tabel & Generator Rangka Baja (Triple Pythagoras)</h1>
+        </div>
+      </div>
+
+      <p style="margin-bottom:1rem;">
+        <strong>Triple Pythagoras</strong> adalah kelompok <strong>tiga bilangan bulat positif ($a, b, c$)</strong> yang memenuhi persamaan $a^2 + b^2 = c^2$. Jika suatu pasangan $(a, b, c)$ adalah Triple Pythagoras, maka kelipatannya seperti $(2a, 2b, 2c)$ dan $(3a, 3b, 3c)$ juga pasti membentuk Triple Pythagoras!
+      </p>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <!-- Generator Interaktif dengan Pilih Paket & Pengali -->
+          <div class="kelompok-slider">
+            <label for="pilih-triple-utama" style="font-weight:700; display:block; margin-bottom:0.4rem;">
+              Pilih Triple Pythagoras Dasar (Primitif):
+            </label>
+            <select id="pilih-triple-utama" class="pilihan-dropdown" style="margin-bottom:0.85rem;">
+              <option value="3,4,5">Tipe 1: (3, 4, 5) — Fondasi & Rangka Ringan</option>
+              <option value="5,12,13">Tipe 2: (5, 12, 13) — Bentang Jembatan Pendek</option>
+              <option value="8,15,17">Tipe 3: (8, 15, 17) — Kuda-Kuda Gudang</option>
+              <option value="7,24,25">Tipe 4: (7, 24, 25) — Menara Penyangga Tinggi</option>
+            </select>
+
+            <div class="label-slider">
+              <label for="slider-kelipatan-triple">Faktor Kelipatan Ukuran ($k$):</label>
+              <span id="label-kelipatan-triple">1x (Ukuran Dasar)</span>
+            </div>
+            <input type="range" id="slider-kelipatan-triple" class="slider-input" min="1" max="4" step="1" value="1">
+          </div>
+
+          <!-- Generator Rumus Euclid (m dan n) -->
+          <div class="kelompok-slider" style="background:rgba(11, 42, 74, 0.04);">
+            <strong style="display:block; margin-bottom:0.35rem;">🛠️ Mesin Pembuat Triple Baru (Rumus Euclid $m > n > 0$):</strong>
+            <p style="font-size:0.86rem; margin-bottom:0.6rem;">
+              Pilih dua bilangan bulat $m$ dan $n$ (dengan $m > n$). Mesin akan menghitung $a = m^2 - n^2$, $b = 2mn$, dan $c = m^2 + n^2$:
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:0.5rem; align-items:end;">
+              <div>
+                <label for="input-euclid-m" style="font-size:0.82rem; font-weight:700;">Nilai m (2-6):</label>
+                <input type="number" id="input-euclid-m" class="input-angka" min="2" max="6" value="2">
+              </div>
+              <div>
+                <label for="input-euclid-n" style="font-size:0.82rem; font-weight:700;">Nilai n (1-5):</label>
+                <input type="number" id="input-euclid-n" class="input-angka" min="1" max="5" value="1">
+              </div>
+              <button type="button" class="tombol-sekunder" id="tombol-buat-euclid">Buat Triple</button>
+            </div>
+            <div id="hasil-generator-euclid" style="margin-top:0.6rem; font-size:0.9rem; font-weight:600;"></div>
+          </div>
+
+          <!-- Tabel Referensi Cepat Triple Pythagoras -->
+          <table class="tabel-teknik" aria-label="Tabel Referensi Triple Pythagoras">
+            <thead>
+              <tr>
+                <th>Triple Dasar</th>
+                <th>Kelipatan 2x</th>
+                <th>Kelipatan 3x</th>
+                <th>Bukti Kuadrat Dasar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="cursor:pointer;" onclick="terapkanTripleKeKanvas(3, 4)" title="Klik untuk melihat gambar">
+                <td><strong>3 - 4 - 5</strong></td>
+                <td>6 - 8 - 10</td>
+                <td>9 - 12 - 15</td>
+                <td>$9 + 16 = 25$</td>
+              </tr>
+              <tr style="cursor:pointer;" onclick="terapkanTripleKeKanvas(5, 12)" title="Klik untuk melihat gambar">
+                <td><strong>5 - 12 - 13</strong></td>
+                <td>10 - 24 - 26</td>
+                <td>15 - 36 - 39</td>
+                <td>$25 + 144 = 169$</td>
+              </tr>
+              <tr style="cursor:pointer;" onclick="terapkanTripleKeKanvas(8, 15)" title="Klik untuk melihat gambar">
+                <td><strong>8 - 15 - 17</strong></td>
+                <td>16 - 30 - 34</td>
+                <td>24 - 45 - 51</td>
+                <td>$64 + 225 = 289$</td>
+              </tr>
+              <tr style="cursor:pointer;" onclick="terapkanTripleKeKanvas(7, 24)" title="Klik untuk melihat gambar">
+                <td><strong>7 - 24 - 25</strong></td>
+                <td>14 - 48 - 50</td>
+                <td>21 - 72 - 75</td>
+                <td>$49 + 576 = 625$</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:0.82rem; color:var(--teks-sekunder);">*Ketuk baris pada tabel di atas untuk memvisualisasikan rangka bajanya.</p>
+        </div>
+
+        <!-- Kanvas SVG Visualisasi Rangka Baja -->
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-triple-baja"></div>
+          <div id="kotak-info-rangka" class="kotak-rumus-blueprint" style="margin-top:0.85rem;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PEMERIKSA APAKAH TIGA BILANGAN ADALAH TRIPLE PYTHAGORAS -->
+    <section class="kartu-materi">
+      <div class="kepala-materi kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">ALAT UJI PRESISI RANGKA</span>
+          <h2 class="judul-kartu">🔍 Pemeriksa Triple Pythagoras Beserta Langkah</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:0.85rem;">
+            Masukkan tiga bilangan ukuran batang baja (boleh acak urutannya). Sistem akan otomatis menentukan sisi terpanjang sebagai kandidat sisi miring ($c$) dan menguji apakah ketiganya merupakan <strong>Triple Pythagoras</strong>!
+          </p>
+
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.75rem; margin-bottom:1rem;">
+            <div>
+              <label for="uji-triple-1" style="font-weight:700; font-size:0.88rem;">Bilangan 1:</label>
+              <input type="number" id="uji-triple-1" class="input-angka" step="any" value="8">
+            </div>
+            <div>
+              <label for="uji-triple-2" style="font-weight:700; font-size:0.88rem;">Bilangan 2:</label>
+              <input type="number" id="uji-triple-2" class="input-angka" step="any" value="17">
+            </div>
+            <div>
+              <label for="uji-triple-3" style="font-weight:700; font-size:0.88rem;">Bilangan 3:</label>
+              <input type="number" id="uji-triple-3" class="input-angka" step="any" value="15">
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <button type="button" class="tombol-utama" id="tombol-cek-triple">✅ Cek Apakah Triple Pythagoras</button>
+            <button type="button" class="tombol-garis" onclick="isiContohUjiTriple(6, 8, 10)">Contoh (6, 8, 10)</button>
+            <button type="button" class="tombol-garis" onclick="isiContohUjiTriple(4, 5, 6)">Contoh (4, 5, 6)</button>
+            <button type="button" class="tombol-garis" onclick="isiContohUjiTriple(1.5, 2, 2.5)">Contoh Desimal (1.5, 2, 2.5)</button>
+          </div>
+
+          <div id="hasil-cek-triple" class="kotak-feedback tampil benar" style="margin-top:1rem;"></div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-uji-triple"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PENENTU JENIS SEGITIGA (SIKU-SIKU, LANCIP, ATAU TUMPUL) -->
+    <section class="kartu-materi">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">KEBALIKAN TEOREMA PYTHAGORAS</span>
+          <h2 class="judul-kartu">📐 Penentu Jenis Segitiga: Lancip, Siku-Siku, atau Tumpul?</h2>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p style="margin-bottom:0.75rem;">
+            Bagaimana jika tiga batang baja yang digabungkan <strong>tidak</strong> memenuhi $a^2 + b^2 = c^2$? Kita dapat mengetahui bentuk sudut terbesar di hadapan sisi terpanjang ($c$) dengan membandingkan nilai $a^2 + b^2$ terhadap $c^2$:
+          </p>
+
+          <ul style="padding-left:1.25rem; font-size:0.92rem; margin-bottom:1rem;">
+            <li>Jika $a^2 + b^2 = c^2 \longrightarrow$ <strong>Segitiga Siku-Siku</strong> (sudut tepat $90^\circ$).</li>
+            <li>Jika $a^2 + b^2 > c^2 \longrightarrow$ <strong>Segitiga Lancip</strong> (semua sudut $< 90^\circ$).</li>
+            <li>Jika $a^2 + b^2 < c^2 \longrightarrow$ <strong>Segitiga Tumpul</strong> (ada sudut $> 90^\circ$).</li>
+          </ul>
+
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.75rem; margin-bottom:1rem;">
+            <div>
+              <label for="sisi-jenis-1" style="font-weight:700; font-size:0.88rem;">Sisi Pertama:</label>
+              <input type="number" id="sisi-jenis-1" class="input-angka" min="1" max="20" value="5">
+            </div>
+            <div>
+              <label for="sisi-jenis-2" style="font-weight:700; font-size:0.88rem;">Sisi Kedua:</label>
+              <input type="number" id="sisi-jenis-2" class="input-angka" min="1" max="20" value="6">
+            </div>
+            <div>
+              <label for="sisi-jenis-3" style="font-weight:700; font-size:0.88rem;">Sisi Ketiga:</label>
+              <input type="number" id="sisi-jenis-3" class="input-angka" min="1" max="20" value="8">
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="tombol-utama" id="tombol-tentukan-jenis">🔍 Analisis Jenis Segitiga</button>
+            <button type="button" class="tombol-garis" onclick="isiContohJenisSegitiga(6, 8, 10)">Coba Siku-Siku (6,8,10)</button>
+            <button type="button" class="tombol-garis" onclick="isiContohJenisSegitiga(7, 8, 9)">Coba Lancip (7,8,9)</button>
+            <button type="button" class="tombol-garis" onclick="isiContohJenisSegitiga(5, 6, 9)">Coba Tumpul (5,6,9)</button>
+          </div>
+
+          <div id="hasil-jenis-segitiga" class="kotak-feedback tampil" style="margin-top:1rem;"></div>
+        </div>
+
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-jenis-segitiga"></div>
+          <p style="font-size:0.83rem; color:var(--teks-sekunder); text-align:center; margin-top:0.4rem;">
+            Visualisasi bentuk segitiga sesungguhnya berdasarkan perbandingan ketiga sisinya.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. GERBANG PROYEK 2 -->
+    <section class="kartu-materi" id="wadah-gerbang-proyek2"></section>
+
+    <!-- 5. JURNAL REFLEKSI PROYEK 2 -->
+    <section class="kartu-materi" id="wadah-jurnal-proyek2"></section>
+
+  </main>
+
+  <footer class="kaki-halaman">
+    <p><strong>ARCHIPYTHA</strong> — Proyek 2: Rangka Baja (Triple Pythagoras & Jenis Segitiga)</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ========== [BAGIAN: PENAMBAHAN DATA SOAL GERBANG PROYEK 2] ========== */
+    const soalGerbangProyek2 = [
+      {
+        id: "gp2-1",
+        proyek: "proyek2",
+        jenis: "pilihan-ganda",
+        level: 1,
+        pertanyaan: "Manakah di antara kelompok tiga bilangan berikut yang merupakan Triple Pythagoras untuk rangka baja siku-siku?",
+        pilihan: [
+          "6, 8, 12",
+          "5, 12, 13",
+          "7, 10, 12",
+          "4, 6, 8"
+        ],
+        kunci: 1,
+        petunjuk1: "Uji setiap pilihan dengan mengecek apakah kuadrat dua angka terkecil jika dijumlahkan sama dengan kuadrat angka terbesar.",
+        petunjuk2: "Hitung 5² + 12² = 25 + 144 = 169, dan bandingkan dengan 13².",
+        kesalahanUmum: {
+          "0": "6² + 8² = 36 + 64 = 100. Agar menjadi Triple Pythagoras, sisi ketiganya harus √100 = 10, bukan 12.",
+          "3": "4² + 6² = 16 + 36 = 52, sedangkan 8² = 64 (tidak sama)."
+        },
+        penjelasan: "5, 12, dan 13 adalah Triple Pythagoras karena 5² + 12² = 25 + 144 = 169 = 13²."
+      },
+      {
+        id: "gp2-2",
+        proyek: "proyek2",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Pasangan bilangan (8, 15, c) adalah Triple Pythagoras untuk kuda-kuda gudang sekolah. Berapakah nilai sisi miring c?",
+        kunci: 17,
+        petunjuk1: "Gunakan rumus c² = 8² + 15².",
+        petunjuk2: "8² + 15² = 64 + 225 = 289. Berapakah akar kuadrat dari 289?",
+        kesalahanUmum: {
+          "23": "Kamu menjumlahkan 8 + 15 = 23 tanpa menguadratkan terlebih dahulu.",
+          "289": "289 adalah nilai c². Jangan lupa menarik akar kuadratnya: √289 = 17!"
+        },
+        penjelasan: "c = √(8² + 15²) = √(64 + 225) = √289 = 17."
+      },
+      {
+        id: "gp2-3",
+        proyek: "proyek2",
+        jenis: "pilihan-ganda",
+        level: 2,
+        pertanyaan: "Seorang arsitek merangkai tiga batang besi dengan ukuran 6 meter, 7 meter, dan 9 meter. Jenis segitiga apakah yang terbentuk oleh ketiga batang besi tersebut?",
+        pilihan: [
+          "Segitiga Siku-Siku",
+          "Segitiga Lancip",
+          "Segitiga Tumpul",
+          "Tidak dapat membentuk segitiga"
+        ],
+        kunci: 1,
+        petunjuk1: "Sisi terpanjang adalah c = 9. Bandingkan nilai 6² + 7² dengan 9².",
+        petunjuk2: "6² + 7² = 36 + 49 = 85, sedangkan 9² = 81. Karena a² + b² > c² (85 > 81), jenis segitiga apakah itu?",
+        kesalahanUmum: {
+          "0": "Segitiga siku-siku hanya terbentuk jika a² + b² sama persis dengan c². Di sini 85 ≠ 81.",
+          "2": "Ingat: jika a² + b² LEBIH BESAR dari c² (85 > 81), maka sudutnya menyempit menjadi Segitiga Lancip, bukan tumpul."
+        },
+        penjelasan: "Karena 6² + 7² = 36 + 49 = 85 dan 9² = 81, maka a² + b² > c² (85 > 81). Jadi segitiga yang terbentuk adalah Segitiga Lancip."
+      },
+      {
+        id: "gp2-4",
+        proyek: "proyek2",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Sebuah rangka baja memanfaatkan kelipatan 3 dari Triple Pythagoras dasar (3, 4, 5), sehingga menjadi (9, 12, x). Berapakah panjang batang miring x tersebut?",
+        kunci: 15,
+        petunjuk1: "Jika (3, 4, 5) dikalikan 3 menjadi (3×3, 4×3, 5×3).",
+        petunjuk2: "Kamu juga bisa mengecek dengan √(9² + 12²) = √(81 + 144) = √225.",
+        kesalahanUmum: {
+          "21": "Kamu menjumlahkan 9 + 12 = 21. Kalikan sisi miring dasar (5) dengan 3!",
+          "225": "225 adalah nilai x². Tarik akarnya: √225 = 15."
+        },
+        penjelasan: "Kelipatan 3 dari (3, 4, 5) adalah (9, 12, 15). Cek: 9² + 12² = 81 + 144 = 225 = 15²."
+      }
+    ];
+
+    // Pastikan soal proyek 2 masuk ke daftarSoal global
+    soalGerbangProyek2.forEach(soalBaru => {
+      if (!daftarSoal.some(s => s.id === soalBaru.id)) {
+        daftarSoal.push(soalBaru);
+      }
+    });
+
+    /* ========== [BAGIAN: LOGIKA GENERATOR & PEMERIKSA TRIPLE PYTHAGORAS] ========== */
+
+    function terapkanTripleKeKanvas(aDasar, bDasar, kelipatan = 1) {
+      const a = aDasar * kelipatan;
+      const b = bDasar * kelipatan;
+      const c = hitungSisiMiring(a, b);
+
+      // Gunakan fungsi pusat gambarSegitigaSiku dengan batasMaks fleksibel agar kelipatan besar tetap tampil
+      gambarSegitigaSiku("kanvas-triple-baja", a, b, {
+        batasMaks: 200,
+        labelA: `a = ${a} m`,
+        labelB: `b = ${b} m`,
+        labelC: `c = ${formatAngka(c)} m`
+      });
+
+      const kotakInfo = document.getElementById("kotak-info-rangka");
+      kotakInfo.innerHTML = `
+        <div style="font-size:0.85rem; color:#CBD5E1;">SPESIFIKASI RANGKA BAJA SIKU-SIKU:</div>
+        <div class="teks-rumus-besar" style="font-size:1.45rem;">(${a}, ${b}, ${formatAngka(c)})</div>
+        <div style="font-size:0.9rem;">
+          Bukti: $${a}^2 + ${b}^2 = ${a * a} + ${b * b} = ${a * a + b * b} = ${formatAngka(c)}^2$
+        </div>
+      `;
+    }
+
+    function perbaruiDariDropdownTriple() {
+      const nilaiPilih = document.getElementById("pilih-triple-utama").value.split(",").map(Number);
+      const k = Number(document.getElementById("slider-kelipatan-triple").value) || 1;
+      document.getElementById("label-kelipatan-triple").textContent =
+        k === 1 ? "1x (Ukuran Dasar)" : `${k}x Lipat (${nilaiPilih[0] * k}, ${nilaiPilih[1] * k}, ${nilaiPilih[2] * k})`;
+      terapkanTripleKeKanvas(nilaiPilih[0], nilaiPilih[1], k);
+    }
+
+    function jalankanGeneratorEuclid() {
+      const m = Math.round(Number(document.getElementById("input-euclid-m").value));
+      const n = Math.round(Number(document.getElementById("input-euclid-n").value));
+      const infoEl = document.getElementById("hasil-generator-euclid");
+
+      if (!Number.isFinite(m) || !Number.isFinite(n) || m <= n || n < 1 || m > 10) {
+        infoEl.style.color = "var(--merah-salah)";
+        infoEl.innerHTML = "⚠️ Syarat rumus Euclid: pilih bilangan bulat positif dengan <strong>m lebih besar daripada n</strong> (contoh: m = 3, n = 2)!";
+        return;
+      }
+
+      const a = m * m - n * n;
+      const b = 2 * m * n;
+      const c = m * m + n * n;
+      infoEl.style.color = "var(--hijau-benar)";
+      infoEl.innerHTML = `✅ Hasil Triple Baru: <strong>(${a}, ${b}, ${c})</strong> &rarr; karena $${a}^2 + ${b}^2 = ${a * a} + ${b * b} = ${c * c} = ${c}^2$`;
+      terapkanTripleKeKanvas(a, b, 1);
+    }
+
+    function isiContohUjiTriple(x, y, z) {
+      document.getElementById("uji-triple-1").value = x;
+      document.getElementById("uji-triple-2").value = y;
+      document.getElementById("uji-triple-3").value = z;
+      periksaTigaBilanganTriple();
+    }
+
+    function periksaTigaBilanganTriple() {
+      const n1 = Number(document.getElementById("uji-triple-1").value);
+      const n2 = Number(document.getElementById("uji-triple-2").value);
+      const n3 = Number(document.getElementById("uji-triple-3").value);
+      const kotakHasil = document.getElementById("hasil-cek-triple");
+
+      if (!Number.isFinite(n1) || !Number.isFinite(n2) || !Number.isFinite(n3) || n1 <= 0 || n2 <= 0 || n3 <= 0) {
+        kotakHasil.className = "kotak-feedback tampil peringatan";
+        kotakHasil.innerHTML = "⚠️ Masukkan tiga bilangan positif yang lebih besar dari 0 ya, Arsitek!";
+        return;
+      }
+
+      // Urutkan dari terkecil ke terbesar agar sisi miring c adalah yang paling panjang
+      const urut = [n1, n2, n3].sort((x, y) => x - y);
+      const a = urut[0];
+      const b = urut[1];
+      const c = urut[2];
+
+      const apakahBulat = Number.isInteger(a) && Number.isInteger(b) && Number.isInteger(c);
+      const jumlahKuadratAB = Number((a * a + b * b).toFixed(4));
+      const kuadratC = Number((c * c).toFixed(4));
+      const apakahSiku = Math.abs(jumlahKuadratAB - kuadratC) < 0.001;
+
+      if (apakahSiku && apakahBulat) {
+        kotakHasil.className = "kotak-feedback tampil benar";
+        kotakHasil.innerHTML = `
+          ✅ <strong>YA, (${a}, ${b}, ${c}) ADALAH TRIPLE PYTHAGORAS!</strong><br>
+          <strong>Langkah Pemeriksaan:</strong><br>
+          1. Urutkan dari terkecil ke terbesar: $a = ${a}$, $b = ${b}$, dan sisi terpanjang $c = ${c}$.<br>
+          2. Ketiganya merupakan bilangan bulat positif.<br>
+          3. Hitung $a^2 + b^2 = ${a}^2 + ${b}^2 = ${a * a} + ${b * b} = $ <strong>${jumlahKuadratAB}</strong>.<br>
+          4. Hitung $c^2 = ${c}^2 = $ <strong>${kuadratC}</strong>.<br>
+          5. Karena $a^2 + b^2 = c^2$ (${jumlahKuadratAB} = ${kuadratC}), maka ketiganya adalah <strong>Triple Pythagoras</strong>!
+        `;
+        gambarSegitigaSiku("kanvas-uji-triple", a, b, {
+          batasMaks: 500,
+          labelA: `a = ${a}`,
+          labelB: `b = ${b}`,
+          labelC: `c = ${c} (Siku-Siku)`
+        });
+        catatHasilSoal("eksplorasi-cek-triple", true, 10);
+      } else if (apakahSiku && !apakahBulat) {
+        kotakHasil.className = "kotak-feedback tampil peringatan";
+        kotakHasil.innerHTML = `
+          ⚠️ <strong>MEMBENTUK SEGITIGA SIKU-SIKU, TETAPI BUKAN TRIPLE PYTHAGORAS!</strong><br>
+          <strong>Mengapa?</strong><br>
+          Walaupun $${formatAngka(a)}^2 + ${formatAngka(b)}^2 = ${formatAngka(jumlahKuadratAB)} = ${formatAngka(c)}^2$, terdapat bilangan desimal/pecahan. Ingat syarat utama <strong>Triple Pythagoras</strong>: ketiga bilangannya harus <strong>bilangan bulat positif</strong>!
+        `;
+        gambarSegitigaSiku("kanvas-uji-triple", a, b, {
+          batasMaks: 500,
+          labelA: `a = ${formatAngka(a)}`,
+          labelB: `b = ${formatAngka(b)}`,
+          labelC: `c = ${formatAngka(c)}`
+        });
+      } else {
+        kotakHasil.className = "kotak-feedback tampil salah";
+        kotakHasil.innerHTML = `
+          ❌ <strong>BUKAN TRIPLE PYTHAGORAS!</strong><br>
+          <strong>Langkah Pemeriksaan:</strong><br>
+          1. Sisi terpanjang adalah $c = ${formatAngka(c)}$, sedangkan dua sisi lainnya $a = ${formatAngka(a)}$ dan $b = ${formatAngka(b)}$.<br>
+          2. $a^2 + b^2 = ${formatAngka(a)}^2 + ${formatAngka(b)}^2 = ${formatAngka(a * a)} + ${formatAngka(b * b)} = $ <strong>${formatAngka(jumlahKuadratAB)}</strong>.<br>
+          3. $c^2 = ${formatAngka(c)}^2 = $ <strong>${formatAngka(kuadratC)}</strong>.<br>
+          4. Karena $a^2 + b^2 \neq c^2$ (${formatAngka(jumlahKuadratAB)} $\neq$ ${formatAngka(kuadratC)}), maka <strong>bukan</strong> Triple Pythagoras.
+        `;
+        const cSeharusnya = hitungSisiMiring(a, b);
+        gambarSegitigaSiku("kanvas-uji-triple", a, b, {
+          batasMaks: 500,
+          labelA: `a = ${formatAngka(a)}`,
+          labelB: `b = ${formatAngka(b)}`,
+          labelC: `Jika siku-siku, c harus ${formatAngka(cSeharusnya)}`
+        });
+      }
+    }
+
+    /* ========== [BAGIAN: PENENTU JENIS SEGITIGA & GAMBAR SVG SEMBARANG] ========== */
+
+    function isiContohJenisSegitiga(x, y, z) {
+      document.getElementById("sisi-jenis-1").value = x;
+      document.getElementById("sisi-jenis-2").value = y;
+      document.getElementById("sisi-jenis-3").value = z;
+      analisisJenisSegitiga();
+    }
+
+    function analisisJenisSegitiga() {
+      const s1 = Number(document.getElementById("sisi-jenis-1").value);
+      const s2 = Number(document.getElementById("sisi-jenis-2").value);
+      const s3 = Number(document.getElementById("sisi-jenis-3").value);
+      const kotakHasil = document.getElementById("hasil-jenis-segitiga");
+      const wadahSvg = document.getElementById("kanvas-jenis-segitiga");
+
+      if (!Number.isFinite(s1) || !Number.isFinite(s2) || !Number.isFinite(s3) || s1 <= 0 || s2 <= 0 || s3 <= 0) {
+        kotakHasil.className = "kotak-feedback tampil peringatan";
+        kotakHasil.innerHTML = "⚠️ Masukkan ukuran ketiga sisi dengan angka positif lebih dari 0!";
+        return;
+      }
+
+      const urut = [s1, s2, s3].sort((x, y) => x - y);
+      const a = urut[0];
+      const b = urut[1];
+      const c = urut[2];
+
+      // Cek syarat ketaksamaan segitiga: jumlah dua sisi terpendek harus > sisi terpanjang
+      if (a + b <= c) {
+        kotakHasil.className = "kotak-feedback tampil salah";
+        kotakHasil.innerHTML = `
+          ⚠️ <strong>TIDAK DAPAT MEMBENTUK SEGITIGA!</strong><br>
+          Jumlah dua sisi yang lebih pendek ($a + b = ${formatAngka(a)} + ${formatAngka(b)} = ${formatAngka(a + b)}$) tidak lebih panjang dari sisi ketiga ($c = ${formatAngka(c)}$). Dalam konstruksi, kedua batang pendek tersebut tidak akan pernah bertemu ujungnya!
+        `;
+        wadahSvg.innerHTML = `
+          <div class="pesan-error-svg">
+            ⚠️ Batang ${formatAngka(a)} m dan ${formatAngka(b)} m terlalu pendek untuk menjangkau bentang ${formatAngka(c)} m ($a + b \le c$).
+          </div>
+        `;
+        return;
+      }
+
+      const a2 = a * a;
+      const b2 = b * b;
+      const ab2 = Number((a2 + b2).toFixed(4));
+      const c2 = Number((c * c).toFixed(4));
+
+      let jenis = "";
+      let simbolBanding = "";
+      let warnaGaris = "#FFC107";
+
+      if (Math.abs(ab2 - c2) < 0.001) {
+        jenis = "SEGITIGA SIKU-SIKU (Sudut = 90°)";
+        simbolBanding = "=";
+        kotakHasil.className = "kotak-feedback tampil benar";
+        warnaGaris = "#4ADE80";
+      } else if (ab2 > c2) {
+        jenis = "SEGITIGA LANCIP (Semua Sudut < 90°)";
+        simbolBanding = ">";
+        kotakHasil.className = "kotak-feedback tampil benar";
+        warnaGaris = "#38BDF8";
+      } else {
+        jenis = "SEGITIGA TUMPUL (Sudut di Depan c > 90°)";
+        simbolBanding = "<";
+        kotakHasil.className = "kotak-feedback tampil peringatan";
+        warnaGaris = "#FBBF24";
+      }
+
+      // Hitung besar sudut C di hadapan sisi c menggunakan aturan kosinus untuk visualisasi akurat
+      const cosC = (a2 + b2 - c2) / (2 * a * b);
+      const sudutCDerajat = Math.acos(Math.max(-1, Math.min(1, cosC))) * (180 / Math.PI);
+
+      kotakHasil.innerHTML = `
+        <strong>Kesimpulan: ${jenis}</strong><br>
+        <strong>Langkah Perbandingan Kuadrat Sisi:</strong><br>
+        1. Urutkan sisi: $a = ${formatAngka(a)}$, $b = ${formatAngka(b)}$, dan sisi terpanjang $c = ${formatAngka(c)}$.<br>
+        2. Jumlah kuadrat dua sisi pendek: $a^2 + b^2 = ${formatAngka(a2)} + ${formatAngka(b2)} = $ <strong>${formatAngka(ab2)}</strong>.<br>
+        3. Kuadrat sisi terpanjang: $c^2 = ${formatAngka(c)}^2 = $ <strong>${formatAngka(c2)}</strong>.<br>
+        4. Perbandingan: <strong>$a^2 + b^2 ${simbolBanding} c^2$</strong> (${formatAngka(ab2)} ${simbolBanding} ${formatAngka(c2)}), sehingga sudut di hadapan sisi $c$ sebesar <strong>${formatAngka(sudutCDerajat)}°</strong>.
+      `;
+
+      // Gambar segitiga akurat di viewBox 400x300
+      const radC = sudutCDerajat * (Math.PI / 180);
+      const titikC = { x: 0, y: 0 };
+      const titikB = { x: b, y: 0 };
+      const titikA = { x: a * Math.cos(radC), y: -a * Math.sin(radC) };
+
+      const semuaX = [titikC.x, titikB.x, titikA.x];
+      const semuaY = [titikC.y, titikB.y, titikA.y];
+      const minX = Math.min(...semuaX);
+      const maxX = Math.max(...semuaX);
+      const minY = Math.min(...semuaY);
+      const maxY = Math.max(...semuaY);
+
+      const skala = Math.min(300 / Math.max(maxX - minX, 1), 210 / Math.max(maxY - minY, 1));
+      const cxLokal = (minX + maxX) / 2;
+      const cyLokal = (minY + maxY) / 2;
+
+      const keSvg = p => ({
+        x: 200 + (p.x - cxLokal) * skala,
+        y: 155 + (p.y - cyLokal) * skala
+      });
+
+      const P_C = keSvg(titikC);
+      const P_B = keSvg(titikB);
+      const P_A = keSvg(titikA);
+
+      wadahSvg.innerHTML = `
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+          <polygon points="${formatAngka(P_C.x)},${formatAngka(P_C.y)} ${formatAngka(P_B.x)},${formatAngka(P_B.y)} ${formatAngka(P_A.x)},${formatAngka(P_A.y)}"
+                   fill="rgba(255,255,255,0.12)" stroke="${warnaGaris}" stroke-width="3.2" stroke-linejoin="round"/>
+          <circle cx="${formatAngka(P_C.x)}" cy="${formatAngka(P_C.y)}" r="5" fill="#FFC107"/>
+          <circle cx="${formatAngka(P_B.x)}" cy="${formatAngka(P_B.y)}" r="4.5" fill="#FFFFFF"/>
+          <circle cx="${formatAngka(P_A.x)}" cy="${formatAngka(P_A.y)}" r="4.5" fill="#FFFFFF"/>
+
+          <!-- Label Sudut di Titik C -->
+          <text x="${formatAngka(P_C.x)}" y="${formatAngka(P_C.y + 24)}" fill="#FEF08A" font-size="13" font-weight="700" text-anchor="middle">
+            Sudut = ${formatAngka(sudutCDerajat)}°
+          </text>
+
+          <!-- Label Ketiga Sisi -->
+          <text x="${formatAngka((P_C.x + P_A.x) / 2 - 22)}" y="${formatAngka((P_C.y + P_A.y) / 2)}" fill="#7DD3FC" font-size="13" font-weight="700" text-anchor="middle">
+            a = ${formatAngka(a)}
+          </text>
+          <text x="${formatAngka((P_C.x + P_B.x) / 2)}" y="${formatAngka((P_C.y + P_B.y) / 2 + 22)}" fill="#86EFAC" font-size="13" font-weight="700" text-anchor="middle">
+            b = ${formatAngka(b)}
+          </text>
+          <text x="${formatAngka((P_A.x + P_B.x) / 2 + 22)}" y="${formatAngka((P_A.y + P_B.y) / 2 - 10)}" fill="#FDE047" font-size="13.5" font-weight="700" text-anchor="middle">
+            c = ${formatAngka(c)}
+          </text>
+        </svg>
+      `;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("maskot-proyek2").innerHTML = buatSvgMaskot("standar");
+
+      // Inisialisasi Generator Triple
+      document.getElementById("pilih-triple-utama").addEventListener("change", perbaruiDariDropdownTriple);
+      document.getElementById("slider-kelipatan-triple").addEventListener("input", perbaruiDariDropdownTriple);
+      document.getElementById("tombol-buat-euclid").addEventListener("click", jalankanGeneratorEuclid);
+      perbaruiDariDropdownTriple();
+
+      // Inisialisasi Pemeriksa Triple
+      document.getElementById("tombol-cek-triple").addEventListener("click", periksaTigaBilanganTriple);
+      periksaTigaBilanganTriple();
+
+      // Inisialisasi Penentu Jenis Segitiga
+      document.getElementById("tombol-tentukan-jenis").addEventListener("click", analisisJenisSegitiga);
+      analisisJenisSegitiga();
+
+      // Render Gerbang Proyek 2 & Jurnal Refleksi
+      renderGerbangProyek("wadah-gerbang-proyek2", "proyek2", 2, "materi3.html");
+      renderJurnalRefleksi("wadah-jurnal-proyek2", "proyek2", "Tabel Triple Pythagoras & Penentu Jenis Segitiga");
+    });
+  </script>
+</body>
+</html>

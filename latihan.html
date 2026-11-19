@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lapangan Proyek (Soal Interaktif & Adaptif) — Misi Arsitek Muda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ========== [BAGIAN: GAYA KHUSUS KOMPONEN INTERAKTIF LAPANGAN] ========== */
+    .indikator-status-pas {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1rem;
+      border: 2px solid transparent;
+      transition: all 0.25s ease;
+    }
+    .indikator-merah {
+      background: var(--merah-latar);
+      color: var(--merah-salah);
+      border-color: var(--merah-salah);
+    }
+    .indikator-kuning {
+      background: var(--oranye-latar);
+      color: var(--oranye-peringatan);
+      border-color: var(--kuning-helm);
+    }
+    .indikator-hijau {
+      background: var(--hijau-latar);
+      color: var(--hijau-benar);
+      border-color: var(--hijau-benar);
+    }
+
+    /* Bank Kartu dan Slot Tujuan Drag & Drop */
+    .bank-kartu-seret {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      padding: 0.85rem;
+      background: rgba(11, 42, 74, 0.06);
+      border: 2px dashed #94A3B8;
+      border-radius: 10px;
+      min-height: 64px;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+
+    .daftar-slot-langkah {
+      display: grid;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .baris-slot-langkah {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .nomor-urut-slot {
+      width: 42px;
+      height: 42px;
+      background: var(--biru-blueprint);
+      color: var(--kuning-helm);
+      font-family: var(--font-judul);
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Kotak Rumus Interaktif */
+    .baris-rumus-interaktif {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #0B2A4A;
+      color: #FFFFFF;
+      padding: 1.25rem;
+      border-radius: 10px;
+      border: 2px solid var(--kuning-helm);
+      margin-bottom: 1rem;
+      font-family: var(--font-judul);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .kotak-kosong-rumus {
+      min-width: 78px;
+      min-height: 52px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 2px dashed var(--kuning-helm);
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.25rem 0.5rem;
+      color: var(--teks-utama);
+    }
+
+    /* Navigasi Tab Soal Interaktif */
+    .navigasi-tab-interaktif {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tombol-tab-soal {
+      flex: 1;
+      min-width: 155px;
+      padding: 0.65rem 0.85rem;
+      background: var(--putih-murni);
+      color: var(--teks-utama);
+      border: 2px solid #CBD5E1;
+      border-radius: 8px;
+      font-family: var(--font-judul);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .tombol-tab-soal.aktif {
+      background: var(--biru-blueprint);
+      color: var(--kuning-helm);
+      border-color: var(--kuning-helm);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .tombol-tab-soal.selesai {
+      border-color: var(--hijau-benar);
+    }
+
+    /* Lencana Level Adaptif */
+    .lencana-level-adaptif {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-family: var(--font-judul);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .level-1 { background: #DCFCE7; color: #166534; border: 1px solid #22C55E; }
+    .level-2 { background: #FEF3C7; color: #92400E; border: 1px solid #F59E0B; }
+    .level-3 { background: #FEE2E2; color: #991B1B; border: 1px solid #EF4444; }
+  </style>
+</head>
+<body>
+
+  <!-- ========== [BAGIAN: BAR AKSESIBILITAS] ========== -->
+  <div class="bar-aksesibilitas">
+    <div class="isi-bar-aksesibilitas">
+      <div class="info-arsitek-mini">
+        <span class="lencana-pangkat-mini" id="tampilan-pangkat-atas">👷 Pangkat: Magang</span>
+        <span id="tampilan-skor-atas">⭐ Skor: 0</span>
+        <span id="tampilan-combo-atas">🔥 Combo: 0x</span>
+      </div>
+      <div class="kelompok-tombol-akses">
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(-1)">A-</button>
+        <button type="button" class="tombol-akses" onclick="ubahUkuranHuruf(1)">A+</button>
+        <button type="button" class="tombol-akses" onclick="toggleModeGelap()">🌓 Mode Kontras</button>
+        <button type="button" class="tombol-akses" onclick="resetProgresBelajar()">🔄 Reset Progres</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== [BAGIAN: NAVBAR] ========== -->
+  <header class="navbar-utama">
+    <div class="isi-navbar">
+      <a href="index.html" class="merek-aplikasi">
+        <svg viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="40" height="40" rx="8" fill="#FFC107"/>
+          <polygon points="12,36 36,36 12,12" fill="none" stroke="#0B2A4A" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="12" y="29" width="7" height="7" fill="none" stroke="#0B2A4A" stroke-width="2"/>
+        </svg>
+        <div>
+          <span class="teks-merek">ARCHIPYTHA</span>
+          <span class="subteks-merek">Proyek 4: Lapangan Proyek (Masalah Kontekstual & Simulasi)</span>
+        </div>
+      </a>
+      <nav aria-label="Navigasi Proyek">
+        <ul class="daftar-menu-navigasi" id="daftar-menu-navigasi"></ul>
+      </nav>
+    </div>
+  </header>
+  <div class="ornamen-penggaris"></div>
+
+  <!-- ========== [BAGIAN: KONTEN UTAMA LAPANGAN PROYEK] ========== -->
+  <main class="wadah-utama" id="awal-materi">
+
+    <!-- Panel Sapaan Maskot -->
+    <section class="panel-maskot">
+      <div class="ikon-maskot-wadah" id="maskot-lapangan"></div>
+      <div class="isi-dialog-maskot">
+        <div class="nama-maskot">Ir. Bima — Kepala Inspektur Lapangan</div>
+        <p class="pesan-maskot" id="pesan-maskot-lapangan">
+          Selamat datang di <strong>Lapangan Proyek</strong>, Arsitek! Sekarang saatnya menerapkan semua yang sudah kamu temukan pada situasi nyata di sekitar kita: tiang bendera upacara, kuda-kuda atap rumah, tangga rumah, benang layang-layang, dan lapangan futsal sekolah.
+        </p>
+      </div>
+      <button type="button" class="tombol-akses" onclick="bacakanTeks(document.getElementById('pesan-maskot-lapangan').innerText)">
+        🔊 Bacakan
+      </button>
+    </section>
+
+    <!-- =====================================================================
+         1. ZONA 5 JENIS SOAL INTERAKTIF (DRAG & DROP DAN GESER KONSISTEN)
+         ===================================================================== -->
+    <section class="kartu-materi" id="seksi-lima-interaktif">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">LABORATORIUM INTERAKTIF LAPANGAN</span>
+          <h1 class="judul-kartu">🛠️ 5 Tantangan Konstruksi Interaktif (Geser & Seret)</h1>
+        </div>
+      </div>
+
+      <p style="margin-bottom:1rem;">
+        Selesaikan kelima misi perakitan di bawah ini! Kamu dapat <strong>menyeret langsung (drag & drop)</strong> dengan mouse/jari, atau <strong>mengetuk kartu lalu mengetuk kotak tujuan (tap-to-place)</strong> maupun memakai tombol panah agar nyaman di semua perangkat.
+      </p>
+
+      <!-- Navigasi 5 Jenis Soal Interaktif -->
+      <div class="navigasi-tab-interaktif" id="navigasi-tab-interaktif" role="tablist"></div>
+
+      <!-- Wadah Render Soal Interaktif Aktif (Pola Konsisten) -->
+      <div id="wadah-soal-interaktif-aktif"></div>
+    </section>
+
+    <!-- =====================================================================
+         2. MINI-GAME "TANGGA TEPAT"
+         ===================================================================== -->
+    <section class="kartu-materi" id="seksi-tangga-tepat">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">MINI-GAME SIMULASI FISIKA & UKURAN</span>
+          <h2 class="judul-kartu">🪜 Mini-Game "Tangga Tepat": Sandarkan Tangga ke Jendela!</h2>
+        </div>
+        <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
+          <button type="button" class="tombol-garis" onclick="pilihMisiTangga(0)">Misi 1 (Jendela 4m)</button>
+          <button type="button" class="tombol-garis" onclick="pilihMisiTangga(1)">Misi 2 (Jendela 8m)</button>
+          <button type="button" class="tombol-garis" onclick="pilihMisiTangga(2)">Misi 3 (Jendela 12m)</button>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <div>
+          <p id="deskripsi-misi-tangga" style="margin-bottom:0.85rem; font-weight:600;"></p>
+
+          <!-- Indikator Posisi Kaki Tangga -->
+          <div id="status-posisi-tangga" class="indikator-status-pas indikator-kuning">
+            Geser kaki tangga hingga tepat berada pada titik aman yang diminta!
+          </div>
+
+          <!-- Slider & Tombol Panah Alternatif Non-Drag -->
+          <div class="kelompok-slider">
+            <div class="label-slider">
+              <label for="slider-kaki-tangga">Jarak Kaki Tangga dari Dinding ($b$):</label>
+              <span id="label-jarak-kaki-tangga">1.0 meter</span>
+            </div>
+            <input type="range" id="slider-kaki-tangga" class="slider-input" min="1" max="12" step="0.5" value="1">
+            <div style="display:flex; justify-content:space-between; margin-top:0.5rem; gap:0.5rem;">
+              <button type="button" class="tombol-garis" onclick="geserKakiTanggaManual(-0.5)">⬅️ Geser Kiri (-0.5m)</button>
+              <button type="button" class="tombol-garis" onclick="geserKakiTanggaManual(0.5)">Geser Kanan (+0.5m) ➡️</button>
+            </div>
+          </div>
+
+          <!-- Input Hitungan Panjang Tangga (Aktif setelah posisi tangga pas) -->
+          <div class="kelompok-slider" style="background:var(--putih-murni);">
+            <label for="input-panjang-tangga" style="font-weight:700; display:block; margin-bottom:0.4rem;">
+              Langkah 2: Hitung Panjang Tangga ($c$) yang Dibutuhkan (meter):
+            </label>
+            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+              <input type="number" step="any" id="input-panjang-tangga" class="input-angka" style="max-width:190px;" placeholder="Ketik panjang c...">
+              <button type="button" class="tombol-utama" id="tombol-periksa-tangga">✅ Periksa Tangga</button>
+              <button type="button" class="tombol-garis" id="tombol-ulangi-tangga">🔄 Ulangi</button>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.65rem;">
+              <button type="button" class="tombol-garis" onclick="tampilkanHintTangga(1)">💡 Petunjuk 1</button>
+              <button type="button" class="tombol-garis" onclick="tampilkanHintTangga(2)">💡 Petunjuk 2</button>
+            </div>
+            <div id="petunjuk-game-tangga" class="kotak-petunjuk"></div>
+            <div id="feedback-game-tangga" class="kotak-feedback"></div>
+          </div>
+        </div>
+
+        <!-- Kanvas SVG Interaktif Tangga Tepat (Bisa Diseret Langsung dengan Jari/Mouse) -->
+        <div>
+          <div class="wadah-kanvas-svg area-bebas-sentuh" id="kanvas-tangga-tepat"></div>
+          <p style="font-size:0.83rem; color:var(--teks-sekunder); text-align:center; margin-top:0.4rem;">
+            💡 Kamu juga bisa menyeret langsung bulatan kuning kaki tangga di atas tanah pada gambar!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         3. SOAL CERITA KONTEKSTUAL BERTINGKAT ADAPTIF (LEVEL 1 - 2 - 3 HOTS)
+         ===================================================================== -->
+    <section class="kartu-materi" id="seksi-soal-adaptif">
+      <div class="kepala-kartu">
+        <div>
+          <span class="label-kode-teknik">SISTEM LATIHAN CERDAS ADAPTIF</span>
+          <h2 class="judul-kartu">📈 Simulasi Masalah Nyata Bertingkat Adaptif</h2>
+        </div>
+        <div id="wadah-lencana-level-adaptif"></div>
+      </div>
+
+      <p style="margin-bottom:1rem;">
+        Sistem akan menyesuaikan tingkat kesulitan secara otomatis: <strong>jawab benar 3 kali berturut-turut untuk naik ke level lebih menantang (HOTS)</strong>, atau jika salah 2 kali berturut-turut sistem akan membantumu dengan level yang lebih mudah!
+      </p>
+
+      <!-- Bar Status Adaptif -->
+      <div class="kelompok-slider" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1.25rem;">
+        <div>
+          <strong>Level Saat Ini:</strong> <span id="teks-level-adaptif">Level 1 (Dasar Lapangan)</span>
+        </div>
+        <div>
+          <strong>Rentetan Benar (Naik Level):</strong> <span id="teks-beruntun-benar">0 / 3</span> &nbsp;|&nbsp;
+          <strong>Soal Dijawab:</strong> <span id="teks-total-adaptif">0</span>
+        </div>
+      </div>
+
+      <div class="grid-dua-kolom">
+        <!-- Kolom Soal & Kontrol Jawaban -->
+        <div>
+          <div class="kelompok-slider" style="background:var(--putih-murni);">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+              <span class="label-kode-teknik" id="konteks-soal-adaptif">KONTEKS LOKAL</span>
+              <button type="button" class="tombol-akses" style="background:#0B2A4A; color:#FFF;" id="tombol-baca-adaptif">
+                🔊 Bacakan Soal
+              </button>
+            </div>
+
+            <p id="pertanyaan-soal-adaptif" style="font-size:1.03rem; font-weight:600; margin-bottom:1rem;"></p>
+
+            <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; margin-bottom:0.75rem;">
+              <input type="number" step="any" id="input-jawaban-adaptif" class="input-angka" style="max-width:210px;" placeholder="Jawaban angka...">
+              <button type="button" class="tombol-utama" id="tombol-periksa-adaptif">✅ Periksa</button>
+              <button type="button" class="tombol-sekunder" id="tombol-soal-berikutnya" style="display:none;">➡️ Soal Berikutnya</button>
+            </div>
+
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+              <button type="button" class="tombol-garis" id="tombol-hint1-adaptif">💡 Petunjuk 1</button>
+              <button type="button" class="tombol-garis" id="tombol-hint2-adaptif">💡 Petunjuk 2</button>
+              <button type="button" class="tombol-garis" id="tombol-ulangi-adaptif">🔄 Ganti Soal Setara</button>
+            </div>
+
+            <div id="petunjuk-soal-adaptif" class="kotak-petunjuk"></div>
+            <div id="feedback-soal-adaptif" class="kotak-feedback"></div>
+          </div>
+        </div>
+
+        <!-- Kolom Ilustrasi SVG Kontekstual -->
+        <div>
+          <div class="wadah-kanvas-svg" id="kanvas-ilustrasi-adaptif"></div>
+          <div id="keterangan-ilustrasi-adaptif" style="font-size:0.84rem; color:var(--teks-sekunder); text-align:center; margin-top:0.4rem;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         4. GERBANG PROYEK 4 (LAPANGAN PROYEK) & JURNAL REFLEKSI
+         ===================================================================== -->
+    <section class="kartu-materi" id="wadah-gerbang-lapangan"></section>
+    <section class="kartu-materi" id="wadah-jurnal-lapangan"></section>
+
+  </main>
+
+  <footer class="kaki-halaman">
+    <p><strong>ARCHIPYTHA</strong> — Proyek 4: Lapangan Proyek (Soal Interaktif & Adaptif)</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ==========================================================================
+       LOGIKA UTAMA LAPANGAN PROYEK (latihan.html)
+       ========================================================================== */
+
+    /* ========== [BAGIAN: 1. DATA SOAL INTERAKTIF, ADAPTIF & GERBANG 4] ========== */
+
+    // UBAH DI SINI: Data 5 jenis soal interaktif dengan struktur seragam
+    const daftarSoalInteraktif = [
+      {
+        id: "interaktif-1-geser",
+        proyek: "lapangan-interaktif",
+        judulTab: "1. Geser Sampai Pas",
+        jenis: "geser-pas",
+        level: 1,
+        pertanyaan: "Misi Tiang Bendera Upacara: Geser slider tinggi tiang (a), jarak patok di tanah (b), dan panjang tali pengerek (c) hingga membentuk segitiga siku-siku dengan tinggi tiang a = 8 meter, jarak patok b = 6 meter, dan panjang tali c yang tepat (indikator menyala HIJAU)!",
+        data: { awalA: 8, awalB: 4, awalC: 12, targetA: 8, targetB: 6 },
+        kunci: { a: 8, b: 6, c: 10 },
+        petunjuk1: "Pastikan slider a berada di angka 8 meter dan slider b di angka 6 meter terlebih dahulu.",
+        petunjuk2: "Hitung nilai c = √(8² + 6²) = √(64 + 36) = √100, lalu geser slider c ke angka tersebut sampai indikator berwarna hijau!",
+        penjelasan: "Saat a = 8 m dan b = 6 m, maka a² + b² = 64 + 36 = 100. Agar memenuhi Teorema Pythagoras (a² + b² = c²), panjang tali c harus tepat 10 m karena 10² = 100."
+      },
+      {
+        id: "interaktif-2-titik",
+        proyek: "lapangan-interaktif",
+        judulTab: "2. Seret Titik Sudut",
+        jenis: "seret-titik",
+        level: 2,
+        pertanyaan: "Misi Kavling Lahan Sekolah: Seret titik puncak A (bulatan kuning) pada bidang berpetak (atau gunakan tombol arah) agar terbentuk segitiga siku-siku di titik C dengan panjang sisi tegak a = 3 satuan, sisi alas b = 4 satuan, dan sisi miring c = 5 satuan!",
+        data: {
+          titikC: { x: 3, y: 7 },
+          titikB: { x: 7, y: 7 },
+          awalA: { x: 6, y: 3 }
+        },
+        kunci: { x: 3, y: 4 },
+        petunjuk1: "Agar sudut di titik C (3, 7) menjadi siku-siku (90°), titik A harus berada tepat lurus di atas titik C (koordinat X harus sama-sama 3).",
+        petunjuk2: "Karena tinggi sisi tegak a yang diminta adalah 3 petak ke atas dari Y = 7, arahkan titik A ke koordinat (3, 4)!",
+        penjelasan: "Dengan titik C di (3,7), B di (7,7), dan A di (3,4), maka sisi tegak a = 3 satuan, sisi alas b = 4 satuan, dan sisi miring c = √(3² + 4²) = 5 satuan (Segitiga Siku-Siku Presisi)."
+      },
+      {
+        id: "interaktif-3-cocokkan",
+        proyek: "lapangan-interaktif",
+        judulTab: "3. Cocokkan Sisi",
+        jenis: "cocokkan-sisi",
+        level: 1,
+        pertanyaan: "Misi Rangka Kuda-Kuda Atap Terotasi: Perhatikan segitiga siku-siku yang diputar di samping. Seret (atau ketuk) kartu nama sisi ke kotak tujuan (Sisi X, Sisi Y, dan Sisi Z) yang benar!",
+        data: {
+          sisiA: 5,
+          sisiB: 12,
+          sudutRotasi: 145,
+          kartu: [
+            { kode: "miring", teks: "Sisi Miring (Hipotenusa = 13 m)" },
+            { kode: "pendek", teks: "Sisi Siku-Siku Pendek (5 m)" },
+            { kode: "alas", teks: "Sisi Siku-Siku Panjang (12 m)" }
+          ]
+        },
+        kunci: { X: "pendek", Y: "alas", Z: "miring" },
+        petunjuk1: "Cari tanda kotak siku-siku kecil berwarna kuning terlebih dahulu. Garis di seberang tanda siku-siku pasti Sisi Miring (Hipotenusa)!",
+        petunjuk2: "Sisi Z berada tepat di depan sudut siku-siku (13 m), Sisi X adalah sisi siku-siku yang lebih pendek (5 m), dan Sisi Y adalah sisi siku-siku yang lebih panjang (12 m).",
+        penjelasan: "Meskipun segitiga diputar 145°, Sisi Z tetap merupakan hipotenusa (13 m) karena menghadap sudut siku-siku, sedangkan Sisi X (5 m) dan Sisi Y (12 m) mengapit sudut siku-siku."
+      },
+      {
+        id: "interaktif-4-langkah",
+        proyek: "lapangan-interaktif",
+        judulTab: "4. Susun Langkah",
+        jenis: "susun-langkah",
+        level: 2,
+        pertanyaan: "Misi Prosedur Perhitungan Atap: Sebuah atap rumah memiliki tinggi tegak a = 6 m dan bentang alas b = 8 m. Seret kartu-kartu di bawah ini ke dalam slot urutan 1 sampai 5 yang benar untuk mencari panjang kemiringan atap (c)!",
+        data: {
+          kartuAcak: [
+            { idKartu: "L3", teks: "Kuadratkan tiap sisi: c² = 36 + 64" },
+            { idKartu: "L1", teks: "Tulis rumus Pythagoras: c² = a² + b²" },
+            { idKartu: "L5", teks: "Tarik akar kuadrat: c = √100 = 10 meter" },
+            { idKartu: "L2", teks: "Substitusi nilai ukuran: c² = 6² + 8²" },
+            { idKartu: "L4", teks: "Jumlahkan hasil kuadrat: c² = 100" }
+          ]
+        },
+        kunci: ["L1", "L2", "L3", "L4", "L5"],
+        petunjuk1: "Langkah pertama selalu dimulai dari menuliskan rumus umum (c² = a² + b²), lalu memasukkan (substitusi) angka 6 dan 8.",
+        petunjuk2: "Setelah substitusi (6² + 8²), hitung kuadratnya (36 + 64), jumlahkan menjadi 100, dan terakhir tarik akarnya (√100 = 10 m).",
+        penjelasan: "Urutan sistematis penyelesaian Pythagoras adalah: (1) Tulis rumus → (2) Substitusi angka → (3) Kuadratkan → (4) Jumlahkan → (5) Tarik akar kuadrat."
+      },
+      {
+        id: "interaktif-5-rumus",
+        proyek: "lapangan-interaktif",
+        judulTab: "5. Isi Kotak Rumus",
+        jenis: "isi-kotak-rumus",
+        level: 1,
+        pertanyaan: "Misi Benang Layang-Layang: Layang-layang terbang setinggi 8 meter dari tanah dengan jarak mendatar 15 meter, sehingga panjang benang miringnya adalah 17 meter. Seret angka yang tepat ke dalam kotak kosong agar membentuk persamaan Pythagoras yang benar!",
+        data: {
+          pilihanAngka: ["8", "15", "17", "23", "64", "289"]
+        },
+        kunci: { siku1: "8", siku2: "15", miring: "17" },
+        petunjuk1: "Rumus kuadrat sisi adalah (Sisi Siku-Siku 1)² + (Sisi Siku-Siku 2)² = (Sisi Miring)².",
+        petunjuk2: "Sisi miring selalu merupakan jarak terpanjang yaitu benang layang-layang (17 m). Dua kotak pertama diisi 8 dan 15.",
+        penjelasan: "Persamaan yang tepat adalah 8² + 15² = 17² (atau 15² + 8² = 17²), karena 64 + 225 = 289."
+      }
+    ];
+
+    // UBAH DI SINI: Data Soal Cerita Kontekstual Bertingkat Adaptif (Level 1, 2, dan 3 HOTS)
+    const daftarSoalAdaptif = [
+      // --- LEVEL 1 (MUDAH - LANGSUNG CARI SISI MIRING) ---
+      {
+        id: "adaptif-l1-1",
+        proyek: "adaptif",
+        konteks: "TIANG BENDERA UPACARA",
+        jenis: "isian-angka",
+        level: 1,
+        pertanyaan: "Pada hari Senin, petugas upacara mengikat tali pengerek dari puncak tiang bendera setinggi 4 meter ke patok yang berjarak 3 meter dari dasar tiang. Berapa meter panjang tali yang terbentang miring tersebut?",
+        data: { sisiA: 4, sisiB: 3, labelA: "Tiang = 4 m", labelB: "Jarak = 3 m", labelC: "Tali = ? m" },
+        kunci: 5,
+        petunjuk1: "Tinggi tiang (a = 4 m) dan jarak patok (b = 3 m) saling tegak lurus. Kamu mencari sisi miring c.",
+        petunjuk2: "c = √(4² + 3²) = √(16 + 9) = √25.",
+        kesalahanUmum: {
+          "7": "Kamu menjumlahkan 4 + 3 = 7 secara langsung. Kuadratkan dulu masing-masing sisi ya!",
+          "25": "25 adalah nilai c². Jangan lupa menarik akar kuadratnya: √25 = 5."
+        },
+        penjelasan: "Panjang tali adalah hipotenusa: c = √(4² + 3²) = √(16 + 9) = √25 = 5 meter."
+      },
+      {
+        id: "adaptif-l1-2",
+        proyek: "adaptif",
+        konteks: "LAPANGAN FUTSAL SEKOLAH",
+        jenis: "isian-angka",
+        level: 1,
+        pertanyaan: "Saat pemanasan olahraga, siswa berlari menyilang mengikuti garis diagonal lapangan futsal mini yang memiliki lebar 6 meter dan panjang 8 meter. Berapa meter jarak diagonal yang ditempuh siswa?",
+        data: { sisiA: 6, sisiB: 8, labelA: "Lebar = 6 m", labelB: "Panjang = 8 m", labelC: "Diagonal = ? m" },
+        kunci: 10,
+        petunjuk1: "Lebar 6 m dan panjang 8 m adalah dua sisi siku-siku lapangan.",
+        petunjuk2: "Diagonal c = √(6² + 8²) = √(36 + 64) = √100.",
+        kesalahanUmum: {
+          "14": "Kamu menjumlahkan 6 + 8 = 14. Gunakan rumus Pythagoras √(6² + 8²)!",
+          "100": "100 masih berupa nilai c². Tarik akarnya menjadi √100 = 10."
+        },
+        penjelasan: "Jarak diagonal lapangan: c = √(6² + 8²) = √(36 + 64) = √100 = 10 meter."
+      },
+      {
+        id: "adaptif-l1-3",
+        proyek: "adaptif",
+        konteks: "LAYANG-LAYANG DI LAPANGAN",
+        jenis: "isian-angka",
+        level: 1,
+        pertanyaan: "Budi menerbangkan layang-layang di lapangan desa. Jarak mendatar Budi ke titik tepat di bawah layang-layang adalah 12 meter, dan tinggi layang-layang dari tanah adalah 5 meter. Berapa meter panjang benang layang-layang yang terulur lurus?",
+        data: { sisiA: 5, sisiB: 12, labelA: "Tinggi = 5 m", labelB: "Mendatar = 12 m", labelC: "Benang = ? m" },
+        kunci: 13,
+        petunjuk1: "Tinggi 5 m dan jarak mendatar 12 m membentuk sudut siku-siku. Benang adalah sisi miring.",
+        petunjuk2: "c = √(5² + 12²) = √(25 + 144) = √169.",
+        kesalahanUmum: {
+          "17": "Kamu menjumlahkan 5 + 12 = 17. Ingat kuadratkan dulu sebelum dijumlahkan!",
+          "169": "169 adalah nilai c². Akar dari 169 adalah 13."
+        },
+        penjelasan: "Panjang benang miring: c = √(5² + 12²) = √(25 + 144) = √169 = 13 meter."
+      },
+
+      // --- LEVEL 2 (SEDANG - MENCARI SISI SIKU-SIKU & DUA SEGITIGA) ---
+      {
+        id: "adaptif-l2-1",
+        proyek: "adaptif",
+        konteks: "TANGGA RUMAH",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Sebuah tangga besi sepanjang 10 meter disandarkan pada dinding rumah untuk memperbaiki talang air. Jika kaki tangga berjarak 6 meter dari dinding, berapa meter tinggi dinding yang dicapai ujung atas tangga?",
+        data: { sisiA: 8, sisiB: 6, labelA: "Tinggi = ? m", labelB: "Jarak = 6 m", labelC: "Tangga = 10 m" },
+        kunci: 8,
+        petunjuk1: "Panjang tangga 10 m adalah sisi miring (c), bukan sisi siku-siku!",
+        petunjuk2: "Gunakan pengurangan kuadrat: a = √(10² - 6²) = √(100 - 36) = √64.",
+        kesalahanUmum: {
+          "64": "64 adalah nilai a². Jangan lupa tarik akar kuadratnya: √64 = 8.",
+          "11.66": "Kamu menjumlahkan 10² + 6². Karena 10 m adalah sisi miring, seharusnya dikurangi: 10² - 6²."
+        },
+        penjelasan: "Tinggi dinding: a = √(c² - b²) = √(10² - 6²) = √(100 - 36) = √64 = 8 meter."
+      },
+      {
+        id: "adaptif-l2-2",
+        proyek: "adaptif",
+        konteks: "KUDA-KUDA ATAP RUMAH",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Kuda-kuda atap rumah berbentuk segitiga sama kaki dengan lebar bentang alas total 16 meter dan tinggi tiang tengah (nok) 6 meter. Berapa meter panjang salah satu sisi miring (kasau) atap tersebut?",
+        data: { sisiA: 6, sisiB: 8, labelA: "Tinggi Nok = 6 m", labelB: "Setengah Alas = 8 m", labelC: "Kasau = ? m" },
+        kunci: 10,
+        petunjuk1: "Hati-hati! Lebar total atap adalah 16 m, sehingga alas satu segitiga siku-siku di sebelah kiri/kanan adalah setengahnya (16 ÷ 2 = 8 m).",
+        petunjuk2: "Hitung sisi miring dari tinggi a = 6 m dan setengah alas b = 8 m: c = √(6² + 8²).",
+        kesalahanUmum: {
+          "17.09": "Kamu menggunakan seluruh lebar 16 m sebagai alas. Bagi dua dulu lebar atapnya menjadi 8 m!",
+          "100": "100 adalah hasil 6² + 8². Tarik akarnya menjadi √100 = 10."
+        },
+        penjelasan: "Setengah bentang alas atap adalah b = 16 ÷ 2 = 8 m. Panjang kemiringan atap: c = √(6² + 8²) = √(36 + 64) = √100 = 10 meter."
+      },
+      {
+        id: "adaptif-l2-3",
+        proyek: "adaptif",
+        konteks: "TIANG BENDERA UPACARA",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Sebuah kawat penyangga sepanjang 17 meter dipasang dari puncak tiang bendera ke patok di tanah. Jika tinggi tiang bendera tersebut adalah 15 meter, berapa meter jarak patok dari pangkal bawah tiang bendera?",
+        data: { sisiA: 15, sisiB: 8, labelA: "Tiang = 15 m", labelB: "Jarak Patok = ? m", labelC: "Kawat = 17 m" },
+        kunci: 8,
+        petunjuk1: "Kawat 17 m adalah sisi miring (c) dan tiang 15 m adalah sisi tegak (a).",
+        petunjuk2: "Jarak patok b = √(17² - 15²) = √(289 - 225) = √64.",
+        kesalahanUmum: {
+          "64": "64 masih berupa nilai b². Tarik akar kuadrat dari 64!",
+          "2": "Kamu mengurangkan langsung 17 - 15 = 2. Gunakan selisih kuadrat 17² - 15²."
+        },
+        penjelasan: "Jarak patok dari dasar tiang: b = √(17² - 15²) = √(289 - 225) = √64 = 8 meter."
+      },
+
+      // --- LEVEL 3 (HOTS - PENALARAN MULTI-LANGKAH & SELISIH JARAK) ---
+      {
+        id: "adaptif-l3-1",
+        proyek: "adaptif",
+        konteks: "LAPANGAN FUTSAL SEKOLAH (HOTS)",
+        jenis: "isian-angka",
+        level: 3,
+        pertanyaan: "[HOTS] Lapangan futsal sekolah berukuran panjang 12 meter dan lebar 5 meter. Andi berlari dari pojok A ke pojok C menyusuri pinggir lapangan (melewati pojok B), sedangkan Riko berlari lurus memotong garis diagonal dari A langsung ke C. Berapa meter LEBIH PENDEK jarak yang ditempuh Riko dibandingkan Andi?",
+        data: { sisiA: 5, sisiB: 12, labelA: "Lebar = 5 m", labelB: "Panjang = 12 m", labelC: "Diagonal Riko = 13 m" },
+        kunci: 4,
+        petunjuk1: "Langkah 1: Hitung jarak Andi yang lewat pinggir lapangan = 12 + 5 = 17 meter. Langkah 2: Hitung jarak diagonal Riko dengan Pythagoras.",
+        petunjuk2: "Jarak Riko = √(12² + 5²) = 13 meter. Sekarang kurangkan jarak Andi dengan jarak Riko (17 - 13)!",
+        kesalahanUmum: {
+          "13": "13 meter baru jarak diagonal yang ditempuh Riko. Pertanyaannya adalah: berapa meter LEBIH PENDEK jarak Riko dibanding Andi (17 - 13)?",
+          "17": "17 meter adalah jarak tempuh Andi lewat tepi lapangan. Kurangkan dengan jarak diagonal Riko (13 m)!"
+        },
+        penjelasan: "Jarak Andi (lewat tepi) = 12 + 5 = 17 m. Jarak Riko (diagonal) = √(12² + 5²) = 13 m. Selisih penghematan jarak = 17 - 13 = 4 meter."
+      },
+      {
+        id: "adaptif-l3-2",
+        proyek: "adaptif",
+        konteks: "LAYANG-LAYANG DI LAPANGAN (HOTS)",
+        jenis: "isian-angka",
+        level: 3,
+        pertanyaan: "[HOTS] Dika memegang gulungan benang layang-layang setinggi 1,5 meter dari permukaan tanah. Panjang benang yang terulur lurus adalah 10 meter dan jarak mendatar Dika ke titik tepat di bawah layang-layang adalah 6 meter. Berapa meter tinggi layang-layang diukur dari PERMUKAAN TANAH?",
+        data: { sisiA: 8, sisiB: 6, labelA: "Tinggi Segitiga = 8 m (+1,5m tangan)", labelB: "Mendatar = 6 m", labelC: "Benang = 10 m" },
+        kunci: 9.5,
+        petunjuk1: "Hitung dulu tinggi segitiga siku-siku dari posisi tangan Dika: a = √(10² - 6²) = √(100 - 36) = 8 meter.",
+        petunjuk2: "Jangan lupa tambahkan tinggi tangan Dika dari permukaan tanah (1,5 meter) ke hasil tinggi segitiga tadi (8 + 1,5)!",
+        kesalahanUmum: {
+          "8": "8 meter baru tinggi layang-layang dari posisi tangan Dika. Tambahkan tinggi tangan Dika (1,5 m) dari tanah!",
+          "6.5": "Tinggi tangan Dika harus ditambahkan (8 + 1,5 = 9,5 m), bukan dikurangkan."
+        },
+        penjelasan: "Tinggi layang-layang dari tangan Dika: a = √(10² - 6²) = 8 m. Tinggi total dari permukaan tanah = 8 + 1,5 = 9,5 meter."
+      },
+      {
+        id: "adaptif-l3-3",
+        proyek: "adaptif",
+        konteks: "KUDA-KUDA ATAP RUMAH (HOTS)",
+        jenis: "isian-angka",
+        level: 3,
+        pertanyaan: "[HOTS] Arsitek merancang 1 unit rangka kuda-kuda atap berbentuk segitiga sama kaki dengan lebar alas total 24 meter dan tinggi tiang tengah 5 meter. Jika seluruh batang luar (alas + 2 sisi miring) ditambah 1 tiang tengah dibuat dari baja, berapa meter TOTAL panjang baja untuk 1 unit kuda-kuda tersebut?",
+        data: { sisiA: 5, sisiB: 12, labelA: "Tiang Tengah = 5 m", labelB: "Setengah Alas = 12 m", labelC: "Sisi Miring = 13 m" },
+        kunci: 55,
+        petunjuk1: "Setengah alas = 24 ÷ 2 = 12 m. Dengan tinggi = 5 m, maka panjang 1 sisi miring adalah c = √(5² + 12²) = 13 meter.",
+        petunjuk2: "Jumlahkan seluruh bagian rangka: Alas penuh (24 m) + 2 Sisi Miring (13 + 13 m) + 1 Tiang Tengah (5 m)!",
+        kesalahanUmum: {
+          "13": "13 meter baru panjang satu sisi miring. Jumlahkan: 24 (alas) + 13 (miring kiri) + 13 (miring kanan) + 5 (tiang tengah)!",
+          "50": "Kamu sudah menjumlahkan keliling segitiga (24 + 13 + 13 = 50 m), tetapi lupa menambahkan 1 batang tiang tengah (5 m)!"
+        },
+        penjelasan: "Setengah alas = 12 m, sehingga sisi miring c = √(5² + 12²) = 13 m. Total baja = 24 m (alas) + 13 m + 13 m (dua sisi miring) + 5 m (tiang tengah) = 55 meter."
+      }
+    ];
+
+    // Soal Gerbang Proyek 4 (Lapangan Proyek) untuk membuka Ujian Sertifikasi
+    const soalGerbangLapangan = [
+      {
+        id: "gp4-1",
+        proyek: "lapangan",
+        jenis: "isian-angka",
+        level: 1,
+        pertanyaan: "Tangga sepanjang 13 meter disandarkan ke dinding gedung sekolah. Jika jarak ujung bawah tangga ke dinding adalah 5 meter, berapa meter tinggi dinding yang dicapai ujung atas tangga?",
+        kunci: 12,
+        petunjuk1: "Panjang tangga 13 m adalah sisi miring (c) dan jarak alas 5 m adalah sisi siku-siku (b).",
+        petunjuk2: "a = √(13² - 5²) = √(169 - 25) = √144.",
+        kesalahanUmum: {
+          "144": "144 adalah nilai a². Jangan lupa tarik akarnya menjadi √144 = 12!"
+        },
+        penjelasan: "Tinggi dinding: a = √(13² - 5²) = √(169 - 25) = √144 = 12 meter."
+      },
+      {
+        id: "gp4-2",
+        proyek: "lapangan",
+        jenis: "pilihan-ganda",
+        level: 2,
+        pertanyaan: "Sebuah kuda-kuda atap rumah berbentuk segitiga sama kaki memiliki lebar bentang alas 8 meter dan tinggi tiang tengah 3 meter. Berapakah panjang satu sisi kemiringan atap tersebut?",
+        pilihan: [
+          "5 meter",
+          "7 meter",
+          "√73 meter",
+          "25 meter"
+        ],
+        kunci: 0,
+        petunjuk1: "Bagi dua dulu lebar bentang alas atap: 8 ÷ 2 = 4 meter.",
+        petunjuk2: "Gunakan Pythagoras dengan tinggi 3 m dan setengah alas 4 m: c = √(3² + 4²).",
+        kesalahanUmum: {
+          "2": "√73 diperoleh jika kamu langsung memakai 8 m tanpa dibagi dua terlebih dahulu.",
+          "3": "25 adalah nilai c², belum ditarik akar kuadratnya."
+        },
+        penjelasan: "Setengah bentang alas = 8 ÷ 2 = 4 m. Panjang sisi miring atap = √(3² + 4²) = √25 = 5 meter."
+      },
+      {
+        id: "gp4-3",
+        proyek: "lapangan",
+        jenis: "isian-angka",
+        level: 2,
+        pertanyaan: "Puncak tiang bendera setinggi 12 meter diikat dengan tali ke patok di tanah yang berjarak 9 meter dari kaki tiang. Berapa meter panjang tali yang dibutuhkan?",
+        kunci: 15,
+        petunjuk1: "Tinggi tiang 12 m dan jarak patok 9 m adalah sisi siku-siku.",
+        petunjuk2: "c = √(12² + 9²) = √(144 + 81) = √225.",
+        kesalahanUmum: {
+          "21": "Kamu menjumlahkan 12 + 9 = 21 tanpa menguadratkan terlebih dahulu.",
+          "225": "225 masih berupa nilai c². Tarik akarnya: √225 = 15."
+        },
+        penjelasan: "Panjang tali: c = √(12² + 9²) = √(144 + 81) = √225 = 15 meter."
+      },
+      {
+        id: "gp4-4",
+        proyek: "lapangan",
+        jenis: "isian-angka",
+        level: 3,
+        pertanyaan: "[HOTS] Lapangan futsal berukuran panjang 16 meter dan lebar 12 meter. Berapa meter panjang garis diagonal lapangan futsal tersebut?",
+        kunci: 20,
+        petunjuk1: "Gunakan rumus diagonal c = √(16² + 12²) atau kelipatan 4 dari Triple Pythagoras (3, 4, 5).",
+        petunjuk2: "16² + 12² = 256 + 144 = 400. Berapakah √400?",
+        kesalahanUmum: {
+          "28": "28 meter adalah jumlah 16 + 12 (lewat pinggir), bukan panjang garis diagonal.",
+          "400": "400 adalah nilai c². Akar kuadrat dari 400 adalah 20."
+        },
+        penjelasan: "Diagonal lapangan = √(16² + 12²) = √(256 + 144) = √400 = 20 meter."
+      }
+    ];
+
+    // Gabungkan semua soal ke dalam daftarSoal global agar fungsi petunjuk dan skor terintegrasi
+    [...daftarSoalInteraktif, ...daftarSoalAdaptif, ...soalGerbangLapangan].forEach(soalBaru => {
+      if (!daftarSoal.some(s => s.id === soalBaru.id)) {
+        daftarSoal.push(soalBaru);
+      }
+    });
+
+
+    /* ========== [BAGIAN: 2. MESIN 5 SOAL INTERAKTIF (DRAG & GESER KONSISTEN)] ========== */
+
+    let indeksTabInteraktifAktif = 0;
+    let kartuTerpilihTap = null; // Menyimpan elemen kartu untuk fitur aksesibilitas Tap-Pilih lalu Tap-Tujuan
+
+    // State khusus untuk tiap jenis soal interaktif
+    let stateGeser = { a: 8, b: 4, c: 12 };
+    let stateTitikA = { x: 6, y: 3 };
+
+    /**
+     * Fungsi renderTabNavigasiInteraktif: Menampilkan 5 tombol tab jenis soal interaktif.
+     */
+    function renderTabNavigasiInteraktif() {
+      const wadahTab = document.getElementById("navigasi-tab-interaktif");
+      const progres = ambilProgresBelajar();
+
+      wadahTab.innerHTML = daftarSoalInteraktif.map((soal, idx) => {
+        const sudahBenar = progres.riwayatSoal[soal.id] === true;
+        const kelasAktif = idx === indeksTabInteraktifAktif ? "aktif" : "";
+        const kelasSelesai = sudahBenar ? "selesai" : "";
+        return `
+          <button type="button" class="tombol-tab-soal ${kelasAktif} ${kelasSelesai}"
+                  onclick="bukaTabSoalInteraktif(${idx})">
+            ${sudahBenar ? "✅" : "🛠️"} ${soal.judulTab}
+          </button>
+        `;
+      }).join("");
+    }
+
+    function bukaTabSoalInteraktif(indeks) {
+      indeksTabInteraktifAktif = indeks;
+      kartuTerpilihTap = null;
+      renderTabNavigasiInteraktif();
+      renderKomponenSoalInteraktif();
+    }
+
+    /**
+     * Fungsi renderKomponenSoalInteraktif: Merender soal interaktif aktif dengan POLA KONSISTEN
+     * (Pertanyaan, Area Kerja Interaktif, Tombol Periksa, Ulangi, Petunjuk 1 & 2, Feedback).
+     */
+    function renderKomponenSoalInteraktif() {
+      const soal = daftarSoalInteraktif[indeksTabInteraktifAktif];
+      const wadah = document.getElementById("wadah-soal-interaktif-aktif");
+      if (!soal || !wadah) return;
+
+      wadah.innerHTML = `
+        <div class="kelompok-slider" style="background:var(--putih-murni); border-left-width:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.6rem;">
+            <span class="label-kode-teknik">${soal.judulTab.toUpperCase()} • LEVEL ${soal.level}</span>
+            <button type="button" class="tombol-akses" style="background:#0B2A4A; color:#FFF;"
+                    onclick="bacakanTeks('${soal.pertanyaan.replace(/'/g, "\\'")}')">
+              🔊 Bacakan Soal
+            </button>
+          </div>
+
+          <p style="font-weight:600; font-size:1.02rem; margin-bottom:1.1rem;">${soal.pertanyaan}</p>
+
+          <!-- Area Kerja Spesifik Jenis Soal -->
+          <div id="area-kerja-${soal.id}" style="margin-bottom:1.1rem;"></div>
+
+          <!-- Bar Tombol Aksi Konsisten untuk SEMUA Jenis Soal -->
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; padding-top:0.5rem; border-top:1px dashed #CBD5E1;">
+            <button type="button" class="tombol-utama" id="tombol-periksa-${soal.id}">
+              ✅ Periksa Jawaban
+            </button>
+            <button type="button" class="tombol-sekunder" id="tombol-ulangi-${soal.id}">
+              🔄 Ulangi
+            </button>
+            <button type="button" class="tombol-garis" onclick="tampilkanPetunjukSoal('${soal.id}', 1)">
+              💡 Petunjuk 1
+            </button>
+            <button type="button" class="tombol-garis" onclick="tampilkanPetunjukSoal('${soal.id}', 2)">
+              💡 Petunjuk 2
+            </button>
+          </div>
+
+          <!-- Kotak Petunjuk & Kotak Feedback Seragam -->
+          <div id="petunjuk-${soal.id}" class="kotak-petunjuk"></div>
+          <div id="feedback-${soal.id}" class="kotak-feedback"></div>
+        </div>
+      `;
+
+      const areaKerja = document.getElementById(`area-kerja-${soal.id}`);
+
+      // Render isi area kerja sesuai jenis soal
+      if (soal.jenis === "geser-pas") {
+        bangunAreaGeserSampaiPas(soal, areaKerja);
+      } else if (soal.jenis === "seret-titik") {
+        bangunAreaSeretTitikSudut(soal, areaKerja);
+      } else if (soal.jenis === "cocokkan-sisi") {
+        bangunAreaCocokkanSisi(soal, areaKerja);
+      } else if (soal.jenis === "susun-langkah") {
+        bangunAreaSusunLangkah(soal, areaKerja);
+      } else if (soal.jenis === "isi-kotak-rumus") {
+        bangunAreaIsiKotakRumus(soal, areaKerja);
+      }
+
+      // Pasang event listener tombol Ulangi
+      document.getElementById(`tombol-ulangi-${soal.id}`).addEventListener("click", () => {
+        if (soal.jenis === "geser-pas") stateGeser = { a: 8, b: 4, c: 12 };
+        if (soal.jenis === "seret-titik") stateTitikA = { x: 6, y: 3 };
+        renderKomponenSoalInteraktif();
+      });
+
+      // Pasang event listener tombol Periksa
+      document.getElementById(`tombol-periksa-${soal.id}`).addEventListener("click", () => {
+        evaluasiSoalInteraktif(soal);
+      });
+    }
+
+    /* ---------- JENIS 1: GESER SAMPAI PAS ---------- */
+    function bangunAreaGeserSampaiPas(soal, areaKerja) {
+      areaKerja.innerHTML = `
+        <div class="grid-dua-kolom">
+          <div>
+            <div id="indikator-geser-pas" class="indikator-status-pas indikator-merah"></div>
+
+            <!-- Slider a -->
+            <div class="kelompok-slider">
+              <div class="label-slider">
+                <label for="geser-a">Tinggi Tiang Bendera (a):</label>
+                <span id="teks-geser-a">${stateGeser.a} m</span>
+              </div>
+              <input type="range" id="geser-a" class="slider-input" min="1" max="15" step="1" value="${stateGeser.a}">
+            </div>
+
+            <!-- Slider b -->
+            <div class="kelompok-slider">
+              <div class="label-slider">
+                <label for="geser-b">Jarak Patok Tanah (b):</label>
+                <span id="teks-geser-b">${stateGeser.b} m</span>
+              </div>
+              <input type="range" id="geser-b" class="slider-input" min="1" max="15" step="1" value="${stateGeser.b}">
+            </div>
+
+            <!-- Slider c -->
+            <div class="kelompok-slider">
+              <div class="label-slider">
+                <label for="geser-c">Panjang Tali Pengerek (c):</label>
+                <span id="teks-geser-c">${stateGeser.c} m</span>
+              </div>
+              <input type="range" id="geser-c" class="slider-input" min="1" max="20" step="1" value="${stateGeser.c}">
+            </div>
+          </div>
+
+          <div>
+            <div class="wadah-kanvas-svg" id="kanvas-geser-pas"></div>
+          </div>
+        </div>
+      `;
+
+      const perbaruiGeser = () => {
+        stateGeser.a = Number(document.getElementById("geser-a").value);
+        stateGeser.b = Number(document.getElementById("geser-b").value);
+        stateGeser.c = Number(document.getElementById("geser-c").value);
+
+        document.getElementById("teks-geser-a").textContent = `${stateGeser.a} m (a² = ${stateGeser.a * stateGeser.a})`;
+        document.getElementById("teks-geser-b").textContent = `${stateGeser.b} m (b² = ${stateGeser.b * stateGeser.b})`;
+        document.getElementById("teks-geser-c").textContent = `${stateGeser.c} m (c² = ${stateGeser.c * stateGeser.c})`;
+
+        const jumlahAB2 = stateGeser.a * stateGeser.a + stateGeser.b * stateGeser.b;
+        const nilaiC2 = stateGeser.c * stateGeser.c;
+        const selisih = Math.abs(jumlahAB2 - nilaiC2);
+        const indikator = document.getElementById("indikator-geser-pas");
+
+        if (selisih === 0 && stateGeser.a === soal.kunci.a && stateGeser.b === soal.kunci.b) {
+          indikator.className = "indikator-status-pas indikator-hijau";
+          indikator.innerHTML = `🟢 PAS & SIKU-SIKU! a² + b² = ${jumlahAB2} dan c² = ${nilaiC2} (Sesuai Target 8-6-10)`;
+        } else if (selisih === 0) {
+          indikator.className = "indikator-status-pas indikator-kuning";
+          indikator.innerHTML = `🟡 Sudah Siku-Siku (${stateGeser.a}-${stateGeser.b}-${stateGeser.c}), tapi sesuaikan ke target a = 8 m dan b = 6 m!`;
+        } else if (selisih <= 18) {
+          indikator.className = "indikator-status-pas indikator-kuning";
+          indikator.innerHTML = `🟡 Hampir Pas! a² + b² = ${jumlahAB2}, sedangkan c² = ${nilaiC2} (Selisih ${selisih})`;
+        } else {
+          indikator.className = "indikator-status-pas indikator-merah";
+          indikator.innerHTML = `🔴 Belum Siku-Siku: a² + b² = ${jumlahAB2} ≠ c² (${nilaiC2})`;
+        }
+
+        gambarSegitigaSiku("kanvas-geser-pas", stateGeser.a, stateGeser.b, {
+          labelA: `a = ${stateGeser.a} m`,
+          labelB: `b = ${stateGeser.b} m`,
+          labelC: `Tali c = ${stateGeser.c} m (Harusnya ${formatAngka(hitungSisiMiring(stateGeser.a, stateGeser.b))} m)`
+        });
+      };
+
+      ["geser-a", "geser-b", "geser-c"].forEach(id => {
+        document.getElementById(id).addEventListener("input", perbaruiGeser);
+      });
+      perbaruiGeser();
+    }
+
+    /* ---------- JENIS 2: SERET TITIK SUDUT ---------- */
+    function bangunAreaSeretTitikSudut(soal, areaKerja) {
+      areaKerja.innerHTML = `
+        <div class="grid-dua-kolom">
+          <div>
+            <div id="status-seret-titik" class="indikator-status-pas indikator-kuning"></div>
+            <p style="font-size:0.9rem; margin-bottom:0.75rem;">
+              Seret <strong>Titik Puncak A (Kuning)</strong> pada petak blueprint di samping, atau gunakan tombol arah presisi di bawah ini:
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(3, 80px); gap:0.4rem; justify-content:center; margin-bottom:1rem;">
+              <div></div>
+              <button type="button" class="tombol-sekunder" onclick="geserTitikAManual(0, -1)">⬆️ Atas</button>
+              <div></div>
+              <button type="button" class="tombol-sekunder" onclick="geserTitikAManual(-1, 0)">⬅️ Kiri</button>
+              <button type="button" class="tombol-garis" onclick="geserTitikAManual(0, 1)">⬇️ Bawah</button>
+              <button type="button" class="tombol-sekunder" onclick="geserTitikAManual(1, 0)">➡️ Kanan</button>
+            </div>
+            <table class="tabel-teknik">
+              <thead>
+                <tr>
+                  <th>Sisi Tegak (CA)</th>
+                  <th>Sisi Alas (CB)</th>
+                  <th>Sisi Miring (AB)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="sel-titik-ca">-</td>
+                  <td id="sel-titik-cb">-</td>
+                  <td id="sel-titik-ab">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <div class="wadah-kanvas-svg area-bebas-sentuh" id="kanvas-seret-titik"></div>
+          </div>
+        </div>
+      `;
+
+      renderKanvasSeretTitik(soal);
+    }
+
+    function geserTitikAManual(dx, dy) {
+      const soal = daftarSoalInteraktif[1];
+      stateTitikA.x = Math.max(1, Math.min(10, stateTitikA.x + dx));
+      stateTitikA.y = Math.max(1, Math.min(6, stateTitikA.y + dy));
+      renderKanvasSeretTitik(soal);
+    }
+
+    function renderKanvasSeretTitik(soal) {
+      const wadah = document.getElementById("kanvas-seret-titik");
+      if (!wadah) return;
+
+      const C = soal.data.titikC; // (3, 7)
+      const B = soal.data.titikB; // (7, 7)
+      const A = stateTitikA;
+
+      const panjangCA = Math.hypot(A.x - C.x, A.y - C.y);
+      const panjangCB = Math.hypot(B.x - C.x, B.y - C.y);
+      const panjangAB = Math.hypot(B.x - A.x, B.y - A.y);
+
+      document.getElementById("sel-titik-ca").textContent = `${formatAngka(panjangCA)} satuan`;
+      document.getElementById("sel-titik-cb").textContent = `${formatAngka(panjangCB)} satuan`;
+      document.getElementById("sel-titik-ab").textContent = `${formatAngka(panjangAB)} satuan`;
+
+      // Cek kesikuan di titik C lewat hasil kali titik (dot product) vektor CA dan CB
+      const dotProduct = (A.x - C.x) * (B.x - C.x) + (A.y - C.y) * (B.y - C.y);
+      const apakahSikuDiC = Math.abs(dotProduct) < 0.01 && panjangCA > 0;
+      const apakahSesuaiTarget = A.x === soal.kunci.x && A.y === soal.kunci.y;
+
+      const kotakStatus = document.getElementById("status-seret-titik");
+      if (apakahSesuaiTarget) {
+        kotakStatus.className = "indikator-status-pas indikator-hijau";
+        kotakStatus.innerHTML = `🟢 Segitiga Siku-Siku Tepat! Koordinat A(${A.x}, ${A.y}) membentuk sisi 3 - 4 - 5.`;
+      } else if (apakahSikuDiC) {
+        kotakStatus.className = "indikator-status-pas indikator-kuning";
+        kotakStatus.innerHTML = `🟡 Sudah Siku-Siku di C, tetapi tinggi sisi CA saat ini ${formatAngka(panjangCA)} satuan (target: 3 satuan).`;
+      } else {
+        kotakStatus.className = "indikator-status-pas indikator-merah";
+        kotakStatus.innerHTML = `🔴 Belum Siku-Siku di C! Posisi A(${A.x}, ${A.y}) membuat sudut C miring.`;
+      }
+
+      // Skala grid ke SVG 400x300 (1 petak = 32 piksel, offset X=20, Y=12)
+      const keX = gx => 20 + gx * 32;
+      const keY = gy => 12 + gy * 32;
+
+      let garisGridHtml = "";
+      for (let gx = 0; gx <= 11; gx++) {
+        garisGridHtml += `<line x1="${keX(gx)}" y1="${keY(0)}" x2="${keX(gx)}" y2="${keY(8)}" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>`;
+      }
+      for (let gy = 0; gy <= 8; gy++) {
+        garisGridHtml += `<line x1="${keX(0)}" y1="${keY(gy)}" x2="${keX(11)}" y2="${keY(gy)}" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>`;
+      }
+
+      wadah.innerHTML = `
+        <svg id="svg-grid-titik" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style="touch-action:none;">
+          ${garisGridHtml}
+
+          <!-- Polygon Segitiga -->
+          <polygon points="${keX(C.x)},${keY(C.y)} ${keX(B.x)},${keY(B.y)} ${keX(A.x)},${keY(A.y)}"
+                   fill="rgba(56, 189, 248, 0.22)" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+
+          <!-- Tanda Siku-Siku jika tepat tegak lurus -->
+          ${apakahSikuDiC ? `
+            <rect x="${keX(C.x)}" y="${keY(C.y) - 14}" width="14" height="14" fill="none" stroke="#4ADE80" stroke-width="2.2"/>
+          ` : ``}
+
+          <!-- Titik C dan B Tetap -->
+          <circle cx="${keX(C.x)}" cy="${keY(C.y)}" r="6" fill="#38BDF8"/>
+          <text x="${keX(C.x) - 10}" y="${keY(C.y) + 20}" fill="#7DD3FC" font-size="13" font-weight="700">C(${C.x},${C.y})</text>
+
+          <circle cx="${keX(B.x)}" cy="${keY(B.y)}" r="6" fill="#38BDF8"/>
+          <text x="${keX(B.x) - 10}" y="${keY(B.y) + 20}" fill="#7DD3FC" font-size="13" font-weight="700">B(${B.x},${B.y})</text>
+
+          <!-- Titik A yang Bisa Diseret (Pointer Events) -->
+          <circle id="handle-titik-a" cx="${keX(A.x)}" cy="${keY(A.y)}" r="13"
+                  fill="#FFC107" stroke="#0B2A4A" stroke-width="3" style="cursor:grab;"/>
+          <text x="${keX(A.x)}" y="${keY(A.y) - 18}" fill="#FEF08A" font-size="13" font-weight="700" text-anchor="middle">
+            Seret A(${A.x},${A.y})
+          </text>
+        </svg>
+      `;
+
+      const svgEl = document.getElementById("svg-grid-titik");
+      const handleA = document.getElementById("handle-titik-a");
+      let sedangSeretTitik = false;
+
+      handleA.addEventListener("pointerdown", e => {
+        sedangSeretTitik = true;
+        handleA.setPointerCapture(e.pointerId);
+        handleA.style.cursor = "grabbing";
+      });
+
+      handleA.addEventListener("pointermove", e => {
+        if (!sedangSeretTitik) return;
+        const rect = svgEl.getBoundingClientRect();
+        const svgX = ((e.clientX - rect.left) / rect.width) * 400;
+        const svgY = ((e.clientY - rect.top) / rect.height) * 300;
+
+        // Snap ke petak bilangan bulat terdekat
+        const gridX = Math.max(1, Math.min(10, Math.round((svgX - 20) / 32)));
+        const gridY = Math.max(1, Math.min(6, Math.round((svgY - 12) / 32)));
+
+        if (gridX !== stateTitikA.x || gridY !== stateTitikA.y) {
+          stateTitikA = { x: gridX, y: gridY };
+          renderKanvasSeretTitik(soal);
+        }
+      });
+
+      const lepasTitik = () => { sedangSeretTitik = false; };
+      handleA.addEventListener("pointerup", lepasTitik);
+      handleA.addEventListener("pointercancel", lepasTitik);
+    }
+
+    /* ---------- SISTEM UMUM POINTER DRAG & DROP + TAP UNTUK KARTU ---------- */
+    /**
+     * Fungsi aktifkanDragDanTapKartu: Mengaktifkan Pointer Events (pointerdown, pointermove, pointerup)
+     * dengan setPointerCapture serta alternatif Tap-Pilih lalu Tap-Tujuan pada wadah soal.
+     */
+    function aktifkanDragDanTapKartu(wadahInduk) {
+      const semuaKartu = wadahInduk.querySelectorAll(".kartu-seret");
+      const semuaZona = wadahInduk.querySelectorAll(".zona-jatuh, .bank-kartu-seret");
+
+      // Fungsi memindahkan kartu ke zona tujuan (jika zona hanya muat 1 kartu, kembalikan kartu lama ke bank)
+      function pindahkanKartuKeZona(kartu, zonaTujuan) {
+        const bank = wadahInduk.querySelector(".bank-kartu-seret");
+        if (zonaTujuan.classList.contains("zona-jatuh")) {
+          const kartuLama = zonaTujuan.querySelector(".kartu-seret");
+          if (kartuLama && kartuLama !== kartu && bank) {
+            bank.appendChild(kartuLama);
+          }
+        }
+        zonaTujuan.appendChild(kartu);
+        kartu.classList.remove("terpilih-tap");
+        kartuTerpilihTap = null;
+      }
+
+      semuaKartu.forEach(kartu => {
+        let awalX = 0;
+        let awalY = 0;
+        let sedangDrag = false;
+        let pindahJauh = false;
+
+        kartu.addEventListener("pointerdown", e => {
+          e.stopPropagation();
+          awalX = e.clientX;
+          awalY = e.clientY;
+          sedangDrag = true;
+          pindahJauh = false;
+          kartu.setPointerCapture(e.pointerId);
+          kartu.classList.add("sedang-diseret");
+        });
+
+        kartu.addEventListener("pointermove", e => {
+          if (!sedangDrag) return;
+          const dx = e.clientX - awalX;
+          const dy = e.clientY - awalY;
+          if (Math.hypot(dx, dy) > 6) pindahJauh = true;
+
+          kartu.style.transform = `translate(${dx}px, ${dy}px) scale(1.04)`;
+
+          // Sorot zona jatuh yang didekati pointer
+          semuaZona.forEach(zona => {
+            const r = zona.getBoundingClientRect();
+            const diDalam = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+            zona.classList.toggle("sorot-dekat", diDalam);
+          });
+        });
+
+        const akhiriSeret = e => {
+          if (!sedangDrag) return;
+          sedangDrag = false;
+          kartu.classList.remove("sedang-diseret");
+          kartu.style.transform = "";
+          semuaZona.forEach(z => z.classList.remove("sorot-dekat"));
+
+          if (!pindahJauh) {
+            // Mode Tap-untuk-Pilih
+            semuaKartu.forEach(k => k.classList.remove("terpilih-tap"));
+            if (kartuTerpilihTap === kartu) {
+              kartuTerpilihTap = null;
+            } else {
+              kartu.classList.add("terpilih-tap");
+              kartuTerpilihTap = kartu;
+            }
+            return;
+          }
+
+          // Cek apakah dijatuhkan di atas salah satu zona tujuan
+          let zonaDitemukan = null;
+          semuaZona.forEach(zona => {
+            const r = zona.getBoundingClientRect();
+            if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+              zonaDitemukan = zona;
+            }
+          });
+
+          const bank = wadahInduk.querySelector(".bank-kartu-seret");
+          if (zonaDitemukan) {
+            pindahkanKartuKeZona(kartu, zonaDitemukan);
+          } else if (bank) {
+            // Kembalikan ke posisi awal (bank kartu) bila dijatuhkan di tempat salah
+            pindahkanKartuKeZona(kartu, bank);
+          }
+        };
+
+        kartu.addEventListener("pointerup", akhiriSeret);
+        kartu.addEventListener("pointercancel", akhiriSeret);
+      });
+
+      // Klik pada zona tujuan saat ada kartu yang sedang dipilih dengan Tap
+      semuaZona.forEach(zona => {
+        zona.addEventListener("click", () => {
+          if (kartuTerpilihTap) {
+            pindahkanKartuKeZona(kartuTerpilihTap, zona);
+          }
+        });
+      });
+    }
+
+    /* ---------- JENIS 3: COCOKKAN SISI ---------- */
+    function bangunAreaCocokkanSisi(soal, areaKerja) {
+      areaKerja.innerHTML = `
+        <div class="grid-dua-kolom">
+          <div>
+            <p style="font-size:0.88rem; color:var(--teks-sekunder); margin-bottom:0.4rem;">
+              Bank Label Sisi (Seret kartu atau Ketuk kartu lalu Ketuk Kotak Sisi):
+            </p>
+            <div class="bank-kartu-seret area-bebas-sentuh">
+              ${soal.data.kartu.map(k => `
+                <div class="kartu-seret" tabindex="0" data-nilai="${k.kode}">${k.teks}</div>
+              `).join("")}
+            </div>
+
+            <div class="daftar-slot-langkah">
+              <div class="baris-slot-langkah">
+                <div class="nomor-urut-slot">X</div>
+                <div class="zona-jatuh" data-target="X">Letakkan label untuk <strong>&nbsp;Sisi X&nbsp;</strong> di sini</div>
+              </div>
+              <div class="baris-slot-langkah">
+                <div class="nomor-urut-slot">Y</div>
+                <div class="zona-jatuh" data-target="Y">Letakkan label untuk <strong>&nbsp;Sisi Y&nbsp;</strong> di sini</div>
+              </div>
+              <div class="baris-slot-langkah">
+                <div class="nomor-urut-slot">Z</div>
+                <div class="zona-jatuh" data-target="Z">Letakkan label untuk <strong>&nbsp;Sisi Z&nbsp;</strong> di sini</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="wadah-kanvas-svg" id="kanvas-cocokkan-sisi"></div>
+          </div>
+        </div>
+      `;
+
+      gambarSegitigaSiku("kanvas-cocokkan-sisi", soal.data.sisiA, soal.data.sisiB, {
+        rotasi: soal.data.sudutRotasi,
+        labelA: "Sisi X (5 m)",
+        labelB: "Sisi Y (12 m)",
+        labelC: "Sisi Z (13 m)"
+      });
+
+      aktifkanDragDanTapKartu(areaKerja);
+    }
+
+    /* ---------- JENIS 4: SUSUN LANGKAH ---------- */
+    function bangunAreaSusunLangkah(soal, areaKerja) {
+      areaKerja.innerHTML = `
+        <p style="font-size:0.88rem; color:var(--teks-sekunder); margin-bottom:0.4rem;">
+          Kartu Langkah Acak (Seret ke urutan 1–5 atau Ketuk Kartu lalu Ketuk Slot Nomor):
+        </p>
+        <div class="bank-kartu-seret area-bebas-sentuh">
+          ${soal.data.kartuAcak.map(k => `
+            <div class="kartu-seret" tabindex="0" data-nilai="${k.idKartu}">${k.teks}</div>
+          `).join("")}
+        </div>
+
+        <div class="daftar-slot-langkah">
+          ${[1, 2, 3, 4, 5].map(nomor => `
+            <div class="baris-slot-langkah">
+              <div class="nomor-urut-slot">${nomor}</div>
+              <div class="zona-jatuh" data-urut="${nomor - 1}">Slot Langkah ${nomor}</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      aktifkanDragDanTapKartu(areaKerja);
+    }
+
+    /* ---------- JENIS 5: ISI KOTAK RUMUS ---------- */
+    function bangunAreaIsiKotakRumus(soal, areaKerja) {
+      areaKerja.innerHTML = `
+        <p style="font-size:0.88rem; color:var(--teks-sekunder); margin-bottom:0.4rem;">
+          Pilihan Angka (Seret angka ke dalam kotak rumus di bawah):
+        </p>
+        <div class="bank-kartu-seret area-bebas-sentuh">
+          ${soal.data.pilihanAngka.map(angka => `
+            <div class="kartu-seret" tabindex="0" data-nilai="${angka}" style="font-size:1.15rem; padding:0.5rem 1.1rem;">${angka}</div>
+          `).join("")}
+        </div>
+
+        <div class="baris-rumus-interaktif">
+          <div class="zona-jatuh kotak-kosong-rumus" data-kotak="siku1">?</div>
+          <span>² &nbsp;+&nbsp;</span>
+          <div class="zona-jatuh kotak-kosong-rumus" data-kotak="siku2">?</div>
+          <span>² &nbsp;=&nbsp;</span>
+          <div class="zona-jatuh kotak-kosong-rumus" data-kotak="miring">?</div>
+          <span>²</span>
+        </div>
+      `;
+
+      aktifkanDragDanTapKartu(areaKerja);
+    }
+
+    /**
+     * Fungsi evaluasiSoalInteraktif: Memeriksa jawaban untuk kelima jenis soal interaktif,
+     * memberikan feedback penjelasan, dan mencatat skor melalui catatHasilSoal().
+     */
+    function evaluasiSoalInteraktif(soal) {
+      const kotakFb = document.getElementById(`feedback-${soal.id}`);
+      const areaKerja = document.getElementById(`area-kerja-${soal.id}`);
+      let apakahBenar = false;
+      let pesanKhusus = "";
+
+      if (soal.jenis === "geser-pas") {
+        apakahBenar =
+          stateGeser.a === soal.kunci.a &&
+          stateGeser.b === soal.kunci.b &&
+          stateGeser.c === soal.kunci.c;
+        if (!apakahBenar) {
+          pesanKhusus = `Saat ini ukuranmu adalah (${stateGeser.a}, ${stateGeser.b}, ${stateGeser.c}). Pastikan tinggi tiang a = 8 m, jarak patok b = 6 m, dan tali miring c = 10 m sehingga 8² + 6² = 10²!`;
+        }
+      } else if (soal.jenis === "seret-titik") {
+        apakahBenar = stateTitikA.x === soal.kunci.x && stateTitikA.y === soal.kunci.y;
+        if (!apakahBenar) {
+          pesanKhusus = `Titik A saat ini berada di (${stateTitikA.x}, ${stateTitikA.y}). Geser titik A ke koordinat (3, 4) agar tepat tegak lurus di atas titik C(3, 7) sejauh 3 satuan!`;
+        }
+      } else if (soal.jenis === "cocokkan-sisi") {
+        const zX = areaKerja.querySelector('.zona-jatuh[data-target="X"] .kartu-seret')?.getAttribute("data-nilai");
+        const zY = areaKerja.querySelector('.zona-jatuh[data-target="Y"] .kartu-seret')?.getAttribute("data-nilai");
+        const zZ = areaKerja.querySelector('.zona-jatuh[data-target="Z"] .kartu-seret')?.getAttribute("data-nilai");
+
+        if (!zX || !zY || !zZ) {
+          kotakFb.className = "kotak-feedback tampil peringatan";
+          kotakFb.innerHTML = "⚠️ Pasangkan ketiga kartu label ke dalam kotak Sisi X, Sisi Y, dan Sisi Z terlebih dahulu!";
+          return;
+        }
+        apakahBenar = zX === soal.kunci.X && zY === soal.kunci.Y && zZ === soal.kunci.Z;
+        if (!apakahBenar) {
+          pesanKhusus = "Perhatikan lagi posisi tanda siku-siku pada gambar! Sisi Z berada di depan tanda siku-siku sehingga Sisi Z adalah Sisi Miring (13 m).";
+        }
+      } else if (soal.jenis === "susun-langkah") {
+        const semuaSlot = areaKerja.querySelectorAll(".zona-jatuh[data-urut]");
+        const urutanSiswa = Array.from(semuaSlot).map(
+          slot => slot.querySelector(".kartu-seret")?.getAttribute("data-nilai") || ""
+        );
+        if (urutanSiswa.includes("")) {
+          kotakFb.className = "kotak-feedback tampil peringatan";
+          kotakFb.innerHTML = "⚠️ Lengkapi seluruh 5 slot urutan langkah terlebih dahulu ya, Arsitek!";
+          return;
+        }
+        apakahBenar = urutanSiswa.every((kode, idx) => kode === soal.kunci[idx]);
+        if (!apakahBenar) {
+          pesanKhusus = "Urutan langkah belum tepat. Ingat alurnya: Tulis rumus → Substitusi nilai → Kuadratkan → Jumlahkan → Tarik akar kuadrat!";
+        }
+      } else if (soal.jenis === "isi-kotak-rumus") {
+        const n1 = areaKerja.querySelector('.zona-jatuh[data-kotak="siku1"] .kartu-seret')?.getAttribute("data-nilai");
+        const n2 = areaKerja.querySelector('.zona-jatuh[data-kotak="siku2"] .kartu-seret')?.getAttribute("data-nilai");
+        const n3 = areaKerja.querySelector('.zona-jatuh[data-kotak="miring"] .kartu-seret')?.getAttribute("data-nilai");
+
+        if (!n1 || !n2 || !n3) {
+          kotakFb.className = "kotak-feedback tampil peringatan";
+          kotakFb.innerHTML = "⚠️ Isi ketiga kotak kosong pada rumus terlebih dahulu!";
+          return;
+        }
+        // Dua sisi siku-siku boleh 8² + 15² atau 15² + 8², dan sisi miring harus 17²
+        apakahBenar =
+          ((n1 === "8" && n2 === "15") || (n1 === "15" && n2 === "8")) &&
+          n3 === "17";
+        if (!apakahBenar) {
+          pesanKhusus = `Kamu menyusun ${n1}² + ${n2}² = ${n3}². Ingat bahwa 64 dan 289 sudah merupakan hasil kuadrat, sedangkan rumus memiliki tanda pangkat dua (²), jadi masukkan panjang sisinya: 8, 15, dan 17!`;
+        }
+      }
+
+      const infoSkor = catatHasilSoal(soal.id, apakahBenar, 20);
+      renderTabNavigasiInteraktif();
+
+      if (apakahBenar) {
+        kotakFb.className = "kotak-feedback tampil benar animasi-benar";
+        kotakFb.innerHTML = `
+          ✅ <strong>Kerja Bagus, Arsitek! (+${infoSkor.poinDiterima} Poin | 🔥 Combo ${infoSkor.combo}x)</strong><br>
+          ${soal.penjelasan}
+        `;
+      } else {
+        kotakFb.className = "kotak-feedback tampil salah";
+        kotakFb.innerHTML = `❌ <strong>Belum Tepat:</strong> ${pesanKhusus}`;
+      }
+    }
+
+
+    /* ========== [BAGIAN: 3. MINI-GAME "TANGGA TEPAT"] ========== */
+
+    const daftarMisiTangga = [
+      {
+        id: "tangga-misi-1",
+        judul: "Misi 1: Jendela Lantai Dua",
+        tinggiJendela: 4,
+        jarakTarget: 3,
+        kunciPanjang: 5,
+        petunjuk1: "Geser kaki tangga ke jarak b = 3 meter dari dinding agar ujung tangga menyentuh jendela setinggi a = 4 meter.",
+        petunjuk2: "Hitung panjang tangga: c = √(4² + 3²) = √(16 + 9) = √25."
+      },
+      {
+        id: "tangga-misi-2",
+        judul: "Misi 2: Balkon Gedung Sekolah",
+        tinggiJendela: 8,
+        jarakTarget: 6,
+        kunciPanjang: 10,
+        petunjuk1: "Geser kaki tangga ke jarak aman b = 6 meter dari dinding untuk menjangkau jendela setinggi a = 8 meter.",
+        petunjuk2: "Hitung panjang tangga: c = √(8² + 6²) = √(64 + 36) = √100."
+      },
+      {
+        id: "tangga-misi-3",
+        judul: "Misi 3: Menara Air Utama",
+        tinggiJendela: 12,
+        jarakTarget: 5,
+        kunciPanjang: 13,
+        petunjuk1: "Geser kaki tangga ke jarak b = 5 meter dari dinding untuk menjangkau ketinggian a = 12 meter.",
+        petunjuk2: "Hitung panjang tangga: c = √(12² + 5²) = √(144 + 25) = √169."
+      }
+    ];
+
+    let indeksMisiTangga = 0;
+    let jarakKakiSaatIni = 1.5;
+
+    function pilihMisiTangga(indeks) {
+      indeksMisiTangga = indeks;
+      jarakKakiSaatIni = 1.5;
+      document.getElementById("slider-kaki-tangga").value = jarakKakiSaatIni;
+      document.getElementById("input-panjang-tangga").value = "";
+      document.getElementById("feedback-game-tangga").className = "kotak-feedback";
+      document.getElementById("petunjuk-game-tangga").className = "kotak-petunjuk";
+      perbaruiSimulasiTanggaTepat();
+    }
+
+    function geserKakiTanggaManual(delta) {
+      jarakKakiSaatIni = Math.max(1, Math.min(12, Number((jarakKakiSaatIni + delta).toFixed(1))));
+      document.getElementById("slider-kaki-tangga").value = jarakKakiSaatIni;
+      perbaruiSimulasiTanggaTepat();
+    }
+
+    function tampilkanHintTangga(nomor) {
+      const misi = daftarMisiTangga[indeksMisiTangga];
+      const kotakHint = document.getElementById("petunjuk-game-tangga");
+      kotakHint.classList.add("tampil");
+      kotakHint.innerHTML = nomor === 1
+        ? `💡 <strong>Petunjuk 1:</strong> ${misi.petunjuk1}`
+        : `💡 <strong>Petunjuk 1:</strong> ${misi.petunjuk1}<br>🧭 <strong>Petunjuk 2:</strong> ${misi.petunjuk2}`;
+    }
+
+    function perbaruiSimulasiTanggaTepat() {
+      const misi = daftarMisiTangga[indeksMisiTangga];
+      document.getElementById("deskripsi-misi-tangga").innerHTML = `
+        <strong>${misi.judul}:</strong> Jendela berada pada ketinggian <strong>$a = ${misi.tinggiJendela}\text{ meter}$</strong>.
+        Langkah 1: Geser kaki tangga agar berada tepat pada jarak aman <strong>$b = ${misi.jarakTarget}\text{ meter}$</strong> dari dinding!
+      `;
+
+      document.getElementById("label-jarak-kaki-tangga").textContent = `${formatAngka(jarakKakiSaatIni)} meter`;
+
+      const selisihJarak = Math.abs(jarakKakiSaatIni - misi.jarakTarget);
+      const statusEl = document.getElementById("status-posisi-tangga");
+
+      if (selisihJarak < 0.05) {
+        statusEl.className = "indikator-status-pas indikator-hijau";
+        statusEl.innerHTML = `🟢 POSISI KAKI TANGGA TEPAT (${misi.jarakTarget} m)! Ujung atas tangga pas di ambang jendela. Sekarang hitung panjang tangganya!`;
+      } else if (selisihJarak <= 1) {
+        statusEl.className = "indikator-status-pas indikator-kuning";
+        statusEl.innerHTML = `🟡 Hampir Pas! Jarak saat ini ${formatAngka(jarakKakiSaatIni)} m (Target: ${misi.jarakTarget} m).`;
+      } else {
+        statusEl.className = "indikator-status-pas indikator-merah";
+        statusEl.innerHTML = `🔴 Belum Pas! Jarak kaki tangga ${formatAngka(jarakKakiSaatIni)} m (Geser menuju ${misi.jarakTarget} m).`;
+      }
+
+      // Gambar SVG Gedung, Jendela, dan Tangga
+      const wadah = document.getElementById("kanvas-tangga-tepat");
+      const xDinding = 95;
+      const yTanah = 250;
+      const skala = 14; // 1 meter = 14 piksel
+
+      const yJendelaTarget = yTanah - misi.tinggiJendela * skala;
+      const xKaki = xDinding + jarakKakiSaatIni * skala;
+      const xTarget = xDinding + misi.jarakTarget * skala;
+
+      // Ujung atas tangga di dinding mengikuti panjang tangga misi ketika disandarkan
+      const rasioSandar = Math.max(0.2, misi.tinggiJendela - (jarakKakiSaatIni - misi.jarakTarget) * 0.8);
+      const yUjungAtas = yTanah - rasioSandar * skala;
+
+      wadah.innerHTML = `
+        <svg id="svg-tangga-interaktif" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet" style="touch-action:none;">
+          <!-- Tanah -->
+          <line x1="20" y1="${yTanah}" x2="380" y2="${yTanah}" stroke="#94A3B8" stroke-width="4"/>
+
+          <!-- Dinding Gedung -->
+          <rect x="35" y="30" width="${xDinding - 35}" height="${yTanah - 30}" fill="#1E3A5F" stroke="#FFFFFF" stroke-width="2.5"/>
+
+          <!-- Jendela Target -->
+          <rect x="${xDinding - 14}" y="${yJendelaTarget - 22}" width="14" height="22"
+                fill="${selisihJarak < 0.05 ? '#4ADE80' : '#FFC107'}" stroke="#0B2A4A" stroke-width="2"/>
+          <text x="${xDinding - 20}" y="${yJendelaTarget - 6}" fill="#FEF08A" font-size="11.5" font-weight="700" text-anchor="end">
+            Jendela (${misi.tinggiJendela}m)
+          </text>
+
+          <!-- Tanda Siku-Siku Dinding-Tanah -->
+          <rect x="${xDinding}" y="${yTanah - 12}" width="12" height="12" fill="none" stroke="#FFC107" stroke-width="2"/>
+
+          <!-- Penanda Titik Target di Tanah -->
+          <circle cx="${xTarget}" cy="${yTanah}" r="6" fill="none" stroke="#4ADE80" stroke-width="2" stroke-dasharray="3 2"/>
+          <text x="${xTarget}" y="${yTanah + 34}" fill="#86EFAC" font-size="11" font-weight="700" text-anchor="middle">
+            Target (${misi.jarakTarget}m)
+          </text>
+
+          <!-- Garis Batang Tangga -->
+          <line x1="${xDinding}" y1="${yUjungAtas}" x2="${xKaki}" y2="${yTanah}"
+                stroke="${selisihJarak < 0.05 ? '#4ADE80' : '#FFC107'}" stroke-width="5" stroke-linecap="round"/>
+
+          <!-- Pegangan Seret Kaki Tangga -->
+          <circle id="handle-kaki-tangga" cx="${xKaki}" cy="${yTanah}" r="12"
+                  fill="#FFC107" stroke="#0B2A4A" stroke-width="3" style="cursor:grab;"/>
+          <text x="${xKaki}" y="${yTanah + 18}" fill="#FFFFFF" font-size="12" font-weight="700" text-anchor="middle">
+            b = ${formatAngka(jarakKakiSaatIni)}m
+          </text>
+        </svg>
+      `;
+
+      const svgTangga = document.getElementById("svg-tangga-interaktif");
+      const handleKaki = document.getElementById("handle-kaki-tangga");
+      let sedangSeretKaki = false;
+
+      handleKaki.addEventListener("pointerdown", e => {
+        sedangSeretKaki = true;
+        handleKaki.setPointerCapture(e.pointerId);
+      });
+
+      handleKaki.addEventListener("pointermove", e => {
+        if (!sedangSeretKaki) return;
+        const rect = svgTangga.getBoundingClientRect();
+        const svgX = ((e.clientX - rect.left) / rect.width) * 400;
+        const meterBaru = Math.round(((svgX - xDinding) / skala) * 2) / 2;
+        const meterValid = Math.max(1, Math.min(12, meterBaru));
+
+        if (meterValid !== jarakKakiSaatIni) {
+          jarakKakiSaatIni = meterValid;
+          document.getElementById("slider-kaki-tangga").value = jarakKakiSaatIni;
+          perbaruiSimulasiTanggaTepat();
+        }
+      });
+
+      const lepasKaki = () => { sedangSeretKaki = false; };
+      handleKaki.addEventListener("pointerup", lepasKaki);
+      handleKaki.addEventListener("pointercancel", lepasKaki);
+    }
+
+
+    /* ========== [BAGIAN: 4. MESIN SOAL CERITA BERTINGKAT ADAPTIF] ========== */
+
+    let levelAdaptifSaatIni = 1;
+    let beruntunBenarAdaptif = 0;
+    let beruntunSalahAdaptif = 0;
+    let totalDijawabAdaptif = 0;
+    let indeksSoalPerLevel = { 1: 0, 2: 0, 3: 0 };
+    let soalAdaptifAktif = null;
+
+    /**
+     * Fungsi muatSoalAdaptif: Mengambil soal sesuai levelAdaptifSaatIni dan menampilkan SVG-nya.
+     */
+    function muatSoalAdaptif() {
+      const kumpulanLevel = daftarSoalAdaptif.filter(s => s.level === levelAdaptifSaatIni);
+      const idx = indeksSoalPerLevel[levelAdaptifSaatIni] % kumpulanLevel.length;
+      soalAdaptifAktif = kumpulanLevel[idx];
+
+      // Perbarui Lencana & Info Level
+      const namaLevel = {
+        1: "Level 1 — Dasar Lapangan",
+        2: "Level 2 — Konstruksi Menengah",
+        3: "Level 3 — Tantangan Arsitek HOTS 🔥"
+      }[levelAdaptifSaatIni];
+
+      document.getElementById("wadah-lencana-level-adaptif").innerHTML = `
+        <span class="lencana-level-adaptif level-${levelAdaptifSaatIni}">${namaLevel}</span>
+      `;
+      document.getElementById("teks-level-adaptif").textContent = namaLevel;
+      document.getElementById("teks-beruntun-benar").textContent = `${beruntunBenarAdaptif} / 3`;
+      document.getElementById("teks-total-adaptif").textContent = `${totalDijawabAdaptif}`;
+
+      document.getElementById("konteks-soal-adaptif").textContent = soalAdaptifAktif.konteks;
+      document.getElementById("pertanyaan-soal-adaptif").textContent = soalAdaptifAktif.pertanyaan;
+      document.getElementById("input-jawaban-adaptif").value = "";
+      document.getElementById("feedback-soal-adaptif").className = "kotak-feedback";
+      document.getElementById("petunjuk-soal-adaptif").className = "kotak-petunjuk";
+      document.getElementById("tombol-soal-berikutnya").style.display = "none";
+
+      // Gambar segitiga ilustrasi menggunakan fungsi pusat gambarSegitigaSiku
+      gambarSegitigaSiku("kanvas-ilustrasi-adaptif", soalAdaptifAktif.data.sisiA, soalAdaptifAktif.data.sisiB, {
+        labelA: soalAdaptifAktif.data.labelA,
+        labelB: soalAdaptifAktif.data.labelB,
+        labelC: soalAdaptifAktif.data.labelC
+      });
+      document.getElementById("keterangan-ilustrasi-adaptif").textContent =
+        `Sketsa Blueprint: ${soalAdaptifAktif.konteks}`;
+    }
+
+    /**
+     * Fungsi periksaSoalAdaptif: Mengevaluasi jawaban siswa dan menerapkan aturan naik/turun level adaptif.
+     * - Benar 3x berturut-turut -> Naik Level (maksimal Level 3 HOTS)
+     * - Salah 2x berturut-turut -> Turun Level (minimal Level 1)
+     */
+    function periksaSoalAdaptif() {
+      const nilaiInput = document.getElementById("input-jawaban-adaptif").value;
+      const hasil = periksaJawabanSoal(soalAdaptifAktif, nilaiInput);
+      const kotakFb = document.getElementById("feedback-soal-adaptif");
+
+      if (hasil.peringatan) {
+        kotakFb.className = "kotak-feedback tampil peringatan";
+        kotakFb.innerHTML = hasil.pesanFeedback;
+        return;
+      }
+
+      totalDijawabAdaptif += 1;
+      const poinLevel = soalAdaptifAktif.level * 15;
+      catatHasilSoal(soalAdaptifAktif.id, hasil.benar, poinLevel);
+
+      let pesanPerubahanLevel = "";
+
+      if (hasil.benar) {
+        beruntunBenarAdaptif += 1;
+        beruntunSalahAdaptif = 0;
+
+        if (beruntunBenarAdaptif >= 3 && levelAdaptifSaatIni < 3) {
+          levelAdaptifSaatIni += 1;
+          beruntunBenarAdaptif = 0;
+          pesanPerubahanLevel = `<br><br>🚀 <strong>NAIK LEVEL ADAPTIF!</strong> Karena kamu menjawab benar 3 kali berturut-turut, kamu naik ke <strong>Level ${levelAdaptifSaatIni}</strong>!`;
+          tampilkanNotifikasiMaskot(`Hebat! Benar 3x beruntun, kamu naik ke Level ${levelAdaptifSaatIni}!`, "senang");
+        }
+
+        kotakFb.className = "kotak-feedback tampil benar animasi-benar";
+        kotakFb.innerHTML = hasil.pesanFeedback + pesanPerubahanLevel;
+        document.getElementById("tombol-soal-berikutnya").style.display = "inline-flex";
+      } else {
+        beruntunSalahAdaptif += 1;
+        beruntunBenarAdaptif = 0;
+
+        if (beruntunSalahAdaptif >= 2 && levelAdaptifSaatIni > 1) {
+          levelAdaptifSaatIni -= 1;
+          beruntunSalahAdaptif = 0;
+          pesanPerubahanLevel = `<br><br>🧭 <strong>PENYESUAIAN LEVEL ADAPTIF:</strong> Kamu tampak perlu penguatan konsep dasar. Soal berikutnya disesuaikan ke <strong>Level ${levelAdaptifSaatIni}</strong> agar kamu makin mantap!`;
+          tampilkanNotifikasiMaskot(`Jangan patah semangat! Kita kuatkan lagi konsep di Level ${levelAdaptifSaatIni} ya.`, "semangat");
+        }
+
+        kotakFb.className = "kotak-feedback tampil salah";
+        kotakFb.innerHTML = hasil.pesanFeedback + pesanPerubahanLevel;
+      }
+
+      document.getElementById("teks-beruntun-benar").textContent = `${beruntunBenarAdaptif} / 3`;
+      document.getElementById("teks-total-adaptif").textContent = `${totalDijawabAdaptif}`;
+    }
+
+
+    /* ========== [BAGIAN: 5. INISIALISASI HALAMAN LAPANGAN PROYEK] ========== */
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("maskot-lapangan").innerHTML = buatSvgMaskot("senang");
+
+      // 1. Inisialisasi 5 Soal Interaktif Drag & Geser
+      renderTabNavigasiInteraktif();
+      renderKomponenSoalInteraktif();
+
+      // 2. Inisialisasi Mini-Game Tangga Tepat
+      const sliderTangga = document.getElementById("slider-kaki-tangga");
+      sliderTangga.addEventListener("input", () => {
+        jarakKakiSaatIni = Number(sliderTangga.value);
+        perbaruiSimulasiTanggaTepat();
+      });
+
+      document.getElementById("tombol-periksa-tangga").addEventListener("click", () => {
+        const misi = daftarMisiTangga[indeksMisiTangga];
+        const fb = document.getElementById("feedback-game-tangga");
+        const selisihKaki = Math.abs(jarakKakiSaatIni - misi.jarakTarget);
+
+        if (selisihKaki >= 0.05) {
+          fb.className = "kotak-feedback tampil peringatan";
+          fb.innerHTML = `⚠️ Geser dulu kaki tangga hingga pas di jarak <strong>${misi.jarakTarget} meter</strong> (sampai indikator berwarna hijau) sebelum memeriksa hitungan panjang tangga!`;
+          return;
+        }
+
+        const jawabanPanjang = Number(document.getElementById("input-panjang-tangga").value);
+        if (Math.abs(jawabanPanjang - misi.kunciPanjang) < 0.05) {
+          const skor = catatHasilSoal(misi.id, true, 25);
+          fb.className = "kotak-feedback tampil benar animasi-benar";
+          fb.innerHTML = `✅ <strong>Tangga Terpasang Sempurna! (+${skor.poinDiterima} Poin)</strong><br>Dengan tinggi jendela $a = ${misi.tinggiJendela}\\text{ m}$ dan jarak kaki tangga $b = ${misi.jarakTarget}\\text{ m}$, panjang tangga adalah $c = \\sqrt{${misi.tinggiJendela}^2 + ${misi.jarakTarget}^2} = $ <strong>${misi.kunciPanjang} meter</strong>!`;
+        } else {
+          catatHasilSoal(misi.id, false, 0);
+          fb.className = "kotak-feedback tampil salah";
+          fb.innerHTML = `❌ Posisi kaki tangga sudah tepat (${misi.jarakTarget} m), tetapi hitungan panjang tanggamu belum pas. Gunakan $c = \\sqrt{${misi.tinggiJendela}^2 + ${misi.jarakTarget}^2}$!`;
+        }
+      });
+
+      document.getElementById("tombol-ulangi-tangga").addEventListener("click", () => {
+        pilihMisiTangga(indeksMisiTangga);
+      });
+
+      pilihMisiTangga(0);
+
+      // 3. Inisialisasi Soal Cerita Bertingkat Adaptif
+      muatSoalAdaptif();
+
+      document.getElementById("tombol-periksa-adaptif").addEventListener("click", periksaSoalAdaptif);
+      document.getElementById("tombol-soal-berikutnya").addEventListener("click", () => {
+        indeksSoalPerLevel[levelAdaptifSaatIni] += 1;
+        muatSoalAdaptif();
+      });
+      document.getElementById("tombol-ulangi-adaptif").addEventListener("click", () => {
+        indeksSoalPerLevel[levelAdaptifSaatIni] += 1;
+        muatSoalAdaptif();
+      });
+      document.getElementById("tombol-baca-adaptif").addEventListener("click", () => {
+        if (soalAdaptifAktif) bacakanTeks(soalAdaptifAktif.pertanyaan);
+      });
+      document.getElementById("tombol-hint1-adaptif").addEventListener("click", () => {
+        if (soalAdaptifAktif) {
+          const kp = document.getElementById("petunjuk-soal-adaptif");
+          kp.classList.add("tampil");
+          kp.innerHTML = `💡 <strong>Petunjuk 1:</strong> ${soalAdaptifAktif.petunjuk1}`;
+        }
+      });
+      document.getElementById("tombol-hint2-adaptif").addEventListener("click", () => {
+        if (soalAdaptifAktif) {
+          const kp = document.getElementById("petunjuk-soal-adaptif");
+          kp.classList.add("tampil");
+          kp.innerHTML = `💡 <strong>Petunjuk 1:</strong> ${soalAdaptifAktif.petunjuk1}<br>🧭 <strong>Petunjuk 2:</strong> ${soalAdaptifAktif.petunjuk2}`;
+        }
+      });
+
+      // 4. Render Gerbang Proyek 4 (Membuka Ujian Sertifikasi kuis.html) & Jurnal Refleksi
+      renderGerbangProyek("wadah-gerbang-lapangan", "lapangan", 4, "kuis.html");
+      renderJurnalRefleksi("wadah-jurnal-lapangan", "lapangan", "5 Tantangan Interaktif & Soal Cerita Kontekstual Adaptif");
+    });
+  </script>
+</body>
+</html>
