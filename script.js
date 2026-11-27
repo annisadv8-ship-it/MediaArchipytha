@@ -500,21 +500,21 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
 
   // Fungsi mencari posisi label di luar sisi menggunakan vektor menjauhi centroid segitiga
   const centroidSvg = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-  function posisiLabelLuar(titik1, titik2, jarakOffset = 20) {
+    function posisiLabelLuar(titik1, titik2, jarakOffset = 8, teks = "", ukuranFont = 13) {
     const tengah = { x: (titik1.x + titik2.x) / 2, y: (titik1.y + titik2.y) / 2 };
     const dx = titik2.x - titik1.x;
     const dy = titik2.y - titik1.y;
     const len = Math.hypot(dx, dy) || 1;
-    // Dua kandidat normal tegak lurus
     let n1 = { x: -dy / len, y: dx / len };
     const vektorDariPusat = { x: tengah.x - centroidSvg.x, y: tengah.y - centroidSvg.y };
     if (n1.x * vektorDariPusat.x + n1.y * vektorDariPusat.y < 0) {
       n1 = { x: -n1.x, y: -n1.y };
     }
-    return {
-      x: tengah.x + n1.x * jarakOffset,
-      y: tengah.y + n1.y * jarakOffset
-    };
+    // Tambahan jarak sesuai ukuran teks agar tidak menyentuh garis
+    const lebarTeks = String(teks).length * ukuranFont * 0.6;
+    const tinggiTeks = ukuranFont * 1.2;
+    const jarak = jarakOffset + Math.abs(n1.x) * (lebarTeks / 2) + Math.abs(n1.y) * (tinggiTeks / 2);
+    return { x: tengah.x + n1.x * jarak, y: tengah.y + n1.y * jarak };
   }
 
   let elemenPersegiHtml = "";
@@ -532,13 +532,14 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
     const pusatPB = pusatPersegi(polyB);
     const pusatPC = pusatPersegi(polyC);
 
-    elemenPersegiHtml = `
+          elemenPersegiHtml = `
       <!-- Persegi Sisi a -->
       <polygon points="${polyA.map(p => `${formatAngka(p.x)},${formatAngka(p.y)}`).join(" ")}"
                fill="rgba(56, 189, 248, 0.25)" stroke="#38BDF8" stroke-width="1.8" stroke-dasharray="4 2"/>
       <text x="${formatAngka(pusatPA.x)}" y="${formatAngka(pusatPA.y)}" fill="#E0F2FE"
             font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="middle">
-        a² = ${formatAngka(angkaA * angkaA)}
+        <tspan x="${formatAngka(pusatPA.x)}" dy="-0.3em">a = ${formatAngka(angkaA)}</tspan>
+        <tspan x="${formatAngka(pusatPA.x)}" dy="1.3em">a² = ${formatAngka(angkaA * angkaA)}</tspan>
       </text>
 
       <!-- Persegi Sisi b -->
@@ -546,7 +547,8 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
                fill="rgba(74, 222, 128, 0.25)" stroke="#4ADE80" stroke-width="1.8" stroke-dasharray="4 2"/>
       <text x="${formatAngka(pusatPB.x)}" y="${formatAngka(pusatPB.y)}" fill="#DCFCE7"
             font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="middle">
-        b² = ${formatAngka(angkaB * angkaB)}
+        <tspan x="${formatAngka(pusatPB.x)}" dy="-0.3em">b = ${formatAngka(angkaB)}</tspan>
+        <tspan x="${formatAngka(pusatPB.x)}" dy="1.3em">b² = ${formatAngka(angkaB * angkaB)}</tspan>
       </text>
 
       <!-- Persegi Sisi c -->
@@ -554,18 +556,19 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
                fill="rgba(255, 193, 7, 0.28)" stroke="#FFC107" stroke-width="2"/>
       <text x="${formatAngka(pusatPC.x)}" y="${formatAngka(pusatPC.y)}" fill="#FEF08A"
             font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="middle">
-        c² = ${formatAngka(angkaA * angkaA + angkaB * angkaB)}
+        <tspan x="${formatAngka(pusatPC.x)}" dy="-0.3em">c = ${formatAngka(angkaC)}</tspan>
+        <tspan x="${formatAngka(pusatPC.x)}" dy="1.3em">c² = ${formatAngka(angkaA * angkaA + angkaB * angkaB)}</tspan>
       </text>
     `;
   }
 
-  const posLabelA = posisiLabelLuar(C, A, tampilkanPersegi ? -14 : 20);
-  const posLabelB = posisiLabelLuar(C, B, tampilkanPersegi ? -14 : 20);
-  const posLabelC = posisiLabelLuar(A, B, tampilkanPersegi ? -14 : 22);
-
   const teksLabelA = opsi.labelA !== undefined ? opsi.labelA : `a = ${formatAngka(angkaA)}`;
   const teksLabelB = opsi.labelB !== undefined ? opsi.labelB : `b = ${formatAngka(angkaB)}`;
   const teksLabelC = opsi.labelC !== undefined ? opsi.labelC : `c = ${formatAngka(angkaC)}`;
+
+  const posLabelA = posisiLabelLuar(C, A, 8, teksLabelA, 13);
+  const posLabelB = posisiLabelLuar(C, B, 8, teksLabelB, 13);
+  const posLabelC = posisiLabelLuar(A, B, 8, teksLabelC, 13.5);
 
   // Jika mode interaktif memilih sisi diaktifkan (misal latihan "Kenali Sisi Miring")
   let elemenInteraktifSisi = "";
@@ -604,11 +607,11 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
       <circle cx="${formatAngka(C.x)}" cy="${formatAngka(C.y)}" r="4.5" fill="#38BDF8"/>
 
       <!-- Label Sisi a, b, c -->
-      <text x="${formatAngka(posLabelA.x)}" y="${formatAngka(posLabelA.y)}"
+            <text visibility="${tampilkanPersegi ? 'hidden' : 'visible'}" x="${formatAngka(posLabelA.x)}" y="${formatAngka(posLabelA.y)}"
             fill="#7DD3FC" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="middle">${teksLabelA}</text>
-      <text x="${formatAngka(posLabelB.x)}" y="${formatAngka(posLabelB.y)}"
+      <text visibility="${tampilkanPersegi ? 'hidden' : 'visible'}" x="${formatAngka(posLabelB.x)}" y="${formatAngka(posLabelB.y)}"
             fill="#86EFAC" font-size="13" font-weight="700" text-anchor="middle" dominant-baseline="middle">${teksLabelB}</text>
-      <text x="${formatAngka(posLabelC.x)}" y="${formatAngka(posLabelC.y)}"
+      <text visibility="${tampilkanPersegi ? 'hidden' : 'visible'}" x="${formatAngka(posLabelC.x)}" y="${formatAngka(posLabelC.y)}"
             fill="#FDE047" font-size="13.5" font-weight="700" text-anchor="middle" dominant-baseline="middle">${teksLabelC}</text>
 
       ${elemenInteraktifSisi}
