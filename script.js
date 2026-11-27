@@ -500,7 +500,7 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
 
   // Fungsi mencari posisi label di luar sisi menggunakan vektor menjauhi centroid segitiga
   const centroidSvg = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-    function posisiLabelLuar(titik1, titik2, jarakOffset = 8, teks = "", ukuranFont = 13) {
+      function posisiLabelLuar(titik1, titik2, jarakOffset = 8, teks = "", ukuranFont = 13) {
     const tengah = { x: (titik1.x + titik2.x) / 2, y: (titik1.y + titik2.y) / 2 };
     const dx = titik2.x - titik1.x;
     const dy = titik2.y - titik1.y;
@@ -510,11 +510,28 @@ function gambarSegitigaSiku(wadah, sisiA, sisiB, opsi = {}) {
     if (n1.x * vektorDariPusat.x + n1.y * vektorDariPusat.y < 0) {
       n1 = { x: -n1.x, y: -n1.y };
     }
-    // Tambahan jarak sesuai ukuran teks agar tidak menyentuh garis
+
     const lebarTeks = String(teks).length * ukuranFont * 0.6;
     const tinggiTeks = ukuranFont * 1.2;
-    const jarak = jarakOffset + Math.abs(n1.x) * (lebarTeks / 2) + Math.abs(n1.y) * (tinggiTeks / 2);
-    return { x: tengah.x + n1.x * jarak, y: tengah.y + n1.y * jarak };
+
+    function hitung(n) {
+      const jarak = jarakOffset + Math.abs(n.x) * (lebarTeks / 2) + Math.abs(n.y) * (tinggiTeks / 2);
+      return { x: tengah.x + n.x * jarak, y: tengah.y + n.y * jarak };
+    }
+    function muat(p) {
+      return p.x - lebarTeks / 2 >= 4 && p.x + lebarTeks / 2 <= 396 &&
+             p.y - tinggiTeks / 2 >= 4 && p.y + tinggiTeks / 2 <= 296;
+    }
+
+    // 1) Coba di luar segitiga. 2) Kalau terpotong, coba di dalam. 3) Terakhir, geser agar tetap di dalam gambar.
+    const luar = hitung(n1);
+    if (muat(luar)) return luar;
+    const dalam = hitung({ x: -n1.x, y: -n1.y });
+    if (muat(dalam)) return dalam;
+    return {
+      x: Math.min(Math.max(luar.x, 4 + lebarTeks / 2), 396 - lebarTeks / 2),
+      y: Math.min(Math.max(luar.y, 4 + tinggiTeks / 2), 296 - tinggiTeks / 2)
+    };
   }
 
   let elemenPersegiHtml = "";
